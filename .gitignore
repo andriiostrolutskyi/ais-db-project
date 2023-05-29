@@ -34,3 +34,6 @@ build/
 
 ### MacOS ###
 .DS_Store
+
+### Environment props ###
+env.properties
