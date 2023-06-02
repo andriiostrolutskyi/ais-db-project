@@ -2,13 +2,14 @@ package ua.naukma.aisdbproject.entities.category.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.naukma.aisdbproject.entities.category.dao.CategoryDAO;
 import ua.naukma.aisdbproject.entities.category.model.Category;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequestMapping("/api/v1/category")
 public class CategoryController {
     private final CategoryDAO categoryDAO;
@@ -19,23 +20,52 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> getCategories(){
-        return categoryDAO.getCategories();
+    public String getAll(Model model) {
+        model.addAttribute("categories", categoryDAO.getAll());
+        return "category/show";
     }
 
-    @PostMapping("/add-category")
-    public void addCategory(@ModelAttribute("category") @Valid Category category){
-        categoryDAO.addCategory(category);
+    @GetMapping("/{categoryNumber}")
+    public String getByID(@PathVariable("categoryNumber") int categoryNumber, Model model) {
+        model.addAttribute("category", categoryDAO.getByID(categoryNumber));
+        return "category/show";
     }
 
-    @PatchMapping("/update/{categoryNumber}")
-    public void updateCategory(@ModelAttribute("category") @Valid Category category,
-                               @PathVariable Integer categoryNumber){
-         categoryDAO.updateCategory(categoryNumber, category);
+    @GetMapping("/add-category")
+    public String goToAdd(Model model) {
+        model.addAttribute("category", new Category());
+        return "category/add";
     }
 
-    @DeleteMapping("/delete/{categoryNumber}")
-    public void deleteCategory(@PathVariable Integer categoryNumber){
-        categoryDAO.deleteCategory(categoryNumber);
+    @PostMapping
+    public String add(@ModelAttribute("category") @Valid Category category,
+                              BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return "category/add";
+        categoryDAO.add(category);
+        return "redirect:/api/v1/category";
+    }
+
+    @GetMapping("/{categoryNumber}/edit")
+    public String edit(Model model,
+                               @PathVariable int categoryNumber) {
+        model.addAttribute("category", categoryDAO.getByID(categoryNumber));
+        return "category/edit";
+    }
+
+    @PatchMapping("/{categoryNumber}")
+    public String update(@ModelAttribute("category") @Valid Category category,
+                         BindingResult bindingResult,
+                         @PathVariable("categoryNumber") int categoryNumber) {
+        if (bindingResult.hasErrors())
+            return "category/edit";
+        categoryDAO.update(categoryNumber, category);
+        return "redirect:/api/v1/category";
+    }
+
+    @DeleteMapping("/{categoryNumber}")
+    public String delete(@PathVariable int categoryNumber) {
+        categoryDAO.delete(categoryNumber);
+        return "redirect:/api/v1/category";
     }
 }

@@ -17,24 +17,28 @@ public class CategoryDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Category> getCategories() {
-        return jdbcTemplate.query("SELECT * FROM category",
+    public List<Category> getAll() {
+        return jdbcTemplate.query("SELECT * FROM `category`",
                 new BeanPropertyRowMapper<>(Category.class));
     }
 
-    public void addCategory(Category category) {
-        jdbcTemplate.update("INSERT INTO category VALUES (?,?)", category.getCategoryNumber(), category.getCategoryName());
+    public Category getByID(int categoryNumber) {
+        return jdbcTemplate.query("SELECT * FROM `category` WHERE category_number=?", new Object[]{categoryNumber},
+                new BeanPropertyRowMapper<>(Category.class)).stream().findAny().orElse(null);
     }
 
-    public void updateCategory(Integer categoryNumber, Category updatedCategory) {
-        jdbcTemplate.update("UPDATE zlagoda SET categoryNumber=?, categoryName=? WHERE categoryNumber=?",
-                updatedCategory.getCategoryNumber(),
+    public void add(Category category) {
+        jdbcTemplate.update("INSERT INTO `category` VALUES (?,?)", category.getCategoryNumber(), category.getCategoryName());
+    }
+
+    public void update(int categoryNumber, Category updatedCategory) {
+        jdbcTemplate.update("UPDATE category SET  category_name=? WHERE category_number=?",
                 updatedCategory.getCategoryName(),
                 categoryNumber
         );
     }
 
-    public void deleteCategory(Integer categoryNumber) {
-        jdbcTemplate.update("DELETE FROM zlagoda WHERE categoryNumber=?", categoryNumber);
+    public void delete(int categoryNumber) {
+        jdbcTemplate.update("DELETE FROM `category` WHERE category_number=?", categoryNumber);
     }
 }
