@@ -47,4 +47,14 @@ public class Product {
     public void setCharacteristics(String characteristics) {
         this.characteristics = characteristics;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "idProduct=" + idProduct +
+                ", categoryNumber=" + categoryNumber +
+                ", productName='" + productName + '\'' +
+                ", characteristics='" + characteristics + '\'' +
+                '}';
+    }
 }

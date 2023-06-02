@@ -28,18 +28,6 @@ public class StoreProduct {
         this.promotionalProduct = promotionalProduct;
     }
 
-    @Override
-    public String toString() {
-        return "StoreProduct{" +
-                "upc='" + upc + '\'' +
-                ", upcProm='" + upcProm + '\'' +
-                ", idProduct=" + idProduct +
-                ", sellingPrice=" + sellingPrice +
-                ", productsNumber=" + productsNumber +
-                ", promotionalProduct=" + promotionalProduct +
-                '}';
-    }
-
     public String getUpc() {
         return upc;
     }
@@ -86,5 +74,17 @@ public class StoreProduct {
 
     public void setPromotionalProduct(Boolean promotionalProduct) {
         this.promotionalProduct = promotionalProduct;
+    }
+
+    @Override
+    public String toString() {
+        return "StoreProduct{" +
+                "upc='" + upc + '\'' +
+                ", upcProm='" + upcProm + '\'' +
+                ", idProduct=" + idProduct +
+                ", sellingPrice=" + sellingPrice +
+                ", productsNumber=" + productsNumber +
+                ", promotionalProduct=" + promotionalProduct +
+                '}';
     }
 }

@@ -6,14 +6,14 @@ import jakarta.validation.constraints.Size;
 
 public class Category {
     @Min(value = 0, message = "Category number should be a positive")
-    private int categoryNumber;
+    private Integer categoryNumber;
     @NotNull
     @Size(max = 50, message = "Category name should be less than 50 characters")
     private String categoryName;
 
     public Category(){}
 
-    public Category(int categoryNumber, @NotNull String categoryName) {
+    public Category(Integer categoryNumber, @NotNull String categoryName) {
         this.categoryNumber = categoryNumber;
         this.categoryName = categoryName;
     }
@@ -22,7 +22,7 @@ public class Category {
         return categoryNumber;
     }
 
-    public void setCategoryNumber(int categoryNumber) {
+    public void setCategoryNumber(Integer categoryNumber) {
         this.categoryNumber = categoryNumber;
     }
 

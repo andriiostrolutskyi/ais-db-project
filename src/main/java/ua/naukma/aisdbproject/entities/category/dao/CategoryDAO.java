@@ -22,7 +22,7 @@ public class CategoryDAO {
                 new BeanPropertyRowMapper<>(Category.class));
     }
 
-    public Category getByID(int categoryNumber) {
+    public Category getByID(Integer categoryNumber) {
         return jdbcTemplate.query("SELECT * FROM `category` WHERE category_number=?", new Object[]{categoryNumber},
                 new BeanPropertyRowMapper<>(Category.class)).stream().findAny().orElse(null);
     }
@@ -31,14 +31,14 @@ public class CategoryDAO {
         jdbcTemplate.update("INSERT INTO `category` VALUES (?,?)", category.getCategoryNumber(), category.getCategoryName());
     }
 
-    public void update(int categoryNumber, Category updatedCategory) {
+    public void update(Integer categoryNumber, Category updatedCategory) {
         jdbcTemplate.update("UPDATE category SET  category_name=? WHERE category_number=?",
                 updatedCategory.getCategoryName(),
                 categoryNumber
         );
     }
 
-    public void delete(int categoryNumber) {
+    public void delete(Integer categoryNumber) {
         jdbcTemplate.update("DELETE FROM `category` WHERE category_number=?", categoryNumber);
     }
 }

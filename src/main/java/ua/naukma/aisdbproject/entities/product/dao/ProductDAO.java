@@ -35,7 +35,8 @@ public class ProductDAO {
     }
 
     public void update(Integer idProduct, Product updatedProduct) {
-        jdbcTemplate.update("UPDATE `product` SET  product_name=?, characteristics=? WHERE id_product=?",
+        jdbcTemplate.update("UPDATE `product` SET category_number=?,  product_name=?, characteristics=? WHERE id_product=?",
+                updatedProduct.getCategoryNumber(),
                 updatedProduct.getProductName(),
                 updatedProduct.getCharacteristics(),
                 idProduct

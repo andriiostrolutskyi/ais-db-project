@@ -48,7 +48,7 @@ public class СustomerCardController {
 
     @GetMapping("/{cardNumber}/edit")
     public String edit(Model model,
-                       @PathVariable String cardNumber) {
+                       @PathVariable("cardNumber") String cardNumber) {
         model.addAttribute("customerCard", customerCardDAO.getByID(cardNumber));
         return "customerCard/edit";
     }
@@ -64,7 +64,7 @@ public class СustomerCardController {
     }
 
     @DeleteMapping("/{cardNumber}")
-    public String delete(@PathVariable String cardNumber) {
+    public String delete(@PathVariable("cardNumber") String cardNumber) {
         customerCardDAO.delete(cardNumber);
         return "redirect:/api/v1/customer-card";
     }

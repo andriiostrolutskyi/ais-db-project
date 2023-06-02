@@ -26,7 +26,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryNumber}")
-    public String getByID(@PathVariable("categoryNumber") int categoryNumber, Model model) {
+    public String getByID(@PathVariable("categoryNumber") Integer categoryNumber, Model model) {
         model.addAttribute("category", categoryDAO.getByID(categoryNumber));
         return "category/show";
     }
@@ -48,7 +48,7 @@ public class CategoryController {
 
     @GetMapping("/{categoryNumber}/edit")
     public String edit(Model model,
-                               @PathVariable int categoryNumber) {
+                               @PathVariable("categoryNumber") Integer categoryNumber) {
         model.addAttribute("category", categoryDAO.getByID(categoryNumber));
         return "category/edit";
     }
@@ -56,7 +56,7 @@ public class CategoryController {
     @PatchMapping("/{categoryNumber}")
     public String update(@ModelAttribute("category") @Valid Category category,
                          BindingResult bindingResult,
-                         @PathVariable("categoryNumber") int categoryNumber) {
+                         @PathVariable("categoryNumber") Integer categoryNumber) {
         if (bindingResult.hasErrors())
             return "category/edit";
         categoryDAO.update(categoryNumber, category);
@@ -64,7 +64,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{categoryNumber}")
-    public String delete(@PathVariable int categoryNumber) {
+    public String delete(@PathVariable("categoryNumber") Integer categoryNumber) {
         categoryDAO.delete(categoryNumber);
         return "redirect:/api/v1/category";
     }

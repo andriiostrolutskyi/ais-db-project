@@ -49,8 +49,8 @@ public class SaleController {
 
     @GetMapping("/{upc}/{checkNumber}/edit")
     public String edit(Model model,
-                       @PathVariable String upc,
-                       @PathVariable String checkNumber) {
+                       @PathVariable("upc") String upc,
+                       @PathVariable("checkNumber") String checkNumber) {
         model.addAttribute("sale", saleDAO.getByID(upc, checkNumber));
         return "sale/edit";
     }

@@ -33,7 +33,7 @@ public class Check {
         this.vat = sumTotal * 0.2f;
     }
 
-    public Check(String checkNumber, String idEmployee, Timestamp printDate, float sumTotal) {
+    public Check(@NotNull String checkNumber, @NotNull String idEmployee,@NotNull Timestamp printDate, @NotNull float sumTotal) {
         this.checkNumber = checkNumber;
         this.idEmployee = idEmployee;
         this.printDate = printDate;

@@ -48,7 +48,7 @@ public class ProductController {
 
     @GetMapping("/{idProduct}/edit")
     public String edit(Model model,
-                       @PathVariable Integer idProduct) {
+                       @PathVariable("idProduct") Integer idProduct) {
         model.addAttribute("product", productDAO.getByID(idProduct));
         return "product/edit";
     }
@@ -64,7 +64,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{idProduct}")
-    public String delete(@PathVariable Integer idProduct) {
+    public String delete(@PathVariable("idProduct") Integer idProduct) {
         productDAO.delete(idProduct);
         return "redirect:/api/v1/product";
     }

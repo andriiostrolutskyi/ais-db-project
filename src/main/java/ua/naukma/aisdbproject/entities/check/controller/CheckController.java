@@ -48,7 +48,7 @@ public class CheckController {
 
         @GetMapping("/{checkNumber}/edit")
         public String edit(Model model,
-                                   @PathVariable String checkNumber) {
+                                   @PathVariable("checkNumber") String checkNumber) {
             model.addAttribute("check", checkDAO.getById(checkNumber));
             return "check/edit";
         }
@@ -64,7 +64,7 @@ public class CheckController {
         }
 
         @DeleteMapping("/{checkNumber}")
-        public String delete(@PathVariable String checkNumber) {
+        public String delete(@PathVariable("checkNumber") String checkNumber) {
             checkDAO.delete(checkNumber);
             return "redirect:/api/v1/check";
         }
