@@ -32,21 +32,6 @@ public class SaleController {
         return "sale/show";
     }
 
-    @GetMapping("/add-sale")
-    public String goToAdd(Model model) {
-        model.addAttribute("sale", new Sale());
-        return "sale/add";
-    }
-
-    @PostMapping
-    public String add(@ModelAttribute("sale") @Valid Sale sale,
-                      BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            return "sale/add";
-        saleDAO.add(sale);
-        return "redirect:/api/v1/sale";
-    }
-
     @GetMapping("/{upc}/{checkNumber}/edit")
     public String edit(Model model,
                        @PathVariable("upc") String upc,
@@ -63,13 +48,6 @@ public class SaleController {
         if (bindingResult.hasErrors())
             return "sale/edit";
         saleDAO.update(upc, checkNumber, sale);
-        return "redirect:/api/v1/sale";
-    }
-
-    @DeleteMapping("/{upc}/{checkNumber}")
-    public String delete(@PathVariable("upc") String upc,
-                         @PathVariable("checkNumber") String checkNumber) {
-        saleDAO.delete(upc, checkNumber);
         return "redirect:/api/v1/sale";
     }
 }

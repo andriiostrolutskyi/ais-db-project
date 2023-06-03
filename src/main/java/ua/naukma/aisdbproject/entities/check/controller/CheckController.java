@@ -46,23 +46,6 @@ public class CheckController {
             return "redirect:/api/v1/check";
         }
 
-        @GetMapping("/{checkNumber}/edit")
-        public String edit(Model model,
-                                   @PathVariable("checkNumber") String checkNumber) {
-            model.addAttribute("check", checkDAO.getById(checkNumber));
-            return "check/edit";
-        }
-
-        @PatchMapping("/{checkNumber}")
-        public String update(@ModelAttribute("check") @Valid Check check,
-                             BindingResult bindingResult,
-                             @PathVariable("checkNumber") String checkNumber) {
-            if (bindingResult.hasErrors())
-                return "check/edit";
-            checkDAO.update(checkNumber, check);
-            return "redirect:/api/v1/check";
-        }
-
         @DeleteMapping("/{checkNumber}")
         public String delete(@PathVariable("checkNumber") String checkNumber) {
             checkDAO.delete(checkNumber);

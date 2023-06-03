@@ -36,17 +36,6 @@ public class CheckDAO {
                                                                             check.getVat());
     }
 
-    public void update(String checkNumber, Check updatedCheck) {
-        jdbcTemplate.update("UPDATE `check` SET id_employee=?, card_number=?, print_date=?, sum_total=?, vat=? WHERE check_number=?",
-                updatedCheck.getIdEmployee(),
-                updatedCheck.getCardNumber(),
-                updatedCheck.getPrintDate(),
-                updatedCheck.getSumTotal(),
-                updatedCheck.getVat(),
-                checkNumber
-        );
-    }
-
     public void delete(String checkNumber) {
         jdbcTemplate.update("DELETE FROM `check` WHERE check_number=?", checkNumber);
     }

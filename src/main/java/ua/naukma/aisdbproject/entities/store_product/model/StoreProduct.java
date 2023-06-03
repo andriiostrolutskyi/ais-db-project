@@ -17,6 +17,8 @@ public class StoreProduct {
         this.sellingPrice = sellingPrice;
         this.productsNumber = productsNumber;
         this.promotionalProduct = promotionalProduct;
+        if(Boolean.TRUE.equals(this.promotionalProduct))
+            this.sellingPrice = sellingPrice * 0.8f;
     }
 
     public StoreProduct(String upc, String upcProm, Integer idProduct, Float sellingPrice, Integer productsNumber, Boolean promotionalProduct) {
@@ -26,6 +28,8 @@ public class StoreProduct {
         this.sellingPrice = sellingPrice;
         this.productsNumber = productsNumber;
         this.promotionalProduct = promotionalProduct;
+        if(Boolean.TRUE.equals(this.promotionalProduct))
+            this.sellingPrice = sellingPrice * 0.8f;
     }
 
     public String getUpc() {
