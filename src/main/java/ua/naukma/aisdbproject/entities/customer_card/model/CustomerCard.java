@@ -1,29 +1,40 @@
 package ua.naukma.aisdbproject.entities.customer_card.model;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class CustomerCard {
-    @NotNull
+    @NotEmpty(message = "Card number can't be empty")
+    @Size(max = 13, message = "Card number should be less than 13 characters")
     private String cardNumber;
-    @NotNull
+    @NotEmpty(message = "Customer surname can't be empty")
+    @Size(max = 50, message = "Customer surname should be less than 50 characters")
     private String customerSurname;
-    @NotNull
+    @NotEmpty(message = "Customer name can't be empty")
+    @Size(max = 50, message = "Customer name should be less than 50 characters")
     private String customerName;
+    @Size(max = 50, message = "Customer patronymic should be less than 50 characters")
     private String customerPatronymic;
-    @NotNull
+    @NotEmpty(message = "Customer phone number can't be empty")
+    @Size(max = 13, message = "Phone number should be less than 13 characters")
     private String phoneNumber;
+    @Size(max = 50, message = "City should be less than 50 characters")
     private String city;
+    @Size(max = 50, message = "Street should be less than 50 characters")
     private String street;
+    @Size(max = 9, message = "Zip code should be less than 9 characters")
     private String zipCode;
-    @NotNull
-    private int percent;
+    @NotNull(message = "Customer discount percent can't be empty")
+    private Integer percent;
 
     public CustomerCard() {
+        percent = 0;
     }
 
-    public CustomerCard(@NotNull String cardNumber, @NotNull String customerSurname, @NotNull String customerName,
-                        String customerPatronymic, @NotNull String phoneNumber, String city, String street,
-                        String zipCode, @NotNull int percent) {
+    public CustomerCard(String cardNumber, String customerSurname, String customerName,
+                        String customerPatronymic, String phoneNumber, String city, String street,
+                        String zipCode, Integer percent) {
         this.cardNumber = cardNumber;
         this.customerSurname = customerSurname;
         this.customerName = customerName;

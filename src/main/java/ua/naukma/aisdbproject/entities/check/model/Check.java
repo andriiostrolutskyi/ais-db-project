@@ -1,30 +1,33 @@
 package ua.naukma.aisdbproject.entities.check.model;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.sql.Timestamp;
 
 public class Check {
-    @Size(max = 10, message = "Check number should be less than 10 symbols")
-    @NotNull
+    @NotEmpty(message = "Check number can't be empty")
+    @Size(max = 10, message = "Check number should be less than 10 characters")
     private String checkNumber;
-    @Size(max = 10, message = "Check number should be less than 10 symbols")
-    @NotNull
+    @NotEmpty(message = "Employee id can't be empty")
+    @Size(max = 10, message = "Employee id should be less than 10 characters")
     private String idEmployee;
-    @Size(max = 13, message = "Check number should be less than 10 symbols")
+    @Size(max = 13, message = "Card number should be less than 13 characters")
     private String cardNumber;
-    @NotNull
+    @NotEmpty(message = "There should be a print date")
     private Timestamp printDate;
-    @NotNull
+    @NotNull(message = "Total sum can't be empty")
+    @Min(value = 0, message = "Total sum should be more than 0")
     private Float sumTotal;
-    @NotNull
     private Float vat;
 
     public Check() {
+        sumTotal = 0f;
     }
 
-    public Check(@NotNull String checkNumber, @NotNull String idEmployee, String cardNumber, @NotNull Timestamp printDate, @NotNull Float sumTotal) {
+    public Check(String checkNumber, String idEmployee, String cardNumber, Timestamp printDate, float sumTotal) {
         this.checkNumber = checkNumber;
         this.idEmployee = idEmployee;
         this.cardNumber = cardNumber;
@@ -33,7 +36,7 @@ public class Check {
         this.vat = sumTotal * 0.2f;
     }
 
-    public Check(@NotNull String checkNumber, @NotNull String idEmployee,@NotNull Timestamp printDate, @NotNull float sumTotal) {
+    public Check(String checkNumber, String idEmployee, Timestamp printDate, float sumTotal) {
         this.checkNumber = checkNumber;
         this.idEmployee = idEmployee;
         this.printDate = printDate;

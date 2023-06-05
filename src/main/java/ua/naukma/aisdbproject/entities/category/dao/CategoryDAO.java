@@ -32,7 +32,7 @@ public class CategoryDAO {
     }
 
     public void update(Integer categoryNumber, Category updatedCategory) {
-        jdbcTemplate.update("UPDATE category SET  category_name=? WHERE category_number=?",
+        jdbcTemplate.update("UPDATE `category` SET category_name=? WHERE category_number=?",
                 updatedCategory.getCategoryName(),
                 categoryNumber
         );
