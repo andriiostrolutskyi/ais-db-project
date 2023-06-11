@@ -25,10 +25,15 @@ public class ProductController {
         return "product/show";
     }
 
-    @GetMapping("/{idProduct}")
-    public String getByID(@PathVariable("idProduct") Integer idProduct, Model model) {
-        model.addAttribute("product", productDAO.getByID(idProduct));
-        return "product/show";
+    @GetMapping("/categoryNumber/{categoryNumber}")
+    public String getByCategory(@PathVariable("categoryNumber") Integer categoryNumber, Model model) {
+        model.addAttribute("products", productDAO.getByCategory(categoryNumber));
+        return "product/show :: searchResults";
+    }
+    @GetMapping("/productName/{productName}")
+    public String getByName(@PathVariable("productName") String productName, Model model) {
+        model.addAttribute("products", productDAO.getByName(productName));
+        return "product/show :: searchResults";
     }
 
     @GetMapping("/add-product")
