@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ua.naukma.aisdbproject.entities.category.dao.CategoryDAO;
 import ua.naukma.aisdbproject.entities.product.dao.ProductDAO;
 import ua.naukma.aisdbproject.entities.product.model.Product;
 
@@ -13,10 +14,12 @@ import ua.naukma.aisdbproject.entities.product.model.Product;
 @RequestMapping("/api/v1/product")
 public class ProductController {
     private final ProductDAO productDAO;
+    private final CategoryDAO categoryDAO;
 
     @Autowired
-    public ProductController(ProductDAO productDAO) {
+    public ProductController(ProductDAO productDAO, CategoryDAO categoryDAO) {
         this.productDAO = productDAO;
+        this.categoryDAO = categoryDAO;
     }
 
     @GetMapping
@@ -25,15 +28,21 @@ public class ProductController {
         return "product/show";
     }
 
-    @GetMapping("/{idProduct}")
-    public String getByID(@PathVariable("idProduct") Integer idProduct, Model model) {
-        model.addAttribute("product", productDAO.getByID(idProduct));
-        return "product/show";
+    @GetMapping("/categoryNumber/{categoryNumber}")
+    public String getByCategory(@PathVariable("categoryNumber") Integer categoryNumber, Model model) {
+        model.addAttribute("products", productDAO.getByCategory(categoryNumber));
+        return "product/show :: searchResults";
+    }
+    @GetMapping("/productName/{productName}")
+    public String getByName(@PathVariable("productName") String productName, Model model) {
+        model.addAttribute("products", productDAO.getByName(productName));
+        return "product/show :: searchResults";
     }
 
     @GetMapping("/add-product")
     public String goToAdd(Model model) {
         model.addAttribute("product", new Product());
+        model.addAttribute("categories", categoryDAO.getAll());
         return "product/add";
     }
 
@@ -50,6 +59,7 @@ public class ProductController {
     public String edit(Model model,
                        @PathVariable("idProduct") Integer idProduct) {
         model.addAttribute("product", productDAO.getByID(idProduct));
+        model.addAttribute("categories", categoryDAO.getAll());
         return "product/edit";
     }
 

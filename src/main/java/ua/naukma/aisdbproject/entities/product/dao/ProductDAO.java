@@ -18,12 +18,21 @@ public class ProductDAO {
     }
 
     public List<Product> getAll() {
-        return jdbcTemplate.query("SELECT * FROM `product`",
+        return jdbcTemplate.query("SELECT * FROM `product` ORDER BY product_name",
                 new BeanPropertyRowMapper<>(Product.class));
     }
 
     public Product getByID(Integer idProduct) {
         return jdbcTemplate.query("SELECT * FROM `product` WHERE id_product=?", new Object[]{idProduct},
+                new BeanPropertyRowMapper<>(Product.class)).stream().findAny().orElse(null);
+    }
+
+    public List<Product> getByCategory(Integer categoryNumber) {
+        return jdbcTemplate.query("SELECT * FROM `product` WHERE category_number=?", new Object[]{categoryNumber},
+                new BeanPropertyRowMapper<>(Product.class));
+    }
+    public Product getByName(String productName) {
+        return jdbcTemplate.query("SELECT * FROM `product` WHERE product_name=?", new Object[]{productName},
                 new BeanPropertyRowMapper<>(Product.class)).stream().findAny().orElse(null);
     }
 
