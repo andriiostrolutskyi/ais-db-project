@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ua.naukma.aisdbproject.entities.category.dao.CategoryDAO;
 import ua.naukma.aisdbproject.entities.product.dao.ProductDAO;
 import ua.naukma.aisdbproject.entities.product.model.Product;
 
@@ -13,10 +14,12 @@ import ua.naukma.aisdbproject.entities.product.model.Product;
 @RequestMapping("/api/v1/product")
 public class ProductController {
     private final ProductDAO productDAO;
+    private final CategoryDAO categoryDAO;
 
     @Autowired
-    public ProductController(ProductDAO productDAO) {
+    public ProductController(ProductDAO productDAO, CategoryDAO categoryDAO) {
         this.productDAO = productDAO;
+        this.categoryDAO = categoryDAO;
     }
 
     @GetMapping
@@ -39,6 +42,7 @@ public class ProductController {
     @GetMapping("/add-product")
     public String goToAdd(Model model) {
         model.addAttribute("product", new Product());
+        model.addAttribute("categories", categoryDAO.getAll());
         return "product/add";
     }
 
@@ -55,6 +59,7 @@ public class ProductController {
     public String edit(Model model,
                        @PathVariable("idProduct") Integer idProduct) {
         model.addAttribute("product", productDAO.getByID(idProduct));
+        model.addAttribute("categories", categoryDAO.getAll());
         return "product/edit";
     }
 
