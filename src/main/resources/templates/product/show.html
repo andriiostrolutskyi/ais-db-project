@@ -76,7 +76,14 @@
             <tbody>
             <tr th:each="product : ${products}">
                 <th scope="row" th:text="${product.getIdProduct()}"/>
-                <td th:text="${product.getCategoryNumber()}"/>
+                <td th:with="selectedCategory=null">
+                  <span th:each="category : ${categories}"
+                        th:if="${category.categoryNumber == product.categoryNumber}"
+                        th:with="selectedCategory=${category}">
+                    <span th:text="${product.categoryNumber}"></span>,
+                    <span th:text="${selectedCategory.categoryName}"></span>
+                  </span>
+                </td>
                 <td th:text="${product.getProductName()}"/>
                 <td th:text="${product.getCharacteristics()}"/>
                 <td>
