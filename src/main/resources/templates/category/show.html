@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories list</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/index.css">
+    <script src= "cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="extensions/natural-sorting/bootstrap-table-natural-sorting.js"></script>
+
+
+    <style>
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg" id="navbar-custom">
+        <a class="navbar-brand" href="#">Zlagoda</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/v1/category">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/v1/check">Checks</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/v1/customer-card">Customer Cards</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/v1/employee">Employees</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ref="/api/v1/product">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/v1/sale">Sales</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/v1/store-product">Store Products</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container" id="table-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" class="form-control mt-4" id="categoryNameInput"
+                           placeholder="Enter category name">
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control mt-4" id="categoryInput"
+                           placeholder="Enter category number">
+                </div>
+            </div>
+        </div>
+        <div id="searchResults" th:fragment="searchResults">
+            <table class="table">
+                <thead class="thead-dark" data-id="name">
+                <tr>
+                    <th scope="col">Category Number</th>
+                    <th scope="col">Category Name</th>
+                    <th scope="col">
+                        <a th:href="@{/api/v1/category/add-category}" type="button" class="btn btn-outline-primary">
+                            Add Category
+                        </a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="category : ${categories}">
+                    <th scope="row" th:text="${category.getCategoryNumber()}"/>
+                    <td th:text="${category.getCategoryName()}"/>
+                    <td>
+                        <div class="btn-group-sm d-flex align-items-center gap-2">
+                            <a type="button" class="btn btn-outline-primary"
+                               th:href="@{/api/v1/category/{categoryNumber}/edit(categoryNumber=${category.getCategoryNumber()})}">
+                                Edit
+                            </a>
+                            <form th:method="DELETE"
+                                  th:action="@{/api/v1/category/{categoryNumber}(categoryNumber=${category.getCategoryNumber()})}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <button class="btn" id="export" onclick="exportPDF('content1')">Save</button>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            const initialTable = $('#searchResults').html();
+            $('#categoryNameInput').on('input', function () {
+                const categoryName = $(this).val();
+                if (categoryName.trim() === '')
+                    $('#searchResults').html(initialTable);
+                else
+                    performNameSearch(categoryName);
+            });
+        });
+
+        function performNameSearch(categoryName) {
+            const url = "/api/v1/category/categoryName/" + categoryName;
+            $.get(url, response => {
+                $('#searchResults').html(response);
+            });
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            const initialTable = $('#searchResults').html();
+            $('#categoryInput').on('input', function () {
+                const categoryNumber = $(this).val();
+                if (categoryNumber.trim() === '')
+                    $('#searchResults').html(initialTable);
+                else
+                    performCategorySearch(categoryNumber);
+            });
+        });
+
+        function performCategorySearch(categoryNumber) {
+            const url = "/api/v1/category/categoryNumber/" + categoryNumber;
+            $.get(url, response => {
+                $('#searchResults').html(response);
+            });
+         }
+        </script>
+    </body>
+</html>
