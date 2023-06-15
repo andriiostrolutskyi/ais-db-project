@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/index.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="#">Zlagoda</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/category">Categories</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/check">Checks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/customer-card">Customer Cards</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/employee">Employees</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/product">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/sale">Sales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/store-product">Store Products</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container-sm" id="table-container">
+    <form th:method="POST" th:action="@{/api/v1/product}" th:object="${product}">
+        <div class="mb-3">
+            <label for="id_product" class="form-label">Product ID</label>
+            <input class="form-control" name="id_product" id="id_product" th:field="*{idProduct}" required="required">
+        </div>
+        <div class="mb-3">
+            <label for="category_number" class="form-label">Category Number</label>
+            <select id="category_number" th:field="*{categoryNumber}" class="form-select"
+                    aria-label="Select a category" required="required" >
+                <option th:selected="true" th:value="null">Select a category</option>
+                <option th:each="category : ${categories}" th:text="${category.getCategoryName()}"
+                        th:value="${category.getCategoryNumber()}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="product_name" class="form-label">Product Name</label>
+            <input class="form-control" name="product_name" id="product_name" th:field="*{productName}"
+                   required="required">
+        </div>
+        <div class="mb-3">
+            <label for="characteristics" class="form-label">Characteristics</label>
+            <textarea class="form-control" name="characteristics" id="characteristics" th:field="*{characteristics}"
+                      required="required"></textarea>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Add product</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

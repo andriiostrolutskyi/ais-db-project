@@ -25,6 +25,7 @@ public class ProductController {
     @GetMapping
     public String getAll(Model model) {
         model.addAttribute("products", productDAO.getAll());
+        model.addAttribute("categories", productDAO.getCategoryNames());
         return "product/show";
     }
 

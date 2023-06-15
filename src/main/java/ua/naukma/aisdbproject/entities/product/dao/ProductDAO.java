@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ua.naukma.aisdbproject.entities.category.model.Category;
 import ua.naukma.aisdbproject.entities.product.model.Product;
 
 import java.util.List;
@@ -31,6 +32,14 @@ public class ProductDAO {
         return jdbcTemplate.query("SELECT * FROM `product` WHERE category_number=?", new Object[]{categoryNumber},
                 new BeanPropertyRowMapper<>(Product.class));
     }
+
+    public List<Category> getCategoryNames() {
+        return jdbcTemplate.query("SELECT DISTINCT `category`.category_number, category_name " +
+                "FROM product " +
+                "INNER JOIN category " +
+                "ON product.category_number=category.category_number;", new BeanPropertyRowMapper<>(Category.class));
+    }
+
     public Product getByName(String productName) {
         return jdbcTemplate.query("SELECT * FROM `product` WHERE product_name=?", new Object[]{productName},
                 new BeanPropertyRowMapper<>(Product.class)).stream().findAny().orElse(null);
