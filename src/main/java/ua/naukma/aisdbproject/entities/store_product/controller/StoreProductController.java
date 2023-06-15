@@ -6,34 +6,76 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ua.naukma.aisdbproject.entities.product.dao.ProductDAO;
 import ua.naukma.aisdbproject.entities.store_product.dao.StoreProductDAO;
 import ua.naukma.aisdbproject.entities.store_product.model.StoreProduct;
+import ua.naukma.aisdbproject.entities.store_product.model.StoreProductSearch;
 
 @Controller
 @RequestMapping("/api/v1/store-product")
 public class StoreProductController {
     private final StoreProductDAO storeProductDAO;
+    private final ProductDAO productDAO;
 
     @Autowired
-    public StoreProductController(StoreProductDAO storeProductDAO) {
+    public StoreProductController(StoreProductDAO storeProductDAO, ProductDAO productDAO) {
         this.storeProductDAO = storeProductDAO;
+        this.productDAO = productDAO;
     }
 
     @GetMapping
     public String getAll(Model model) {
         model.addAttribute("storeProducts", storeProductDAO.getAll());
+        model.addAttribute("products", storeProductDAO.getProductNames());
         return "storeProduct/show";
     }
 
     @GetMapping("/{upc}")
-    public String getByID(@PathVariable("upc") String upc, Model model) {
-        model.addAttribute("storeProduct", storeProductDAO.getByID(upc));
-        return "storeProduct/show";
+    @ResponseBody
+    public StoreProductSearch getByID(@PathVariable("upc") String upc, Model model) {
+        return storeProductDAO.getProductByUPC(upc);
+    }
+
+    @GetMapping("/getPromotional/sortByName")
+    public String getPromotionalByName(Model model) {
+        model.addAttribute("storeProducts", storeProductDAO.getPromotionalByName());
+        model.addAttribute("products", storeProductDAO.getProductNames());
+        return "storeProduct/show :: searchResults";
+    }
+
+    @GetMapping("/getPromotional/sortByQuantity")
+    public String getPromotionalByQuantity(Model model) {
+        model.addAttribute("storeProducts", storeProductDAO.getPromotionalByQuantity());
+        model.addAttribute("products", storeProductDAO.getProductNames());
+        return "storeProduct/show :: searchResults";
+    }
+
+    @GetMapping("/getNotPromotional/sortByName")
+    public String getNotPromotionalByName(Model model) {
+        model.addAttribute("storeProducts", storeProductDAO.getNotPromotionalByName());
+        model.addAttribute("products", storeProductDAO.getProductNames());
+        return "storeProduct/show :: searchResults";
+    }
+
+    @GetMapping("/getNotPromotional/sortByQuantity")
+    public String getNotPromotionalByQuantity(Model model) {
+        model.addAttribute("storeProducts", storeProductDAO.getNotPromotionalByQuantity());
+        model.addAttribute("products", storeProductDAO.getProductNames());
+        return "storeProduct/show :: searchResults";
+    }
+
+    @GetMapping("/noFilters")
+    public String getProductsWithoutFilters(Model model) {
+        model.addAttribute("storeProducts", storeProductDAO.getAll());
+        model.addAttribute("products", storeProductDAO.getProductNames());
+        return "storeProduct/show :: searchResults";
     }
 
     @GetMapping("/add-store-product")
     public String goToAdd(Model model) {
         model.addAttribute("storeProduct", new StoreProduct());
+        model.addAttribute("storeProducts", storeProductDAO.getAll());
+        model.addAttribute("productIDs", productDAO.getAll());
         return "storeProduct/add";
     }
 
@@ -50,6 +92,8 @@ public class StoreProductController {
     public String edit(Model model,
                        @PathVariable("upc") String upc) {
         model.addAttribute("storeProduct", storeProductDAO.getByID(upc));
+        model.addAttribute("storeProducts", storeProductDAO.getAll());
+        model.addAttribute("productIDs", productDAO.getAll());
         return "storeProduct/edit";
     }
 
