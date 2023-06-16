@@ -18,7 +18,7 @@ public class CategoryDAO {
     }
 
     public List<Category> getAll() {
-        return jdbcTemplate.query("SELECT * FROM `category`",
+        return jdbcTemplate.query("SELECT * FROM `category` ORDER BY category_name",
                 new BeanPropertyRowMapper<>(Category.class));
     }
 
