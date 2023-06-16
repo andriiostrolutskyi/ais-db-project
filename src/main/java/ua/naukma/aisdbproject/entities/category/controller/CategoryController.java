@@ -68,4 +68,17 @@ public class CategoryController {
         categoryDAO.delete(categoryNumber);
         return "redirect:/api/v1/category";
     }
+
+    @GetMapping("/categoryNumber/{categoryNumber}")
+    public String getByNumber(@PathVariable("categoryNumber") Integer categoryNumber, Model model) {
+        model.addAttribute("categories", categoryDAO.getByID(categoryNumber));
+        return "category/show :: searchResults";
+    }
+
+    @GetMapping("/categoryName/{categoryName}")
+    public String getByName(@PathVariable("categoryName") String categoryName, Model model) {
+        model.addAttribute("categories", categoryDAO.getByName(categoryName));
+        return "category/show :: searchResults";
+    }
+
 }

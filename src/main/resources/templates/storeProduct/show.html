@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Show products in store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/index.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg" id="navbar-custom">
+    <a class="navbar-brand" href="#">Zlagoda</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/category">Categories</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/check">Checks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/customer-card">Customer Cards</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/employee">Employees</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/product">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/sale">Sales</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link">Store Products</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container" id="table-container">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <input type="text" class="form-control mt-4" id="upcSearch"
+                       placeholder="Enter product UPC">
+            </div>
+            <div class="col-6 align-items-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="productType" id="allProducts" value="allProducts"
+                           checked>
+                    <label class="form-check-label" for="allProducts">
+                        All products
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="productType" id="promProduct"
+                           value="promProduct">
+                    <label class="form-check-label" for="promProduct">
+                        Promotional product
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="productType" id="notPromProduct"
+                           value="notPromProduct">
+                    <label class="form-check-label" for="notPromProduct">
+                        Not promotional product
+                    </label>
+                </div>
+            </div>
+            <div class="col">
+                <label for="sortBy" class="form-label">Sort By</label>
+                <select id="sortBy" class="form-select">
+                    <option th:selected="true" th:value="sortByName">Name</option>
+                    <option th:value="sortByQuantity">Quantity</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="searchResults" th:fragment="searchResults">
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">UPC</th>
+                <th scope="col">Promotional UPC</th>
+                <th scope="col">Product name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Promotional product</th>
+                <th scope="col">
+                    <a th:href="@{/api/v1/store-product/add-store-product}" type="button"
+                       class="btn btn-outline-primary">
+                        Add Product
+                    </a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="storeProduct : ${storeProducts}">
+                <th scope="row" th:text="${storeProduct.getUpc()}"></th>
+                <td th:text="${storeProduct.getUpcProm()}"></td>
+                <td>
+                  <span th:each="product : ${products}"
+                        th:if="${product.idProduct == storeProduct.idProduct}"
+                        th:with="matchedProduct=${product}">
+                    <span th:text="${matchedProduct.productName}"></span>
+                  </span>
+                </td>
+                <td th:text="${storeProduct.getSellingPrice()}"></td>
+                <td th:text="${storeProduct.getProductsNumber()}"></td>
+                <td th:text="${storeProduct.getPromotionalProduct()}"></td>
+                <td>
+                    <div class="btn-group-sm d-flex align-items-center gap-2">
+                        <a type="button" class="btn btn-outline-primary"
+                           th:href="@{/api/v1/store-product/{upc}/edit(upc=${storeProduct.getUpc()})}">
+                            Edit
+                        </a>
+                        <form th:method="DELETE"
+                              th:action="@{/api/v1/store-product/{upc}(upc=${storeProduct.getUpc()})}">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        const initialTable = $('#searchResults').html();
+        $('#upcSearch').on('input', function () {
+            const upc = $(this).val();
+            if (upc.trim() === '')
+                $('#searchResults').html(initialTable);
+            else
+                performUPCSearch(upc);
+        });
+    });
+
+    function updateTableStructure(response) {
+        // Create the new table structure dynamically
+        let newTable = $('<table class="table" id="newTable">');
+        // Create the new table headers dynamically
+        let newHeaders = $('<thead class="thead-dark">');
+        let headerRow = $('<tr>');
+        // Add the new headers
+        headerRow.append('<th scope="col">UPC</th>');
+        headerRow.append('<th scope="col">Product Name</th>');
+        headerRow.append('<th scope="col">Price</th>');
+        headerRow.append('<th scope="col">Quantity</th>');
+        headerRow.append('<th scope="col">Characteristics</th>');
+
+        newHeaders.append(headerRow);
+        const newBody = $('<tbody>');
+        // Iterate over the search results and create new rows
+        const newRow = $('<tr>');
+        // Create and append data cells
+        newRow.append('<td>' + response.upc + '</td>');
+        newRow.append('<td>' + response.productName + '</td>');
+        newRow.append('<td>' + response.sellingPrice + '</td>');
+        newRow.append('<td>' + response.productsNumber + '</td>');
+        newRow.append('<td>' + response.characteristics + '</td>');
+        // Append the new row to the new table body
+        newBody.append(newRow);
+
+        // Replace the old table with the new table
+        $('#searchResults').html(newTable);
+
+        // Append the new headers and body to the new table
+        newTable.append(newHeaders, newBody);
+    }
+
+    function performUPCSearch(upc) {
+        const url = "/api/v1/store-product/" + upc;
+        $.get(url, response => {
+            updateTableStructure(response);
+        });
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $('input[name="productType"]').on('change', function () {
+            let selectedRadio = $(this).val();
+
+            if (selectedRadio === 'promProduct') {
+                performSearchOfPromoted();
+            } else if (selectedRadio === 'notPromProduct') {
+                performSearchOfNotPromoted();
+            } else if (selectedRadio === 'allProducts') {
+                getAllProducts();
+            }
+        });
+
+        function performSearchOfPromoted() {
+            const url = "/api/v1/store-product/getPromotional/" + $('#sortBy').val();
+            $.get(url, function (response) {
+                $('#searchResults').html(response);
+            });
+        }
+
+        function performSearchOfNotPromoted() {
+            const url = "/api/v1/store-product/getNotPromotional/" + $('#sortBy').val();
+            $.get(url, function (response) {
+                $('#searchResults').html(response);
+            });
+        }
+
+        function getAllProducts() {
+            const url = "/api/v1/store-product/noFilters";
+            $.get(url, function (response) {
+                $('#searchResults').html(response);
+            });
+        }
+    });
+</script>
+</body>
+</html>

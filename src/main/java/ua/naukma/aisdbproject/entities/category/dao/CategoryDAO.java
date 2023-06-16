@@ -27,6 +27,11 @@ public class CategoryDAO {
                 new BeanPropertyRowMapper<>(Category.class)).stream().findAny().orElse(null);
     }
 
+    public Category getByName(String categoryName) {
+        return jdbcTemplate.query("SELECT * FROM `category` WHERE category_name=?", new Object[]{categoryName},
+                new BeanPropertyRowMapper<>(Category.class)).stream().findAny().orElse(null);
+    }
+
     public void add(Category category) {
         jdbcTemplate.update("INSERT INTO `category` VALUES (?,?)", category.getCategoryNumber(), category.getCategoryName());
     }
