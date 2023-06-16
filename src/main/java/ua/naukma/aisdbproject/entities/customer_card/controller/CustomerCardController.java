@@ -68,4 +68,16 @@ public class CustomerCardController {
         customerCardDAO.delete(cardNumber);
         return "redirect:/api/v1/customer-card";
     }
+
+    @GetMapping("/customerSurname/{customerSurname}")
+    public String getBySurname(@PathVariable("customerSurname") String customerSurname, Model model) {
+        model.addAttribute("customerCards", customerCardDAO.getBySurname(customerSurname));
+        return "customerCard/show :: searchResults";
+    }
+
+    @GetMapping("/cardNumber/{cardNumber}")
+    public String getByNumber(@PathVariable("cardNumber") String cardNumber, Model model) {
+        model.addAttribute("customerCards", customerCardDAO.getByNumber(cardNumber));
+        return "customerCard/show :: searchResults";
+    }
 }

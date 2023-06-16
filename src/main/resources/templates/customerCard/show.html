@@ -21,6 +21,11 @@
     #exportButton:hover {
       opacity: .7;
     }
+    .table-wrapper {
+      max-height: 90%;
+      overflow: auto;
+
+    }
   </style>
 </head>
 <body>
@@ -69,7 +74,7 @@
       </div>
     </div>
   </div>
-  <div class="table-responsive" id="searchResults" th:fragment="searchResults">
+  <div class="table-responsive table-wrapper" id="searchResults" th:fragment="searchResults">
     <table class="table">
       <thead class="thead-dark" data-id="name">
       <tr>
@@ -133,7 +138,7 @@
   });
 
   function performCardNumberSearch(cardNumber) {
-    const url = "/api/v1/customerCard/cardNumber/" + cardNumber;
+    const url = "/api/v1/customer-card/cardNumber/" + cardNumber;
     $.get(url, response => {
       $('#searchResults').html(response);
     });
@@ -153,7 +158,7 @@
   });
 
   function performCustomerSurnameSearch(customerSurname) {
-    const url = "/api/v1/customerCard/customerSurname/" + customerSurname;
+    const url = "/api/v1/customer-card/customerSurname/" + customerSurname;
     $.get(url, response => {
       $('#searchResults').html(response);
     });
@@ -172,8 +177,15 @@
       var searchResults = $('#searchResults');
       searchResults.find('tbody tr').each(function () {
         var row = {};
-        row["Category Number"] = parseInt($(this).find('th').eq(0).text().trim());
-        row["Category Name"] = $(this).find('td:nth-child(2)').text().trim();
+        row["Card Number"] = parseInt($(this).find('th').eq(0).text().trim());
+        row["Customer Surname"] = $(this).find('td').eq(0).text().trim();
+        row["Customer Name"] = $(this).find('td').eq(1).text().trim();
+        row["Customer Patronymic"] = $(this).find('td').eq(2).text().trim();
+        row["Phone Number"] = parseInt($(this).find('td').eq(3).text().trim());
+        row["City"] = $(this).find('td').eq(4).text().trim();
+        row["Street"] = $(this).find('td').eq(5).text().trim();
+        row["Zip code"] = parseInt($(this).find('td').eq(6).text().trim());
+        row["Percent"] = parseInt($(this).find('td').eq(7).text().trim());
         data.push(row);
       });
 
@@ -181,8 +193,15 @@
         data: data,
         schema: {
           fields: {
-            "Category Number": { type: Number },
-            "Category Name": { type: String }
+            "Card Number": { type: Number },
+            "Customer Surname": { type: String },
+            "Customer Name": { type: String },
+            "Customer Patronymic": { type: String },
+            "Phone Number": { type: Number },
+            "City": { type: String },
+            "Street": { type: String },
+            "Zip code": { type: Number },
+            "Percent": { type: Number }
           }
         }
       });
@@ -193,7 +212,7 @@
           created: new Date(),
         });
 
-        pdf.addPage("a4", "portrait");
+        pdf.addPage("a4", "landscape");
 
 
 
@@ -202,8 +221,15 @@
                 50,
                 data,
                 [
-                  { field: "Category Number", title: "Category Number", width: 100 },
-                  { field: "Category Name", title: "Category Name", width: 150 },
+                  { field: "Card Number", title: "Card Number", width: 90 },
+                  { field: "Customer Surname", title: "Customer Surname", width: 100 },
+                  { field: "Customer Name", title: "Customer Name", width: 100 },
+                  { field: "Customer Patronymic", title: "Customer Patronymic", width: 90 },
+                  { field: "Phone Number", title: "Phone Number", width: 100 },
+                  { field: "City", title: "City", width:50 },
+                  { field: "Street", title: "Street", width: 100 },
+                  { field: "Zip code", title: "Zip code", width: 60 },
+                  { field: "Percent", title: "Percent", width: 60 }
                 ],
                 {
                   margins: {
@@ -217,7 +243,7 @@
         var timestamp = new Date().toLocaleString();
 
         pdf.saveAs({
-          fileName: "CategoriesReport" + timestamp
+          fileName: "CustomerCardsReport" + timestamp
         });
       });
     });

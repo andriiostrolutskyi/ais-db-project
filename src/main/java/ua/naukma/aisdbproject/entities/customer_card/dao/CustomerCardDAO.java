@@ -27,6 +27,16 @@ public class CustomerCardDAO {
                 new BeanPropertyRowMapper<>(CustomerCard.class)).stream().findAny().orElse(null);
     }
 
+    public CustomerCard getBySurname(String customerSurname) {
+        return jdbcTemplate.query("SELECT * FROM `customer_card` WHERE cust_surname=?", new Object[]{customerSurname},
+                new BeanPropertyRowMapper<>(CustomerCard.class)).stream().findAny().orElse(null);
+    }
+
+    public CustomerCard getByNumber(String cardNumber) {
+        return jdbcTemplate.query("SELECT * FROM `customer_card` WHERE card_number=?", new Object[]{cardNumber},
+                new BeanPropertyRowMapper<>(CustomerCard.class)).stream().findAny().orElse(null);
+    }
+
     public void add(CustomerCard customerCard) {
         jdbcTemplate.update("INSERT INTO `customer_card` VALUES (?,?,?,?,?,?,?,?,?)",
                 customerCard.getCardNumber(),
