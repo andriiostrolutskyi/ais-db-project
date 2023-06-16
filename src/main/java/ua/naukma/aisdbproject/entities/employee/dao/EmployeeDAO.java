@@ -27,22 +27,27 @@ public class EmployeeDAO {
                 new BeanPropertyRowMapper<>(Employee.class)).stream().findAny().orElse(null);
     }
 
+    public List<Employee> getBySurname(String surnameEmployee) {
+        return jdbcTemplate.query("SELECT * FROM `employee` WHERE empl_surname=?", new Object[]{surnameEmployee},
+                new BeanPropertyRowMapper<>(Employee.class));
+    }
+
     public void add(Employee employee) {
         jdbcTemplate.update("INSERT INTO `employee` VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
-                employee.getIdEmployee(), employee.getEmployeeSurname(), employee.getEmployeeName(),
-                employee.getEmployeePatronymic(), employee.getEmployeeRole(), employee.getSalary(),
+                employee.getIdEmployee(), employee.getEmplSurname(), employee.getEmplName(),
+                employee.getEmplPatronymic(), employee.getEmplRole(), employee.getSalary(),
                 employee.getDateOfBirth(), employee.getDateOfStart(), employee.getPhoneNumber(),
-                employee.getPhoneNumber(), employee.getCity(), employee.getStreet(), employee.getZipCode());
+                employee.getCity(), employee.getStreet(), employee.getZipCode());
     }
 
     public void update(String idEmployee, Employee updatedEmployee) {
         jdbcTemplate.update("UPDATE `employee` SET  empl_surname=?, empl_name=?, empl_patronymic=?, empl_role=?," +
                         "salary=?, date_of_birth=?, date_of_start=?, phone_number=?, city=?, street=?, zip_code=?" +
                         " WHERE id_employee=?",
-                updatedEmployee.getEmployeeSurname(),
-                updatedEmployee.getEmployeeName(),
-                updatedEmployee.getEmployeePatronymic(),
-                updatedEmployee.getEmployeeRole(),
+                updatedEmployee.getEmplSurname(),
+                updatedEmployee.getEmplName(),
+                updatedEmployee.getEmplPatronymic(),
+                updatedEmployee.getEmplRole(),
                 updatedEmployee.getSalary(),
                 updatedEmployee.getDateOfBirth(),
                 updatedEmployee.getDateOfStart(),
@@ -58,3 +63,4 @@ public class EmployeeDAO {
         jdbcTemplate.update("DELETE FROM `employee` WHERE id_employee=?", idEmployee);
     }
 }
+
