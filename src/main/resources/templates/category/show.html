@@ -13,6 +13,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="extensions/natural-sorting/bootstrap-table-natural-sorting.js"></script>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&display=swap" rel="stylesheet">
+
     <style>
         #exportButton{
             width: 160px;
@@ -161,7 +165,7 @@
             searchResults.find('tbody tr').each(function () {
                 var row = {};
                 row["Category Number"] = parseInt($(this).find('th').eq(0).text().trim());
-                row["Category Name"] = $(this).find('td:nth-child(2)').text().trim();
+                row["Category Name"] = $(this).find('td').eq(0).text().trim();
                 data.push(row);
             });
 
