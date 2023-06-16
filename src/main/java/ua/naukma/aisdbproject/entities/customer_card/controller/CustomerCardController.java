@@ -11,11 +11,11 @@ import ua.naukma.aisdbproject.entities.customer_card.model.CustomerCard;
 
 @Controller
 @RequestMapping("/api/v1/customer-card")
-public class СustomerCardController {
+public class CustomerCardController {
     private final CustomerCardDAO customerCardDAO;
 
     @Autowired
-    public СustomerCardController(CustomerCardDAO customerCardDAO) {
+    public CustomerCardController(CustomerCardDAO customerCardDAO) {
         this.customerCardDAO = customerCardDAO;
     }
 

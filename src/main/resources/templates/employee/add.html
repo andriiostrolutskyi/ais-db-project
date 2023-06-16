@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add employee</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/index.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="#">Zlagoda</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/category">Categories</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/check">Checks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/customer-card">Customer Cards</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/employee">Employees</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/product">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/sale">Sales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/store-product">Store Products</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container-sm" id="table-container">
+    <form th:method="POST" th:action="@{/api/v1/employee}" th:object="${employee}">
+        <div class="mb-3">
+            <label for="id_employee" class="form-label">Employee ID</label>
+            <input class="form-control" name="id_employee" id="id_employee" th:field="*{idEmployee}" required="required">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="surname" class="form-label">Surname</label>
+            <input class="form-control" name="surname" id="surname" th:field="*{emplSurname}"
+                   required="required">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input class="form-control" name="name" id="name" th:field="*{emplName}"
+                   required="required">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="patronymic" class="form-label">Patronymic</label>
+            <input class="form-control" name="patronymic" id="patronymic" th:field="*{emplPatronymic}">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select class="form-control" name="role" id="role" th:field="*{emplRole}" required="required">
+                <option value="Cashier">Cashier</option>
+                <option value="Manager">Manager</option>
+            </select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="salary" class="form-label">Salary</label>
+            <input class="form-control" name="salary" id="salary" th:field="*{salary}"
+                   required="required">
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label for="dateOfBirth" class="form-label">Date of birth</label>
+            <input class="form-control" name="dateOfBirth" id="dateOfBirth" th:field="*{dateOfBirth}"
+                   required="required">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="dateOfStart" class="form-label">Date of start</label>
+            <input class="form-control" name="dateOfStart" id="dateOfStart" th:field="*{dateOfStart}"
+                   required="required">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input class="form-control" name="phone" id="phone" th:field="*{phoneNumber}"
+                   required="required">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="city" class="form-label">City</label>
+            <input class="form-control" name="city" id="city" th:field="*{city}"
+                   required="required">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="street" class="form-label">Street</label>
+            <input class="form-control" name="street" id="street" th:field="*{street}"
+                   required="required">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="zipCode" class="form-label">ZIP code</label>
+            <input class="form-control" name="zipCode" id="zipCode" th:field="*{zipCode}"
+                   required="required">
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Add employee</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
