@@ -50,6 +50,11 @@ public class CustomerCard {
         return cardNumber;
     }
 
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+
     public String getCustSurname() {
         return custSurname;
     }
