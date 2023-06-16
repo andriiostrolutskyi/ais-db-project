@@ -18,7 +18,7 @@ public class EmployeeDAO {
     }
 
     public List<Employee> getAll() {
-        return jdbcTemplate.query("SELECT * FROM `employee`",
+        return jdbcTemplate.query("SELECT * FROM `employee` ORDER BY empl_surname ASC",
                 new BeanPropertyRowMapper<>(Employee.class));
     }
 
@@ -31,6 +31,12 @@ public class EmployeeDAO {
         return jdbcTemplate.query("SELECT * FROM `employee` WHERE empl_surname=?", new Object[]{surnameEmployee},
                 new BeanPropertyRowMapper<>(Employee.class));
     }
+
+    public List<Employee> getCashiers() {
+        String query = "SELECT * FROM `employee` WHERE empl_role = 'Cashier' ORDER BY empl_surname ASC";
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(Employee.class));
+    }
+
 
     public void add(Employee employee) {
         jdbcTemplate.update("INSERT INTO `employee` VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",

@@ -126,6 +126,27 @@
 <script th:inline="javascript">
     $(document).ready(function () {
         const initialTable = $('#searchResults').html();
+        $('#idEmployeeInput').on('input', function () {
+            const employeeID = $(this).val();
+            if (employeeID.trim() === '')
+                $('#searchResults').html(initialTable);
+            else
+                performIDSearch(employeeID);
+        });
+    });
+
+    function performIDSearch(employeeID) {
+        const url = "/api/v1/employee/" + employeeID;
+        $.get(url, response => {
+            $('#searchResults').html(response);
+        });
+    }
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        const initialTable = $('#searchResults').html();
         $('#surnameEmployeeInput').on('input', function () {
             const employeeSurname = $(this).val();
             if (employeeSurname.trim() === '')
@@ -143,5 +164,26 @@
     }
 
 </script>
+
+<script>
+    $(document).ready(function () {
+        const initialTable = $('#searchResults').html();
+        $('#isCashier').on('change', function () {
+            if ($(this).is(':checked')) {
+                performRequest()
+            } else {
+                $('#searchResults').html(initialTable);
+            }
+        });
+    });
+
+    function performRequest() {
+        const url = "/api/v1/employee/cashier";
+        $.get(url, response => {
+            $('#searchResults').html(response);
+        });
+    }
+</script>
+
 </body>
 </html>
