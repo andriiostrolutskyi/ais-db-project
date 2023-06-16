@@ -18,7 +18,7 @@ public class CustomerCardDAO {
     }
 
     public List<CustomerCard> getAll() {
-        return jdbcTemplate.query("SELECT * FROM `customer_card`",
+        return jdbcTemplate.query("SELECT * FROM `customer_card` ORDER BY cust_surname ASC",
                 new BeanPropertyRowMapper<>(CustomerCard.class));
     }
 
