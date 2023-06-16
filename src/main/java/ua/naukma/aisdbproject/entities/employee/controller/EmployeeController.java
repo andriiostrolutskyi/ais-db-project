@@ -30,6 +30,11 @@ public class EmployeeController {
         model.addAttribute("employee", employeeDAO.getByID(idEmployee));
         return "employee/show";
     }
+    @GetMapping("/surname/{surnameEmployee}")
+    public String getBySurname(@PathVariable("surnameEmployee") String surnameEmployee, Model model) {
+        model.addAttribute("employee", employeeDAO.getBySurname(surnameEmployee));
+        return "employee/show :: searchResults";
+    }
 
     @GetMapping("/add-employee")
     public String goToAdd(Model model) {

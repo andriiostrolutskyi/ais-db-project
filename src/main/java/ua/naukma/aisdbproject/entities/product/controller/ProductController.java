@@ -32,11 +32,13 @@ public class ProductController {
     @GetMapping("/categoryNumber/{categoryNumber}")
     public String getByCategory(@PathVariable("categoryNumber") Integer categoryNumber, Model model) {
         model.addAttribute("products", productDAO.getByCategory(categoryNumber));
+        model.addAttribute("categories", categoryDAO.getAll());
         return "product/show :: searchResults";
     }
     @GetMapping("/productName/{productName}")
     public String getByName(@PathVariable("productName") String productName, Model model) {
         model.addAttribute("products", productDAO.getByName(productName));
+        model.addAttribute("categories", categoryDAO.getAll());
         return "product/show :: searchResults";
     }
 

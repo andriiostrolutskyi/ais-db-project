@@ -7,25 +7,23 @@ import jakarta.validation.constraints.Size;
 import java.sql.Date;
 
 public class Employee {
-    @NotEmpty(message = "Employee id cant be empty")
-    @Size(max = 10, message = "Employee id should be less than 10 characters")
+    @NotEmpty(message = "Employee ID cant be empty")
+    @Size(max = 10, message = "Employee ID should be less than 10 characters")
     private String idEmployee;
     @NotEmpty(message = "Employee surname can't be empty")
     @Size(max = 50, message = "Employee surname should be less than  50 characters")
-    private String employeeSurname;
+    private String emplSurname;
     @NotEmpty(message = "Employee name can't be empty")
     @Size(max = 50, message = "Employee name should be less than  50 characters")
-    private String employeeName;
+    private String emplName;
     @Size(max = 50, message = "Employee patronymic should be less than  50 characters")
-    private String employeePatronymic;
+    private String emplPatronymic;
     @NotEmpty(message = "Employee role can't be empty")
     @Size(max = 10, message = "Employee role should be less than 10 characters")
-    private String employeeRole;
+    private String emplRole;
     @NotNull(message = "Salary can't be empty")
     private Float salary;
-    @NotEmpty(message = "Date of birth can't be empty")
     private Date dateOfBirth;
-    @NotEmpty(message = "Date of start can't be empty")
     private Date dateOfStart;
     @NotEmpty(message = "Phone number can't be empty")
     @Size(max = 13, message = "Phone number should be less than 13 characters")
@@ -48,9 +46,9 @@ public class Employee {
                     Float salary, Date dateOfBirth, Date dateOfStart, String phoneNumber, String city,
                     String street, String zipCode) {
         this.idEmployee = idEmployee;
-        this.employeeSurname = employeeSurname;
-        this.employeeName = employeeName;
-        this.employeeRole = employeeRole;
+        this.emplSurname = employeeSurname;
+        this.emplName = employeeName;
+        this.emplRole = employeeRole;
         this.salary = salary;
         this.dateOfBirth = dateOfBirth;
         this.dateOfStart = dateOfStart;
@@ -64,10 +62,10 @@ public class Employee {
                     String employeeRole, Float salary, Date dateOfBirth, Date dateOfStart, String phoneNumber,
                     String city, String street, String zipCode) {
         this.idEmployee = idEmployee;
-        this.employeeSurname = employeeSurname;
-        this.employeeName = employeeName;
-        this.employeePatronymic = employeePatronymic;
-        this.employeeRole = employeeRole;
+        this.emplSurname = employeeSurname;
+        this.emplName = employeeName;
+        this.emplPatronymic = employeePatronymic;
+        this.emplRole = employeeRole;
         this.salary = salary;
         this.dateOfBirth = dateOfBirth;
         this.dateOfStart = dateOfStart;
@@ -85,36 +83,36 @@ public class Employee {
         this.idEmployee = idEmployee;
     }
 
-    public String getEmployeeSurname() {
-        return employeeSurname;
+    public String getEmplSurname() {
+        return emplSurname;
     }
 
-    public void setEmployeeSurname(String employeeSurname) {
-        this.employeeSurname = employeeSurname;
+    public void setEmplSurname(String emplSurname) {
+        this.emplSurname = emplSurname;
     }
 
-    public String getEmployeeName() {
-        return employeeName;
+    public String getEmplName() {
+        return emplName;
     }
 
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
+    public void setEmplName(String emplName) {
+        this.emplName = emplName;
     }
 
-    public String getEmployeePatronymic() {
-        return employeePatronymic;
+    public String getEmplPatronymic() {
+        return emplPatronymic;
     }
 
-    public void setEmployeePatronymic(String employeePatronymic) {
-        this.employeePatronymic = employeePatronymic;
+    public void setEmplPatronymic(String emplPatronymic) {
+        this.emplPatronymic = emplPatronymic;
     }
 
-    public String getEmployeeRole() {
-        return employeeRole;
+    public String getEmplRole() {
+        return emplRole;
     }
 
-    public void setEmployeeRole(String employeeRole) {
-        this.employeeRole = employeeRole;
+    public void setEmplRole(String emplRole) {
+        this.emplRole = emplRole;
     }
 
     public Float getSalary() {
@@ -177,10 +175,10 @@ public class Employee {
     public String toString() {
         return "Employee{" +
                 "idEmployee='" + idEmployee + '\'' +
-                ", employeeSurname='" + employeeSurname + '\'' +
-                ", employeeName='" + employeeName + '\'' +
-                ", employeePatronymic='" + employeePatronymic + '\'' +
-                ", employeeRole='" + employeeRole + '\'' +
+                ", employeeSurname='" + emplSurname + '\'' +
+                ", employeeName='" + emplName + '\'' +
+                ", employeePatronymic='" + emplPatronymic + '\'' +
+                ", employeeRole='" + emplRole + '\'' +
                 ", salary=" + salary +
                 ", dateOfBirth=" + dateOfBirth +
                 ", dateOfStart=" + dateOfStart +
