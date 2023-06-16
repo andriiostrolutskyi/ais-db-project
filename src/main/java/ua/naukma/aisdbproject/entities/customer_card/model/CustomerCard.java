@@ -10,12 +10,12 @@ public class CustomerCard {
     private String cardNumber;
     @NotEmpty(message = "Customer surname can't be empty")
     @Size(max = 50, message = "Customer surname should be less than 50 characters")
-    private String customerSurname;
+    private String custSurname;
     @NotEmpty(message = "Customer name can't be empty")
     @Size(max = 50, message = "Customer name should be less than 50 characters")
-    private String customerName;
+    private String custName;
     @Size(max = 50, message = "Customer patronymic should be less than 50 characters")
-    private String customerPatronymic;
+    private String custPatronymic;
     @NotEmpty(message = "Customer phone number can't be empty")
     @Size(max = 13, message = "Phone number should be less than 13 characters")
     private String phoneNumber;
@@ -36,9 +36,9 @@ public class CustomerCard {
                         String customerPatronymic, String phoneNumber, String city, String street,
                         String zipCode, Integer percent) {
         this.cardNumber = cardNumber;
-        this.customerSurname = customerSurname;
-        this.customerName = customerName;
-        this.customerPatronymic = customerPatronymic;
+        this.custSurname = customerSurname;
+        this.custName = customerName;
+        this.custPatronymic = customerPatronymic;
         this.phoneNumber = phoneNumber;
         this.city = city;
         this.street = street;
@@ -50,28 +50,28 @@ public class CustomerCard {
         return cardNumber;
     }
 
-    public String getCustomerSurname() {
-        return customerSurname;
+    public String getCustSurname() {
+        return custSurname;
     }
 
-    public void setCustomerSurname(String customerSurname) {
-        this.customerSurname = customerSurname;
+    public void setCustSurname(String custSurname) {
+        this.custSurname = custSurname;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getCustName() {
+        return custName;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setCustName(String custName) {
+        this.custName = custName;
     }
 
-    public String getCustomerPatronymic() {
-        return customerPatronymic;
+    public String getCustPatronymic() {
+        return custPatronymic;
     }
 
-    public void setCustomerPatronymic(String customerPatronymic) {
-        this.customerPatronymic = customerPatronymic;
+    public void setCustPatronymic(String custPatronymic) {
+        this.custPatronymic = custPatronymic;
     }
 
     public String getPhoneNumber() {
@@ -118,9 +118,9 @@ public class CustomerCard {
     public String toString() {
         return "CustomerCard{" +
                 "cardNumber='" + cardNumber + '\'' +
-                ", customerSurname='" + customerSurname + '\'' +
-                ", customerName='" + customerName + '\'' +
-                ", customerPatronymic='" + customerPatronymic + '\'' +
+                ", customerSurname='" + custSurname + '\'' +
+                ", customerName='" + custName + '\'' +
+                ", customerPatronymic='" + custPatronymic + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", city='" + city + '\'' +
                 ", street='" + street + '\'' +

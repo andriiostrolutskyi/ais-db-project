@@ -30,9 +30,9 @@ public class CustomerCardDAO {
     public void add(CustomerCard customerCard) {
         jdbcTemplate.update("INSERT INTO `customer_card` VALUES (?,?,?,?,?,?,?,?,?)",
                 customerCard.getCardNumber(),
-                customerCard.getCustomerSurname(),
-                customerCard.getCustomerName(),
-                customerCard.getCustomerPatronymic(),
+                customerCard.getCustSurname(),
+                customerCard.getCustName(),
+                customerCard.getCustPatronymic(),
                 customerCard.getPhoneNumber(),
                 customerCard.getCity(),
                 customerCard.getStreet(),
@@ -43,9 +43,9 @@ public class CustomerCardDAO {
     public void update(String cardNumber, CustomerCard updatedCustomerCard) {
         jdbcTemplate.update("UPDATE `customer_card` SET  cust_surname=?, cust_name=?, cust_patronymic=?," +
                         "phone_number=?, city=?, street=?, zip_code=?, percent=? WHERE card_number=?",
-                updatedCustomerCard.getCustomerSurname(),
-                updatedCustomerCard.getCustomerName(),
-                updatedCustomerCard.getCustomerPatronymic(),
+                updatedCustomerCard.getCustSurname(),
+                updatedCustomerCard.getCustName(),
+                updatedCustomerCard.getCustPatronymic(),
                 updatedCustomerCard.getPhoneNumber(),
                 updatedCustomerCard.getCity(),
                 updatedCustomerCard.getStreet(),

@@ -27,12 +27,12 @@ public class EmployeeController {
 
     @GetMapping("/{idEmployee}")
     public String getByID(@PathVariable("idEmployee") String idEmployee, Model model) {
-        model.addAttribute("employee", employeeDAO.getByID(idEmployee));
+        model.addAttribute("employees", employeeDAO.getByID(idEmployee));
         return "employee/show";
     }
     @GetMapping("/surname/{surnameEmployee}")
     public String getBySurname(@PathVariable("surnameEmployee") String surnameEmployee, Model model) {
-        model.addAttribute("employee", employeeDAO.getBySurname(surnameEmployee));
+        model.addAttribute("employees", employeeDAO.getBySurname(surnameEmployee));
         return "employee/show :: searchResults";
     }
 

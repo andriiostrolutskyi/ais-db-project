@@ -99,15 +99,15 @@
       <tbody>
       <tr th:each="customerCard : ${customerCards}">
         <th scope="row" th:text="${customerCard.getCardNumber()}"/>
-        <td th:text="${customerCard.getCustomerName()}"/>
-        <td th:text="${customerCard.getCustomerSurname()}"/>
-        <td th:text="${customerCard.getCustomerPatronymic()}"/>
+        <td th:text="${customerCard.getCustName()}"/>
+        <td th:text="${customerCard.getCustSurname()}"/>
+        <td th:text="${customerCard.getCustPatronymic()}"/>
         <td th:text="${customerCard.getPhoneNumber()}"/>
         <td th:text="${customerCard.getCity()}"/>
         <td th:text="${customerCard.getStreet()}"/>
         <td th:text="${customerCard.getZipCode()}"/>
         <td th:text="${customerCard.getPercent()}"/>
-        <td th:text="${customerCard.getCustomerPatronymic()}"/>
+        <td th:text="${customerCard.getCustPatronymic()}"/>
         <td>
           <div class="btn-group-sm d-flex align-items-center gap-2">
             <a type="button" class="btn btn-outline-primary"
