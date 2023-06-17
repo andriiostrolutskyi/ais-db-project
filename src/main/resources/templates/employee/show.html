@@ -120,6 +120,7 @@
             </tr>
             </tbody>
         </table>
+        <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to PDF</button>
     </div>
 </div>
 
@@ -184,6 +185,101 @@
         });
     }
 </script>
+<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/jszip.min.js"></script>
 
+<script type="text/javascript">
+    jQuery(function ($) {
+        $(document).on('click', '#exportButton', function () {
+
+            var data = [];
+            var searchResults = $('#searchResults');
+
+            searchResults.find('tbody tr').each(function () {
+                var row = {};
+                row["ID"] = $(this).find('th').eq(0).text().trim();
+                row["Surname"] = $(this).find('td').eq(0).text().trim();
+                row["Name"] = $(this).find('td').eq(1).text().trim();
+                row["Patronymic"] = $(this).find('td').eq(2).text().trim();
+                row["Role"] = $(this).find('td').eq(3).text().trim();
+                row["Salary"] = $(this).find('td').eq(4).text().trim();
+                row["Birth date"] = $(this).find('td').eq(5).text().trim();
+                row["Start date"] = $(this).find('td').eq(6).text().trim();
+                row["Phone"] = $(this).find('td').eq(7).text().trim();
+                row["City"] = $(this).find('td').eq(8).text().trim();
+                row["Street"] = $(this).find('td').eq(9).text().trim();
+                row["ZIP code"] = $(this).find('td').eq(10).text().trim();
+                data.push(row);
+            });
+
+            var dataSource = shield.DataSource.create({
+                data: data,
+                schema: {
+                    fields: {
+                        "ID": { type: String },
+                        "Surname": { type: String },
+                        "Name": { type: String},
+                        "Patronymic": { type: String},
+                        "Role": { type: String},
+                        "Salary": { type: Number},
+                        "Birth date": { type: Date},
+                        "Start date": { type: Date},
+                        "Phone": { type: String},
+                        "City": { type: String},
+                        "Street": { type: String},
+                        "ZIP code": { type: String}
+                    }
+                }
+            });
+
+            dataSource.read().then(function (data) {
+                var pdf = new shield.exp.PDFDocument({
+                    author: "Zlagoda",
+                    created: new Date(),
+                });
+
+                pdf.addPage("a4", "landscape");
+
+
+
+                pdf.table(
+                    50,
+                    50,
+                    data,
+                    [
+                        { field: "ID", title: "ID", width: 50 },
+                        { field: "Surname", title: "Surname", width: 75 },
+                        { field: "Name", title: "Name", width: 65 },
+                        { field: "Patronymic", title: "Patronymic", width: 70 },
+                        { field: "Role", title: "Role", width: 60 },
+                        { field: "Salary", title: "Salary", width: 50 },
+                        { field: "Birth date", title: "Birth date", width: 70 },
+                        { field: "Start date", title: "Start date", width: 70 },
+                        { field: "Phone", title: "Phone", width: 80 },
+                        { field: "City", title: "City", width: 50 },
+                        { field: "Street", title: "Street", width: 60 },
+                        { field: "ZIP code", title: "ZIP code", width: 60 }
+                    ],
+                    {
+                        margins: {
+                            top: 50,
+                            left: 50
+                        }
+                    }
+
+                );
+
+                var timestamp = new Date().toLocaleString();
+
+                pdf.saveAs({
+                    fileName: "EmployeesReport" + timestamp
+                });
+
+
+            });
+        });
+    });
+</script>
 </body>
 </html>

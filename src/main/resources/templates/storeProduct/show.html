@@ -142,6 +142,7 @@
             </tr>
             </tbody>
         </table>
+        <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to PDF</button>
     </div>
 </div>
 <script th:inline="javascript">
@@ -230,6 +231,81 @@
                 $('#searchResults').html(response);
             });
         }
+    });
+</script>
+<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/jszip.min.js"></script>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        $(document).on('click', '#exportButton', function () {
+
+            var data = [];
+            var searchResults = $('#searchResults');
+            searchResults.find('tbody tr').each(function () {
+                var row = {};
+                row["UPC"] = parseInt($(this).find('th').eq(0).text().trim());
+                row["Promotional UPC"] = $(this).find('td').eq(0).text().trim();
+                row["Product name"] = $(this).find('td').eq(1).text().trim();
+                row["Price"] = $(this).find('td').eq(2).text().trim();
+                row["Quantity"] = $(this).find('td').eq(3).text().trim();
+                row["Promotional product"] = $(this).find('td').eq(4).text().trim();
+                data.push(row);
+            });
+
+            var dataSource = shield.DataSource.create({
+                data: data,
+                schema: {
+                    fields: {
+                        "UPC": { type: Number },
+                        "Promotional UPC": { type: Number },
+                        "Product name": { type: String },
+                        "Price": { type: Number},
+                        "Quantity": { type: Number},
+                        "Promotional product": { type: String}
+                    }
+                }
+            });
+
+            dataSource.read().then(function (data) {
+                var pdf = new shield.exp.PDFDocument({
+                    author: "Zlagoda",
+                    created: new Date(),
+                });
+
+                pdf.addPage("a4", "portrait");
+
+
+
+                pdf.table(
+                    50,
+                    50,
+                    data,
+                    [
+                        { field: "UPC", title: "UPC", width: 100 },
+                        { field: "Promotional UPC", title: "Promotional UPC", width: 100 },
+                        { field: "Product name", title: "Product Name", width: 100 },
+                        { field: "Price", title: "Price", width: 50 },
+                        { field: "Quantity", title: "Quantity", width: 60 },
+                        { field: "Promotional product", title: "Promotional product", width: 80 },
+                    ],
+                    {
+                        margins: {
+                            top: 50,
+                            left: 50
+                        }
+                    }
+
+                );
+
+                var timestamp = new Date().toLocaleString();
+
+                pdf.saveAs({
+                    fileName: "StoreProductsReport" + timestamp
+                });
+            });
+        });
     });
 </script>
 </body>

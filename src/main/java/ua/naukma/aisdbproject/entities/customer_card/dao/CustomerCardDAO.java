@@ -37,9 +37,9 @@ public class CustomerCardDAO {
                 new BeanPropertyRowMapper<>(CustomerCard.class)).stream().findAny().orElse(null);
     }
 
-    public CustomerCard getByPercent(Integer percent) {
-        return jdbcTemplate.query("SELECT * FROM `customer_card` WHERE percent=?", new Object[]{percent},
-                new BeanPropertyRowMapper<>(CustomerCard.class)).stream().findAny().orElse(null);
+    public List<CustomerCard> getByPercent(Integer percent) {
+        return jdbcTemplate.query("SELECT * FROM `customer_card` WHERE percent=? ORDER BY cust_surname", new Object[]{percent},
+                new BeanPropertyRowMapper<>(CustomerCard.class));
     }
 
     public void add(CustomerCard customerCard) {
