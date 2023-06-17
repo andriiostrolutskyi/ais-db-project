@@ -72,6 +72,10 @@
         <input type="text" class="form-control mt-4" id="customerSurnameInput"
                placeholder="Enter customer surname">
       </div>
+      <div class="col-md-6">
+        <input type="text" class="form-control mt-4" id="percentInput"
+               placeholder="Enter percent value">
+      </div>
     </div>
   </div>
   <div class="table-responsive table-wrapper" id="searchResults" th:fragment="searchResults">
@@ -88,7 +92,7 @@
         <th scope="col">Zip code</th>
         <th scope="col">Percent</th>
         <th scope="col">
-          <a th:href="@{/api/v1/customerCard/add-customerCard}" type="button" class="btn btn-outline-primary">
+          <a th:href="@{/api/v1/customer-card/add-customer-card}" type="button" class="btn btn-outline-primary">
             Add Customer Card
           </a>
         </th>
@@ -97,8 +101,8 @@
       <tbody>
       <tr th:each="customerCard : ${customerCards}">
         <th scope="row" th:text="${customerCard.getCardNumber()}"/>
-        <td th:text="${customerCard.getCustName()}"/>
         <td th:text="${customerCard.getCustSurname()}"/>
+        <td th:text="${customerCard.getCustName()}"/>
         <td th:text="${customerCard.getCustPatronymic()}"/>
         <td th:text="${customerCard.getPhoneNumber()}"/>
         <td th:text="${customerCard.getCity()}"/>
@@ -159,6 +163,26 @@
 
   function performCustomerSurnameSearch(customerSurname) {
     const url = "/api/v1/customer-card/customerSurname/" + customerSurname;
+    $.get(url, response => {
+      $('#searchResults').html(response);
+    });
+  }
+</script>
+
+<script>
+  $(document).ready(function () {
+    const initialTable = $('#searchResults').html();
+    $('#percentInput').on('input', function () {
+      const percent = $(this).val();
+      if (percent.trim() === '')
+        $('#searchResults').html(initialTable);
+      else
+        performPercentSearch(percent);
+    });
+  });
+
+  function performPercentSearch(percent) {
+    const url = "/api/v1/customer-card/percent/" + percent;
     $.get(url, response => {
       $('#searchResults').html(response);
     });

@@ -1,10 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add Customer Card</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/index.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 </head>
 <body>
-
+<nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="#">Zlagoda</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/category">Categories</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/check">Checks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/customer-card">Customer Cards</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/employee">Employees</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/product">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/sale">Sales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/store-product">Store Products</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container-sm" id="table-container">
+    <form th:method="POST" th:action="@{/api/v1/customer-card}" th:object="${customerCard}" class ="needs-validation">
+        <div class="mb-3">
+            <label for="card_number" class="form-label">Card Number</label>
+            <input class="form-control" name="card_number" id="card_number" th:field="*{cardNumber}" required="required">
+        </div>
+        <div class="mb-3">
+            <label for="customer_surname" class="form-label">Customer Surname</label>
+            <input class="form-control" name="customer_surname" id="customer_surname" th:field="*{custSurname}" required="required">
+        </div>
+        <div class="mb-3">
+            <label for="customer_name" class="form-label">Customer Name</label>
+            <input class="form-control" name="customer_name" id="customer_name" th:field="*{custName}" required="required">
+        </div>
+        <div class="mb-3">
+            <label for="customer_patronymic" class="form-label">Customer Patronymic</label>
+            <input class="form-control" name="customer_patronymic" id="customer_patronymic" th:field="*{custPatronymic}">
+        </div>
+        <div class="mb-3">
+            <label for="phone_number" class="form-label">Phone Number</label>
+            <input class="form-control" name="phone_number" id="phone_number" th:field="*{phoneNumber}" required="required">
+        </div>
+        <div class="mb-3">
+            <label for="city" class="form-label">City</label>
+            <input class="form-control" name="city" id="city" th:field="*{city}" required="required">
+        </div>
+        <div class="mb-3">
+            <label for="street" class="form-label">Street</label>
+            <input class="form-control" name="street" id="street" th:field="*{street}" required="required">
+        </div>
+        <div class="mb-3">
+            <label for="zip_code" class="form-label">Zip code</label>
+            <input class="form-control" name="zip_code" id="zip_code" th:field="*{zipCode}" required="required">
+        </div>
+        <div class="mb-3">
+            <label for="percent" class="form-label">Percent</label>
+            <input class="form-control" name="percent" id="percent" th:field="*{percent}" required="required">
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Add customer card</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>

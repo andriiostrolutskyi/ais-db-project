@@ -80,4 +80,10 @@ public class CustomerCardController {
         model.addAttribute("customerCards", customerCardDAO.getByNumber(cardNumber));
         return "customerCard/show :: searchResults";
     }
+
+    @GetMapping("/percent/{percent}")
+    public String getByPercent(@PathVariable("percent") Integer percent, Model model) {
+        model.addAttribute("customerCards", customerCardDAO.getByPercent(percent));
+        return "customerCard/show :: searchResults";
+    }
 }
