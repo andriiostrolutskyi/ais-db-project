@@ -50,7 +50,7 @@
           th:object="${storeProduct}" class="needs-validation">
         <div class="mb-3">
             <label for="upc" class="form-label">UPC</label>
-            <input class="form-control" name="upc" id="upc" th:field="*{upc}" readonly>
+            <input class="form-control bg-light" name="upc" id="upc" th:field="*{upc}" readonly>
         </div>
         <div class="mb-3">
             <label for="upcProm" class="form-label">Promotional UPC</label>
@@ -62,7 +62,7 @@
         </div>
         <div class="mb-3">
             <label for="productId" class="form-label">Product ID</label>
-            <select id="productId" th:field="*{idProduct}" class="form-select" required>
+            <select id="productId" th:field="*{#idProduct}" class="form-select" required>
                 <option th:selected="true" th:value="null">Select an ID</option>
                 <option th:each="product : ${productIDs}" th:text="${product.getProductName()}"
                         th:value="${product.getIdProduct()}"></option>
