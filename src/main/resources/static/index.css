@@ -1,52 +1,68 @@
 /*------Navbar css-----*/
-.navbar{
+.navbar {
     background-color: #003049;
 }
+
 .navbar .navbar-brand {
     margin: 5px;
     color: #EAE2B7;
 }
+
 .navbar .nav-link {
     color: #EAE2B7;
 }
+
 /*--------------------*/
 
 /*-----Buttons css----*/
 .btn-outline-warning {
     border-color: #FCBF49;
 }
+
 .btn-outline-warning:hover {
     background-color: #FCBF49;
 }
-.btn-outline-primary{
+
+.btn-outline-primary {
     border-color: #003049;
     color: #003049;
 }
-.btn-outline-primary:hover{
+
+.btn-outline-primary:hover {
     border-color: #003049;
     background-color: #003049;
 }
-.btn-outline-primary:active:focus{
+
+.btn-outline-primary:active:focus {
     border-color: #003049;
     background-color: #003049;
 }
-.btn-primary{
+
+.btn-primary {
     background-color: #003049;
     border-color: #003049;
 }
-.btn-primary:hover{
+
+.btn-primary:hover {
     background-color: #003049;
 }
+
 /*--------------------*/
 
 /*---Inputs css-------*/
-.form-control:focus{
+.form-control:focus {
     border-color: #003049;
     box-shadow: 1px 3px #003049;
 }
+
 /*--------------------*/
 
-#table-container{
+#table-container {
     margin-top: 25px;
     vertical-align: middle;
+}
+
+#searchResults {
+    height: 600px;
+    overflow-y: auto;
 }
