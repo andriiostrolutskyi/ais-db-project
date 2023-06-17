@@ -1,5 +1,6 @@
 package ua.naukma.aisdbproject.entities.employee.dao;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -44,6 +45,10 @@ public class EmployeeDAO {
                 employee.getEmplPatronymic(), employee.getEmplRole(), employee.getSalary(),
                 employee.getDateOfBirth(), employee.getDateOfStart(), employee.getPhoneNumber(),
                 employee.getCity(), employee.getStreet(), employee.getZipCode());
+        jdbcTemplate.update("INSERT INTO `users` VALUES (?,?,?)",
+                employee.getIdEmployee(),
+                BCrypt.hashpw(employee.getIdEmployee(), BCrypt.gensalt()),
+                employee.getEmplRole());
     }
 
     public void update(String idEmployee, Employee updatedEmployee) {
