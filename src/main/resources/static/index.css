@@ -65,4 +65,13 @@
 #searchResults {
     height: 600px;
     overflow-y: auto;
+    margin-top: 10px;
+}
+#searchResults thead th {
+    position: sticky;
+    top: 0;
+}
+
+#exportButton {
+    margin-top: 30px;
 }
