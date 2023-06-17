@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Add product to store</title>
@@ -46,10 +46,10 @@
     </div>
 </nav>
 <div class="container-sm" id="table-container">
-    <form th:method="POST" th:action="@{/api/v1/store-product}" th:object="${storeProduct}">
+    <form th:method="POST" th:action="@{/api/v1/store-product}" th:object="${storeProduct}" class="needs-validation">
         <div class="mb-3">
             <label for="upc" class="form-label">UPC</label>
-            <input class="form-control" name="upc" id="upc" th:field="*{upc}" required="required">
+            <input class="form-control" name="upc" id="upc" th:field="*{upc}" required>
         </div>
         <div class="mb-3">
             <label for="upcProm" class="form-label">Promotional UPC</label>
@@ -61,7 +61,7 @@
         </div>
         <div class="mb-3">
             <label for="productId" class="form-label">Product ID</label>
-            <select id="productId" th:field="*{idProduct}" class="form-select">
+            <select id="productId" th:field="*{idProduct}" class="form-select" required>
                 <option th:selected="true" th:value="null">Select an ID</option>
                 <option th:each="product : ${productIDs}" th:text="${product.getProductName()}"
                         th:value="${product.getIdProduct()}"></option>
@@ -70,12 +70,12 @@
         <div class="mb-3">
             <label for="sellingPrice" class="form-label">Price</label>
             <input class="form-control" name="sellingPrice" id="sellingPrice" th:field="*{sellingPrice}"
-                   required="required">
+                   required>
         </div>
         <div class="mb-3">
             <label for="quantity" class="form-label">Quantity</label>
-            <textarea class="form-control" name="quantity" id="quantity" th:field="*{productsNumber}"
-                      required="required"></textarea>
+            <input class="form-control" name="quantity" id="quantity" th:field="*{productsNumber}"
+                      required/>
         </div>
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="isPromotional" th:field="*{promotionalProduct}">

@@ -47,43 +47,54 @@
     </div>
 </nav>
 <div class="container-sm" id="table-container">
-    <form th:method="PATCH" th:action="@{/api/v1/customer-card/{cardNumber}(cardNumber=${customerCard.getCardNumber()})}"
+    <form th:method="PATCH"
+          th:action="@{/api/v1/customer-card/{cardNumber}(cardNumber=${customerCard.getCardNumber()})}"
           th:object="${customerCard}" class="needs-validation">
-        <div class="mb-3">
-            <label for="card_number" class="form-label">Card Number</label>
-            <input class="form-control bg-light" name="card_number" id="card_number" th:field="*{cardNumber}" required="required" readonly>
+        <div class="row mb-4">
+            <div class="form-group col-md-2">
+                <label for="card_number">Card Number</label>
+                <input type="text" class="form-control" id="card_number" th:field="*{cardNumber}"
+                       placeholder="Card Number" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="customer_surname">Customer Surname</label>
+                <input type="text" class="form-control" id="customer_surname" th:field="*{custSurname}"
+                       placeholder="Surname" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="customer_name">Customer Name</label>
+                <input type="text" class="form-control" id="customer_name" th:field="*{custName}" placeholder="Name"
+                       required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="customer_patronymic">Patronymic</label>
+                <input type="text" class="form-control" id="customer_patronymic" th:field="*{custPatronymic}"
+                       placeholder="Customer Patronymic">
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="customer_surname" class="form-label">Customer Surname</label>
-            <input class="form-control" name="customer_surname" id="customer_surname" th:field="*{custSurname}" required="required">
+        <div class="row mb-4">
+            <div class="form-group col-md-3">
+                <label for="city" class="form-label">City</label>
+                <input class="form-control" name="city" id="city" th:field="*{city}">
+            </div>
+            <div class="form-group col-md-5">
+                <label for="street" class="form-label">Street</label>
+                <input class="form-control" name="street" id="street" th:field="*{street}">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="zip_code" class="form-label">Zip code</label>
+                <input class="form-control" name="zip_code" id="zip_code" th:field="*{zipCode}">
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="customer_name" class="form-label">Customer Name</label>
-            <input class="form-control" name="customer_name" id="customer_name" th:field="*{custName}" required="required">
-        </div>
-        <div class="mb-3">
-            <label for="customer_patronymic" class="form-label">Customer Patronymic</label>
-            <input class="form-control" name="customer_patronymic" id="customer_patronymic" th:field="*{custPatronymic}">
-        </div>
-        <div class="mb-3">
-            <label for="phone_number" class="form-label">Phone Number</label>
-            <input class="form-control" name="phone_number" id="phone_number" th:field="*{phoneNumber}" required="required">
-        </div>
-        <div class="mb-3">
-            <label for="city" class="form-label">City</label>
-            <input class="form-control" name="city" id="city" th:field="*{city}" required="required">
-        </div>
-        <div class="mb-3">
-            <label for="street" class="form-label">Street</label>
-            <input class="form-control" name="street" id="street" th:field="*{street}" required="required">
-        </div>
-        <div class="mb-3">
-            <label for="zip_code" class="form-label">Zip code</label>
-            <input class="form-control" name="zip_code" id="zip_code" th:field="*{zipCode}" required="required">
-        </div>
-        <div class="mb-3">
-            <label for="percent" class="form-label">Percent</label>
-            <input class="form-control" name="percent" id="percent" th:field="*{percent}" required="required">
+        <div class="row mb-4">
+            <div class="form-group col-md-6">
+                <label for="phone_number" class="form-label">Phone Number</label>
+                <input class="form-control" name="phone_number" id="phone_number" th:field="*{phoneNumber}" required>
+            </div>
+            <div class="form-group col-md-5">
+                <label for="percent" class="form-label">Percent</label>
+                <input class="form-control" name="percent" id="percent" th:field="*{percent}" required>
+            </div>
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-outline-primary btn-md btn-block">Update customer card</button>

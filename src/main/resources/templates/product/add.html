@@ -47,15 +47,15 @@
     </div>
 </nav>
 <div class="container-sm" id="table-container">
-    <form th:method="POST" th:action="@{/api/v1/product}" th:object="${product}">
+    <form th:method="POST" th:action="@{/api/v1/product}" th:object="${product}" class="needs-validation">
         <div class="mb-3">
             <label for="id_product" class="form-label">Product ID</label>
-            <input class="form-control" name="id_product" id="id_product" th:field="*{idProduct}" required="required">
+            <input class="form-control" name="id_product" id="id_product" th:field="*{idProduct}" required>
         </div>
         <div class="mb-3">
             <label for="category_number" class="form-label">Category Number</label>
             <select id="category_number" th:field="*{categoryNumber}" class="form-select"
-                    aria-label="Select a category" required="required" >
+                    aria-label="Select a category" required>
                 <option th:selected="true" th:value="null">Select a category</option>
                 <option th:each="category : ${categories}" th:text="${category.getCategoryName()}"
                         th:value="${category.getCategoryNumber()}"></option>
@@ -64,12 +64,12 @@
         <div class="mb-3">
             <label for="product_name" class="form-label">Product Name</label>
             <input class="form-control" name="product_name" id="product_name" th:field="*{productName}"
-                   required="required">
+                   required>
         </div>
         <div class="mb-3">
             <label for="characteristics" class="form-label">Characteristics</label>
             <textarea class="form-control" name="characteristics" id="characteristics" th:field="*{characteristics}"
-                      required="required"></textarea>
+                      required></textarea>
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Add product</button>

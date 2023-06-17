@@ -48,72 +48,66 @@
 </nav>
 <div class="container-sm" id="table-container">
     <form th:method="PATCH" th:action="@{/api/v1/employee/{idEmployee}(idEmployee=${employee.getIdEmployee()})}"
-          th:object="${employee}" class="needs-validation" novalidate>
-        <div class="form-row">
-            <div class="col-md-4 mb-3">
-                <label for="id_employee" class="form-label">Employee ID</label>
-                <input class="form-control bg-light" name="id_employee" id="id_employee" th:field="*{idEmployee}" readonly>
+          th:object="${employee}" class="needs-validation">
+        <div class="row mb-4">
+            <div class="form-group col-md-2">
+                <label for="id_employee">Employee ID</label>
+                <input type="text" class="form-control" id="id_employee" th:field="*{idEmployee}"
+                       placeholder="Employee ID" required>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="surname" class="form-label">Surname</label>
-                <input class="form-control" name="surname" id="surname" th:field="*{emplSurname}"
-                       required="required">
+            <div class="form-group col-md-3">
+                <label for="surname">Surname</label>
+                <input type="text" class="form-control" id="surname" th:field="*{emplSurname}" placeholder="Surname" required>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input class="form-control" name="name" id="name" th:field="*{emplName}"
-                       required="required">
+            <div class="form-group col-md-3">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" th:field="*{emplName}" placeholder="Name" required>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="patronymic" class="form-label">Patronymic</label>
-                <input class="form-control" name="patronymic" id="patronymic" th:field="*{emplPatronymic}">
+            <div class="form-group col-md-3">
+                <label for="patronymic">Patronymic</label>
+                <input type="text" class="form-control" id="patronymic" th:field="*{emplPatronymic}"
+                       placeholder="Patronymic">
             </div>
         </div>
-        <div class="form-row">
-            <div class="col-md-4 mb-3">
-                <label for="role" class="form-label">Role</label>
-                <select class="form-control" name="role" id="role" th:field="*{emplRole}" required="required">
+        <div class="row mb-4">
+            <div class="form-group col-md-3">
+                <label for="role">Role</label>
+                <select class="form-control" name="role" id="role" th:field="*{emplRole}" required>
+                    <option value="null" selected>Select a role</option>
                     <option value="Cashier">Cashier</option>
                     <option value="Manager">Manager</option>
                 </select>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="salary" class="form-label">Salary</label>
-                <input class="form-control" name="salary" id="salary" th:field="*{salary}"
-                       required="required">
+            <div class="form-group col-md-2">
+                <label for="salary">Salary</label>
+                <input type="text" class="form-control" id="salary" th:field="*{salary}" placeholder="Salary" required>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="dateOfBirth" class="form-label">Date of birth</label>
-                <input class="form-control" name="dateOfBirth" id="dateOfBirth" th:field="*{dateOfBirth}"
-                       required="required">
+            <div class="form-group col-md-3">
+                <label for="dob">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" pattern="\d{4}-\d{2}-\d{2}" th:field="*{dateOfBirth}" required>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="dateOfStart" class="form-label">Date of start</label>
-                <input class="form-control" name="dateOfStart" id="dateOfStart" th:field="*{dateOfStart}"
-                       required="required">
+            <div class="form-group col-md-3">
+                <label for="dateOfStart">Date of Start</label>
+                <input type="date" class="form-control" id="dateOfStart" pattern="\d{4}-\d{2}-\d{2}"
+                       th:field="*{dateOfStart}" required>
             </div>
         </div>
-        <div class="form-row">
-
-            <div class="col-md-4 mb-3">
-                <label for="phone" class="form-label">Phone</label>
-                <input class="form-control" name="phone" id="phone" th:field="*{phoneNumber}"
-                       required="required">
+        <div class="row mb-4">
+            <div class="form-group col-md-3">
+                <label for="phone">Phone</label>
+                <input type="text" class="form-control" id="phone" th:field="*{phoneNumber}" required>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="city" class="form-label">City</label>
-                <input class="form-control" name="city" id="city" th:field="*{city}"
-                       required="required">
+            <div class="form-group col-md-3">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" th:field="*{city}"required>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="street" class="form-label">Street</label>
-                <input class="form-control" name="street" id="street" th:field="*{street}"
-                       required="required">
+            <div class="form-group col-md-3">
+                <label for="street">Street</label>
+                <input type="text" class="form-control" id="street" th:field="*{street}" required>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="zipCode" class="form-label">ZIP code</label>
-                <input class="form-control" name="zipCode" id="zipCode" th:field="*{zipCode}"
-                       required="required">
+            <div class="form-group col-md-2">
+                <label for="zipCode">Zip Code</label>
+                <input type="text" class="form-control" id="zipCode" th:field="*{zipCode}" required>
             </div>
         </div>
         <div class="text-center">
