@@ -30,6 +30,13 @@
     border-color: #003049;
     background-color: #003049;
 }
+.btn-primary{
+    background-color: #003049;
+    border-color: #003049;
+}
+.btn-primary:hover{
+    background-color: #003049;
+}
 /*--------------------*/
 
 /*---Inputs css-------*/
