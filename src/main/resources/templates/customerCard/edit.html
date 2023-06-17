@@ -47,39 +47,44 @@
     </div>
 </nav>
 <div class="container-sm" id="table-container">
-    <form th:method="PATCH" th:action="@{/api/v1/customer-card/{cardNumber}(cardNumber=${customerCard.getCardNumber()})}"
+    <form th:method="PATCH"
+          th:action="@{/api/v1/customer-card/{cardNumber}(cardNumber=${customerCard.getCardNumber()})}"
           th:object="${customerCard}" class="needs-validation">
         <div class="mb-3">
             <label for="card_number" class="form-label">Card Number</label>
-            <input class="form-control bg-light" name="card_number" id="card_number" th:field="*{cardNumber}" required="required" readonly>
+            <input class="form-control bg-light" name="card_number" id="card_number" th:field="*{cardNumber}"
+                   readonly>
         </div>
         <div class="mb-3">
             <label for="customer_surname" class="form-label">Customer Surname</label>
-            <input class="form-control" name="customer_surname" id="customer_surname" th:field="*{custSurname}" required="required">
+            <input class="form-control" name="customer_surname" id="customer_surname" th:field="*{custSurname}"
+                   required>
         </div>
         <div class="mb-3">
             <label for="customer_name" class="form-label">Customer Name</label>
-            <input class="form-control" name="customer_name" id="customer_name" th:field="*{custName}" required="required">
+            <input class="form-control" name="customer_name" id="customer_name" th:field="*{custName}" required>
         </div>
         <div class="mb-3">
             <label for="customer_patronymic" class="form-label">Customer Patronymic</label>
-            <input class="form-control" name="customer_patronymic" id="customer_patronymic" th:field="*{custPatronymic}">
+            <input class="form-control" name="customer_patronymic" id="customer_patronymic"
+                   th:field="*{custPatronymic}">
         </div>
         <div class="mb-3">
             <label for="phone_number" class="form-label">Phone Number</label>
-            <input class="form-control" name="phone_number" id="phone_number" th:field="*{phoneNumber}" required="required">
+            <input class="form-control" name="phone_number" id="phone_number" th:field="*{phoneNumber}"
+                   required="required">
         </div>
         <div class="mb-3">
             <label for="city" class="form-label">City</label>
-            <input class="form-control" name="city" id="city" th:field="*{city}" required="required">
+            <input class="form-control" name="city" id="city" th:field="*{city}">
         </div>
         <div class="mb-3">
             <label for="street" class="form-label">Street</label>
-            <input class="form-control" name="street" id="street" th:field="*{street}" required="required">
+            <input class="form-control" name="street" id="street" th:field="*{street}">
         </div>
         <div class="mb-3">
             <label for="zip_code" class="form-label">Zip code</label>
-            <input class="form-control" name="zip_code" id="zip_code" th:field="*{zipCode}" required="required">
+            <input class="form-control" name="zip_code" id="zip_code" th:field="*{zipCode}">
         </div>
         <div class="mb-3">
             <label for="percent" class="form-label">Percent</label>

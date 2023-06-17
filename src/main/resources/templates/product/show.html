@@ -91,7 +91,7 @@
                   <span th:each="category : ${categories}"
                         th:if="${category.categoryNumber == product.categoryNumber}"
                         th:with="selectedCategory=${category}">
-                    <span th:text="${product.categoryNumber}"></span>,
+                    <span th:text="${product.categoryNumber}"></span>
                     <span th:text="${selectedCategory.categoryName}"></span>
                   </span>
                 </td>

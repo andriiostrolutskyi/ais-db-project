@@ -48,7 +48,7 @@
 </nav>
 <div class="container-sm" id="table-container">
     <form th:method="PATCH" th:action="@{/api/v1/category/{numberCategory}(numberCategory=${category.getCategoryNumber()})}"
-          th:object="${category}" class="needs-validation" novalidate>
+          th:object="${category}" class="needs-validation">
         <div class="mb-3">
             <label for="number_category" class="form-label">Category Number</label>
             <input class="form-control bg-light" name="number_category" id="number_category" th:field="*{categoryNumber}" readonly>
@@ -56,7 +56,7 @@
         <div class="mb-3">
             <label for="name_category" class="form-label">Category Name</label>
             <input class="form-control" name="name_category" id="name_category" th:field="*{categoryName}"
-                   required="required">
+                   required>
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-outline-primary btn-md btn-block">Update category</button>

@@ -62,7 +62,7 @@
         </div>
         <div class="mb-3">
             <label for="productId" class="form-label">Product ID</label>
-            <select id="productId" th:field="*{#idProduct}" class="form-select" required>
+            <select id="productId" th:field="*{idProduct}" class="form-select" required>
                 <option th:selected="true" th:value="null">Select an ID</option>
                 <option th:each="product : ${productIDs}" th:text="${product.getProductName()}"
                         th:value="${product.getIdProduct()}"></option>
@@ -75,8 +75,8 @@
         </div>
         <div class="mb-3">
             <label for="quantity" class="form-label">Quantity</label>
-            <textarea class="form-control" name="quantity" id="quantity" th:field="*{productsNumber}"
-                      required></textarea>
+            <input class="form-control" name="quantity" id="quantity" th:field="*{productsNumber}"
+                      required/>
         </div>
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="isPromotional"

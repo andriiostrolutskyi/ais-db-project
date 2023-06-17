@@ -47,15 +47,15 @@
     </div>
 </nav>
 <div class="container-sm" id="table-container">
-    <form th:method="POST" th:action="@{/api/v1/category}" th:object="${category}">
+    <form th:method="POST" th:action="@{/api/v1/category}" th:object="${category}" class="needs-validation">
         <div class="mb-3">
             <label for="number_category" class="form-label">Category Number</label>
-            <input class="form-control" name="number_category" id="number_category" th:field="*{categoryNumber}" required="required">
+            <input class="form-control" name="number_category" id="number_category" th:field="*{categoryNumber}" required>
         </div>
         <div class="mb-3">
             <label for="category_name" class="form-label">Product Name</label>
             <input class="form-control" name="category_name" id="category_name" th:field="*{categoryName}"
-                   required="required">
+                   required>
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Add category</button>
