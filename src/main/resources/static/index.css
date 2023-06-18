@@ -75,3 +75,11 @@
 #exportButton {
     margin-top: 30px;
 }
+
+#logout {
+    position: absolute;
+    right: 20px;
+    background-color: #EAE2B7;
+    border-color: #1E3050;
+
+}
