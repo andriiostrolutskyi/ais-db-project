@@ -56,7 +56,8 @@
             </div>
             <div class="form-group col-md-3">
                 <label for="surname">Surname</label>
-                <input type="text" class="form-control" id="surname" th:field="*{emplSurname}" placeholder="Surname" required>
+                <input type="text" class="form-control" id="surname" th:field="*{emplSurname}" placeholder="Surname"
+                       required>
             </div>
             <div class="form-group col-md-3">
                 <label for="name">Name</label>
@@ -83,12 +84,14 @@
             </div>
             <div class="form-group col-md-3">
                 <label for="dob">Date of Birth</label>
-                <input type="date" class="form-control" id="dob" pattern="\d{4}-\d{2}-\d{2}" th:field="*{dateOfBirth}" required>
+                <input type="date" class="form-control" id="dob" pattern="\d{4}-\d{2}-\d{2}" th:field="*{dateOfBirth}"
+                       required
+                       onchange="validateDateOfBirth()">
             </div>
             <div class="form-group col-md-3">
                 <label for="dateOfStart">Date of Start</label>
                 <input type="date" class="form-control" id="dateOfStart" pattern="\d{4}-\d{2}-\d{2}"
-                       th:field="*{dateOfStart}" required>
+                       th:field="*{dateOfStart}" required onchange="validateDateOfStart()">
             </div>
         </div>
         <div class="row mb-4">
@@ -114,5 +117,32 @@
         </div>
     </form>
 </div>
+<script>
+    function validateDateOfBirth() {
+        const dobInput = document.getElementById('dob');
+        const dobValue = dobInput.value;
+        const dobDate = new Date(dobValue);
+        const today = new Date();
+        const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+
+        if (dobDate > eighteenYearsAgo) {
+            alert('You must be at least 18 years old');
+            dobInput.value = ''
+        }
+    }
+
+    function validateDateOfStart() {
+        const dateOfStartInput = document.getElementById('dateOfStart');
+        const dateOfStartValue = dateOfStartInput.value;
+        const dateOfStartDate = new Date(dateOfStartValue);
+
+        const today = new Date();
+
+        if (dateOfStartDate > today) {
+            alert('The date of start cannot be in the future');
+            dateOfStartInput.value = '';
+        }
+    }
+</script>
 </body>
 </html>

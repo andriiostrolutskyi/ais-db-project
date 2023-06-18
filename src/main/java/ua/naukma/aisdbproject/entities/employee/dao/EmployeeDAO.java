@@ -72,6 +72,7 @@ public class EmployeeDAO {
 
     public void delete(String idEmployee) {
         jdbcTemplate.update("DELETE FROM `employee` WHERE id_employee=?", idEmployee);
+        jdbcTemplate.update("DELETE FROM `users` WHERE usr_username=?", idEmployee);
     }
 }
 

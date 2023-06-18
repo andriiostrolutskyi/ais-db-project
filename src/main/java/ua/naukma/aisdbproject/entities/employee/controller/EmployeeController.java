@@ -2,6 +2,7 @@ package ua.naukma.aisdbproject.entities.employee.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,11 +31,13 @@ public class EmployeeController {
         model.addAttribute("employees", employeeDAO.getByID(idEmployee));
         return "employee/show :: searchResults";
     }
+
     @GetMapping("/surname/{surnameEmployee}")
     public String getBySurname(@PathVariable("surnameEmployee") String surnameEmployee, Model model) {
         model.addAttribute("employees", employeeDAO.getBySurname(surnameEmployee));
         return "employee/show :: searchResults";
     }
+
     @GetMapping("/cashier")
     public String getCashiers(Model model) {
         model.addAttribute("employees", employeeDAO.getCashiers());
