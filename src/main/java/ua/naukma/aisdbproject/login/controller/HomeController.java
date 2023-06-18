@@ -1,5 +1,6 @@
 package ua.naukma.aisdbproject.login.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +26,9 @@ public class HomeController {
     }
 
     @PostMapping
-    public String signIn(User user, Model model) {
+    public String signIn(User user, Model model, HttpSession session) {
         if (homeDAO.getByCredentials(user) != null) {
+            session.setAttribute("employee", user);
             if (homeDAO.getByCredentials(user).getUsrRole().equals("Manager"))
                 return "redirect:manager/home";
             else
