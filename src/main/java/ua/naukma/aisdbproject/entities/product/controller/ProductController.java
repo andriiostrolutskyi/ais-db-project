@@ -2,6 +2,7 @@ package ua.naukma.aisdbproject.entities.product.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,6 +41,11 @@ public class ProductController {
         model.addAttribute("products", productDAO.getByName(productName));
         model.addAttribute("categories", categoryDAO.getAll());
         return "product/show :: searchResults";
+    }
+
+    @GetMapping("/canBeDeleted/{idProduct}")
+    public ResponseEntity<Boolean> canBeDeleted(@PathVariable("idProduct") Integer idProduct) {
+        return ResponseEntity.ok(productDAO.canBeDeleted(idProduct));
     }
 
     @GetMapping("/add-product")

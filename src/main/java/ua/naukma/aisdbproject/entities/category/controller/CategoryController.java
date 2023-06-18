@@ -1,13 +1,17 @@
 package ua.naukma.aisdbproject.entities.category.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.naukma.aisdbproject.entities.category.dao.CategoryDAO;
 import ua.naukma.aisdbproject.entities.category.model.Category;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/api/v1/category")
@@ -39,7 +43,7 @@ public class CategoryController {
 
     @PostMapping
     public String add(@ModelAttribute("category") @Valid Category category,
-                              BindingResult bindingResult) {
+                      BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "category/add";
         categoryDAO.add(category);
@@ -48,7 +52,7 @@ public class CategoryController {
 
     @GetMapping("/{categoryNumber}/edit")
     public String edit(Model model,
-                               @PathVariable("categoryNumber") Integer categoryNumber) {
+                       @PathVariable("categoryNumber") Integer categoryNumber) {
         model.addAttribute("category", categoryDAO.getByID(categoryNumber));
         return "category/edit";
     }
@@ -61,6 +65,11 @@ public class CategoryController {
             return "category/edit";
         categoryDAO.update(categoryNumber, category);
         return "redirect:/api/v1/category";
+    }
+
+    @GetMapping("/canBeDeleted/{categoryNumber}")
+    public ResponseEntity<Boolean> canBeDeleted(@PathVariable("categoryNumber") Integer categoryNumber) {
+        return ResponseEntity.ok(categoryDAO.canBeDeleted(categoryNumber));
     }
 
     @DeleteMapping("/{categoryNumber}")

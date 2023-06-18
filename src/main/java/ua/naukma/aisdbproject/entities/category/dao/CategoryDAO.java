@@ -43,6 +43,16 @@ public class CategoryDAO {
         );
     }
 
+    public boolean canBeDeleted(Integer categoryNumber) {
+        List<Category> categories =
+                jdbcTemplate.query("SELECT DISTINCT `category`.category_number " +
+                        "FROM `category` " +
+                        "INNER JOIN `product` " +
+                        "ON `category`.category_number = `product`.category_number " +
+                        "WHERE product.category_number = ?", new Object[]{categoryNumber}, new BeanPropertyRowMapper<>(Category.class));
+        return categories.isEmpty();
+    }
+
     public void delete(Integer categoryNumber) {
         jdbcTemplate.update("DELETE FROM `category` WHERE category_number=?", categoryNumber);
     }

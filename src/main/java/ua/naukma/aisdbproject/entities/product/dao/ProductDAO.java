@@ -28,6 +28,17 @@ public class ProductDAO {
                 new BeanPropertyRowMapper<>(Product.class)).stream().findAny().orElse(null);
     }
 
+    public boolean canBeDeleted(Integer idProduct) {
+        List<Product> products =
+                jdbcTemplate.query("SELECT DISTINCT `product`.id_product " +
+                        "FROM `product` " +
+                        "INNER JOIN `store_product` " +
+                        "ON `product`.id_product = `store_product`.id_product " +
+                        "WHERE `product`.id_product = ?", new Object[]{idProduct}, new BeanPropertyRowMapper<>(Product.class));
+        return products.isEmpty();
+    }
+
+
     public List<Product> getByCategory(Integer categoryNumber) {
         return jdbcTemplate.query("SELECT * FROM `product` WHERE category_number=?", new Object[]{categoryNumber},
                 new BeanPropertyRowMapper<>(Product.class));

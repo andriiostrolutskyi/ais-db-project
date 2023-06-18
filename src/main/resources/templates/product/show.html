@@ -104,7 +104,8 @@
                             Edit
                         </a>
                         <form th:method="DELETE"
-                              th:action="@{/api/v1/product/{idProduct}(idProduct=${product.getIdProduct()})}">
+                              th:action="@{/api/v1/product/{idProduct}(idProduct=${product.getIdProduct()})}"
+                        onsubmit="return deleteClicked(this)">
                             <button type="submit" class="btn btn-outline-danger btn-sm">
                                 Delete
                             </button>
@@ -224,6 +225,25 @@
             });
         });
     });
+</script>
+<script>
+    function deleteClicked(form) {
+        const idProduct = form.getAttribute('action').split('/').pop();
+        if (confirm('Are you sure you want to delete this product?')) {
+            $.get('/api/v1/product/canBeDeleted/' + idProduct)
+                .done(function (response) {
+                    if (response === true)
+                        form.submit()
+                    else {
+                        alert('This product is bound to a product in store. Deletion is not allowed.');
+                    }
+                }).fail(function () {
+                // Handle error case, display an error message, etc.
+                alert('An error occurred while checking category deletion eligibility.');
+            });
+        }
+        return false;
+    }
 </script>
 </body>
 </html>
