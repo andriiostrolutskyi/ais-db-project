@@ -1,5 +1,6 @@
 package ua.naukma.aisdbproject.entities.employee.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.naukma.aisdbproject.entities.employee.dao.EmployeeDAO;
 import ua.naukma.aisdbproject.entities.employee.model.Employee;
+import ua.naukma.aisdbproject.login.model.User;
 
 @Controller
 @RequestMapping("/api/v1/employee")
@@ -20,15 +22,23 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public String getAll(Model model) {
+    public String getAll(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("employees", employeeDAO.getAll());
-        return "employee/show";
+        return "employee/manager/show";
     }
 
     @GetMapping("/{idEmployee}")
-    public String getByID(@PathVariable("idEmployee") String idEmployee, Model model) {
+    public String getByID(@PathVariable("idEmployee") String idEmployee, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("employees", employeeDAO.getByID(idEmployee));
-        return "employee/show :: searchResults";
+        return "employee/manager/show :: searchResults";
     }
 
     @GetMapping("/validate/{idEmployee}")
@@ -38,38 +48,54 @@ public class EmployeeController {
     }
 
     @GetMapping("/surname/{surnameEmployee}")
-    public String getBySurname(@PathVariable("surnameEmployee") String surnameEmployee, Model model) {
+    public String getBySurname(@PathVariable("surnameEmployee") String surnameEmployee, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("employees", employeeDAO.getBySurname(surnameEmployee));
-        return "employee/show :: searchResults";
+        return "employee/manager/show :: searchResults";
     }
 
     @GetMapping("/cashier")
-    public String getCashiers(Model model) {
+    public String getCashiers(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("employees", employeeDAO.getCashiers());
-        return "employee/show :: searchResults";
+        return "employee/manager/show :: searchResults";
     }
 
 
     @GetMapping("/add-employee")
-    public String goToAdd(Model model) {
+    public String goToAdd(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("employee", new Employee());
-        return "employee/add";
+        return "employee/manager/add";
     }
 
     @PostMapping
     public String add(@ModelAttribute("employee") @Valid Employee employee,
                       BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return "employee/add";
+            return "employee/manager/add";
         employeeDAO.add(employee);
         return "redirect:/api/v1/employee";
     }
 
     @GetMapping("/{idEmployee}/edit")
     public String edit(Model model,
-                       @PathVariable("idEmployee") String idEmployee) {
+                       @PathVariable("idEmployee") String idEmployee, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("employee", employeeDAO.getByID(idEmployee));
-        return "employee/edit";
+        return "employee/manager/edit";
     }
 
     @PatchMapping("/{idEmployee}")
@@ -77,7 +103,7 @@ public class EmployeeController {
                          BindingResult bindingResult,
                          @PathVariable("idEmployee") String idEmployee) {
         if (bindingResult.hasErrors())
-            return "employee/edit";
+            return "employee/manager/edit";
         employeeDAO.update(idEmployee, employee);
         return "redirect:/api/v1/employee";
     }
