@@ -41,10 +41,14 @@
             </li>
         </ul>
         <a type="button" href="/api/v1/login" id="logout" class="btn btn-info btn-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-            </svg> Log out
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                <path fill-rule="evenodd"
+                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+            </svg>
+            Log out
         </a>
     </div>
 </nav>
@@ -78,10 +82,11 @@
         <div class="mb-3">
             <label for="quantity" class="form-label">Quantity</label>
             <input class="form-control" name="quantity" id="quantity" th:field="*{productsNumber}"
-                      required/>
+                   required/>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="isPromotional" th:field="*{promotionalProduct}">
+            <input class="form-check-input" type="checkbox" value="" id="isPromotional"
+                   th:field="*{promotionalProduct}">
             <label class="form-check-label" for="isPromotional">
                 Promotional product
             </label>
@@ -95,20 +100,38 @@
     $(document).ready(function () {
         const $checkbox = $('#isPromotional');
         const $select = $('#upcProm');
+        const $sellingPrice = $('#sellingPrice');
+
         $checkbox.change(function () {
             if ($checkbox.is(':checked')) {
                 $select.prop('required', true);
+                $sellingPrice.prop('readonly', true);
             } else {
                 $select.prop('required', false);
                 $select.val($select.find('option:first').val());
+                $sellingPrice.prop('readonly', false);
+                $sellingPrice.val('0.0')
             }
         });
         $select.change(function () {
-            if ($select.val() !== '')
-                $checkbox.prop('required', true);
-            else
-                $checkbox.prop('required', false);
+            if ($select.val() !== '') {
+                $checkbox.prop('checked', true);
+                $sellingPrice.prop('readonly', true);
+                getPrice($select.val());
+            } else {
+                $checkbox.prop('checked', false);
+                $sellingPrice.prop('readonly', false)
+                $sellingPrice.val('0.0')
+            }
         })
+
+        function getPrice(upc) {
+            const endpoint = '/api/v1/store-product/' + upc;
+            $.get(endpoint, function (data) {
+                const price = (data.sellingPrice * 0.8).toFixed(3);
+                $sellingPrice.val(price);
+            });
+        }
     });
 </script>
 </body>
