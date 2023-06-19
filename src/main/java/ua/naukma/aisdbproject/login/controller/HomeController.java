@@ -27,9 +27,13 @@ public class HomeController {
 
     @PostMapping
     public String signIn(User user, Model model, HttpSession session) {
-        if (homeDAO.getByCredentials(user) != null) {
+        User authenticatedUser = homeDAO.getByCredentials(user);
+        if (authenticatedUser != null) {
+            user.setUsrRole(authenticatedUser.getUsrRole());
+
             session.setAttribute("employee", user);
-            if (homeDAO.getByCredentials(user).getUsrRole().equals("Manager"))
+
+            if (user.getUsrRole().equals("Manager"))
                 return "redirect:manager/home";
             else
                 return "redirect:cashier/home";
