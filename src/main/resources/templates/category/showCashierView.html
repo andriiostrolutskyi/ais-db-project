@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories list</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/index.css">
+    <script src="cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="extensions/natural-sorting/bootstrap-table-natural-sorting.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&display=swap" rel="stylesheet">
+
+    <style>
+        #exportButton {
+            width: 160px;
+            font-size: 18px;
+            font-weight: bold;
+
+        }
+
+        #exportButton:hover {
+            opacity: .7;
+        }
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg" id="navbar-custom">
+    <a class="navbar-brand" href="#">Zlagoda</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/category">Categories</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/check">Checks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/customer-card">Customer Cards</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/employee">Employees</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/product">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/store-product">Store Products</a>
+            </li>
+        </ul>
+        <a type="button" href="/api/v1/login" id="logout" class="btn btn-info btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+            </svg> Log out
+        </a>
+    </div>
+</nav>
+<div class="container" id="table-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" class="form-control mt-4" id="categoryInput"
+                       placeholder="Enter category number">
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control mt-4" id="categoryNameInput"
+                       placeholder="Enter category name">
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive" id="searchResults" th:fragment="searchResults">
+        <table class="table">
+            <thead class="thead-dark" data-id="name">
+            <tr>
+                <th scope="col">Category Number</th>
+                <th scope="col">Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category : ${categories}">
+                <th scope="row" th:text="${category.getCategoryNumber()}"/>
+                <td th:text="${category.getCategoryName()}"/>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to
+        PDF
+    </button>
+
+</div>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        const initialTable = $('#searchResults').html();
+        $('#categoryNameInput').on('input', function () {
+            const categoryName = $(this).val();
+            if (categoryName.trim() === '')
+                $('#searchResults').html(initialTable);
+            else
+                performNameSearch(categoryName);
+        });
+    });
+
+    function performNameSearch(categoryName) {
+        const url = "/api/v1/category/categoryName/" + categoryName;
+        $.get(url, response => {
+            $('#searchResults').html(response);
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        const initialTable = $('#searchResults').html();
+        $('#categoryInput').on('input', function () {
+            const categoryNumber = $(this).val();
+            if (categoryNumber.trim() === '')
+                $('#searchResults').html(initialTable);
+            else
+                performCategorySearch(categoryNumber);
+        });
+    });
+
+    function performCategorySearch(categoryNumber) {
+        const url = "/api/v1/category/categoryNumber/" + categoryNumber;
+        $.get(url, response => {
+            $('#searchResults').html(response);
+        });
+    }
+</script>
+
+<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css"/>
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/jszip.min.js"></script>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        $(document).on('click', '#exportButton', function () {
+
+            var data = [];
+            var searchResults = $('#searchResults');
+            searchResults.find('tbody tr').each(function () {
+                var row = {};
+                row["Category Number"] = parseInt($(this).find('th').eq(0).text().trim());
+                row["Category Name"] = $(this).find('td').eq(0).text().trim();
+                data.push(row);
+            });
+
+            var dataSource = shield.DataSource.create({
+                data: data,
+                schema: {
+                    fields: {
+                        "Category Number": {type: Number},
+                        "Category Name": {type: String}
+                    }
+                }
+            });
+
+            dataSource.read().then(function (data) {
+                var pdf = new shield.exp.PDFDocument({
+                    author: "Zlagoda",
+                    created: new Date(),
+                });
+
+                pdf.addPage("a4", "portrait");
+
+
+                pdf.table(
+                    50,
+                    50,
+                    data,
+                    [
+                        {field: "Category Number", title: "Category Number", width: 100},
+                        {field: "Category Name", title: "Category Name", width: 150},
+                    ],
+                    {
+                        margins: {
+                            top: 50,
+                            left: 50
+                        }
+                    }
+                );
+
+                var timestamp = new Date().toLocaleString();
+
+                pdf.saveAs({
+                    fileName: "CategoriesReport" + timestamp
+                });
+            });
+        });
+    });
+</script>
+
+<script>
+    function deleteClicked(form) {
+        const categoryNumber = form.getAttribute('action').split('/').pop();
+        if (confirm('Are you sure you want to delete this category?')) {
+            $.get('/api/v1/category/canBeDeleted/' + categoryNumber)
+                .done(function (response) {
+                    if (response === true)
+                        form.submit()
+                    else {
+                        alert('This category is bound to a product. Deletion is not allowed.');
+                    }
+                }).fail(function () {
+                // Handle error case, display an error message, etc.
+                alert('An error occurred while checking category deletion eligibility.');
+            });
+        }
+        return false;
+    }
+</script>
+</body>
+</html>
