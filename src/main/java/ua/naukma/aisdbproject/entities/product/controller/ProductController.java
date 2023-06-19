@@ -30,12 +30,19 @@ public class ProductController {
         return "product/show";
     }
 
+    @GetMapping("/{productID}")
+    @ResponseBody
+    public boolean getByID(@PathVariable("productID") Integer productID) {
+        return (productDAO.getByID(productID)) != null;
+    }
+
     @GetMapping("/categoryNumber/{categoryNumber}")
     public String getByCategory(@PathVariable("categoryNumber") Integer categoryNumber, Model model) {
         model.addAttribute("products", productDAO.getByCategory(categoryNumber));
         model.addAttribute("categories", categoryDAO.getAll());
         return "product/show :: searchResults";
     }
+
     @GetMapping("/productName/{productName}")
     public String getByName(@PathVariable("productName") String productName, Model model) {
         model.addAttribute("products", productDAO.getByName(productName));
@@ -59,7 +66,7 @@ public class ProductController {
     public String add(@ModelAttribute("product") @Valid Product product,
                       BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return "product/add";
+            return "redirect:/api/v1/product/add-product";
         productDAO.add(product);
         return "redirect:/api/v1/product";
     }

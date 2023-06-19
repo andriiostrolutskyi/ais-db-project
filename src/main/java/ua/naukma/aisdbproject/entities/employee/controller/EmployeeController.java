@@ -2,7 +2,6 @@ package ua.naukma.aisdbproject.entities.employee.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +29,12 @@ public class EmployeeController {
     public String getByID(@PathVariable("idEmployee") String idEmployee, Model model) {
         model.addAttribute("employees", employeeDAO.getByID(idEmployee));
         return "employee/show :: searchResults";
+    }
+
+    @GetMapping("/validate/{idEmployee}")
+    @ResponseBody
+    public boolean getByID(@PathVariable("idEmployee") String idEmployee) {
+        return (employeeDAO.getByID(idEmployee)) != null;
     }
 
     @GetMapping("/surname/{surnameEmployee}")

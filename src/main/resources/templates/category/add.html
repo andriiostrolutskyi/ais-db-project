@@ -65,5 +65,36 @@
         </div>
     </form>
 </div>
+<script>
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            if (form.checkValidity()) {
+                const $categoryID = $('#number_category');
+                checkIDDuplicate($categoryID.val(), form);
+            } else
+                event.stopPropagation(); // Stop event propagation
+            form.classList.add('was-validated');
+        }, false);
+        function checkIDDuplicate(categoryID, form) {
+            var endpoint = '/api/v1/category/validate/' + categoryID;
+            $.get(endpoint)
+                .done(function (response) {
+                    if (response === true) {
+                        alert('This category number already exists');
+                        form.classList.remove('was-validated');
+                    } else {
+                        form.classList.add('was-validated');
+                        form.submit();
+                    }
+                })
+                .fail(function () {
+                    form.classList.add('was-validated');
+                    form.submit();
+                });
+        }
+    });
+</script>
 </body>
 </html>

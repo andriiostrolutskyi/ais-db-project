@@ -52,12 +52,12 @@
 <div class="container-sm" id="table-container">
     <form th:method="PATCH"
           th:action="@{/api/v1/customer-card/{cardNumber}(cardNumber=${customerCard.getCardNumber()})}"
-          th:object="${customerCard}" class="needs-validation">
+          th:object="${customerCard}" class="needs-validation" novalidate>
         <div class="row mb-4">
             <div class="form-group col-md-2">
                 <label for="card_number">Card Number</label>
                 <input type="text" class="form-control" id="card_number" th:field="*{cardNumber}"
-                       placeholder="Card Number" required>
+                       placeholder="Card Number" readonly>
             </div>
             <div class="form-group col-md-3">
                 <label for="customer_surname">Customer Surname</label>
@@ -86,17 +86,26 @@
             </div>
             <div class="form-group col-md-3">
                 <label for="zip_code" class="form-label">Zip code</label>
-                <input class="form-control" name="zip_code" id="zip_code" th:field="*{zipCode}">
+                <input type="number" class="form-control" name="zip_code" id="zip_code" min="0" th:field="*{zipCode}">
+                <div class="invalid-feedback">
+                    Please enter a valid zip code
+                </div>
             </div>
         </div>
         <div class="row mb-4">
             <div class="form-group col-md-6">
                 <label for="phone_number" class="form-label">Phone Number</label>
-                <input class="form-control" name="phone_number" id="phone_number" th:field="*{phoneNumber}" required>
+                <input type="text" class="form-control" name="phone_number" id="phone_number" th:field="*{phoneNumber}" maxlength="12" required>
+                <div class="invalid-feedback">
+                    Please enter a valid phone number
+                </div>
             </div>
             <div class="form-group col-md-5">
                 <label for="percent" class="form-label">Percent</label>
-                <input class="form-control" name="percent" id="percent" th:field="*{percent}" required>
+                <input  type="number" class="form-control" name="percent" id="percent" th:field="*{percent}" min="0" required>
+                <div class="invalid-feedback">
+                    Please enter a valid discount (0% or higher)
+                </div>
             </div>
         </div>
         <div class="text-center">
@@ -105,5 +114,17 @@
         </div>
     </form>
 </div>
+<script>
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+</script>
 </body>
 </html>

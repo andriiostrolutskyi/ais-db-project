@@ -54,6 +54,12 @@ public class CategoryController {
         }
     }
 
+    @GetMapping("/validate/{categoryNumber}")
+    @ResponseBody
+    public boolean getByIDValidation(@PathVariable("categoryNumber") Integer categoryNumber) {
+        return (categoryDAO.getByID(categoryNumber)) != null;
+    }
+
     @GetMapping("/add-category")
     public String goToAdd(Model model, HttpSession session) {
         User user = (User) session.getAttribute("employee");

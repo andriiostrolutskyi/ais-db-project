@@ -30,6 +30,11 @@ public class CustomerCardController {
         model.addAttribute("customerCard", customerCardDAO.getByID(cardNumber));
         return "customerCard/show";
     }
+    @GetMapping("/validate/{cardNumber}")
+    @ResponseBody
+    public boolean getByIDValidation(@PathVariable("cardNumber") String cardNumber) {
+        return (customerCardDAO.getByID(cardNumber)) != null;
+    }
 
     @GetMapping("/add-customer-card")
     public String goToAdd(Model model) {

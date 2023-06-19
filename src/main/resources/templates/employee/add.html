@@ -42,15 +42,19 @@
             </li>
         </ul>
         <a type="button" href="/api/v1/login" id="logout" class="btn btn-info btn-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-            </svg> Log out
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                <path fill-rule="evenodd"
+                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+            </svg>
+            Log out
         </a>
     </div>
 </nav>
 <div class="container-sm" id="table-container">
-    <form th:method="POST" th:action="@{/api/v1/employee}" th:object="${employee}" class="needs-validation">
+    <form th:method="POST" th:action="@{/api/v1/employee}" th:object="${employee}" class="needs-validation" novalidate>
         <div class="row mb-4">
             <div class="form-group col-md-2">
                 <label for="id_employee">Employee ID</label>
@@ -83,7 +87,11 @@
             </div>
             <div class="form-group col-md-2">
                 <label for="salary">Salary</label>
-                <input type="text" class="form-control" id="salary" th:field="*{salary}" placeholder="Salary" required>
+                <input type="number" class="form-control" id="salary" th:field="*{salary}" placeholder="Salary" min="0.1" step="0.001"
+                       required>
+                <div class="invalid-feedback">
+                    Please enter a non-negative salary and >0
+                </div>
             </div>
             <div class="form-group col-md-3">
                 <label for="dob">Date of Birth</label>
@@ -100,7 +108,10 @@
         <div class="row mb-4">
             <div class="form-group col-md-3">
                 <label for="phone">Phone</label>
-                <input type="text" class="form-control" id="phone" th:field="*{phoneNumber}" required>
+                <input type="text" class="form-control" id="phone" th:field="*{phoneNumber}" maxlength="12" required>
+                <div class="invalid-feedback">
+                    Please enter a valid sized phone number
+                </div>
             </div>
             <div class="form-group col-md-3">
                 <label for="city">City</label>
@@ -112,7 +123,10 @@
             </div>
             <div class="form-group col-md-2">
                 <label for="zipCode">Zip Code</label>
-                <input type="text" class="form-control" id="zipCode" th:field="*{zipCode}" required>
+                <input type="number" class="form-control" id="zipCode" th:field="*{zipCode}" min="0" required>
+                <div class="invalid-feedback">
+                    Please enter a valid zip code
+                </div>
             </div>
         </div>
         <div class="text-center">
@@ -146,6 +160,39 @@
             dateOfStartInput.value = '';
         }
     }
+</script>
+<script>
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            if (form.checkValidity()) {
+                var $id = $('#id_employee');
+                checkIDDuplicate($id.val(), form);
+            } else
+                event.stopPropagation(); // Stop event propagation
+            form.classList.add('was-validated');
+        }, false);
+
+
+        function checkIDDuplicate(id, form) {
+            var endpoint = '/api/v1/employee/validate/' + id;
+            $.get(endpoint)
+                .done(function (response) {
+                    if (response === true) {
+                        alert('This employee id already exists');
+                        form.classList.remove('was-validated');
+                    } else {
+                        form.classList.add('was-validated');
+                        form.submit();
+                    }
+                })
+                .fail(function () {
+                    form.classList.add('was-validated');
+                    form.submit();
+                });
+        }
+    });
 </script>
 </body>
 </html>
