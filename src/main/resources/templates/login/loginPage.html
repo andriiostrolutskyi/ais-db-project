@@ -20,12 +20,16 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <div class="row d-flex align-items-center justify-content-center h-100">
+
             <div class="col-md-8 col-lg-7 col-xl-6">
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
                      class="img-fluid" alt="Phone image">
             </div>
             <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
                 <form th:method="POST" th:action="@{/api/v1/login}" th:object="${user}">
+                    <div class="text-center mb-4">
+                        <h2><span style="font-family: 'Rockwell',serif;">Zlagoda</span></h2>
+                    </div>
                     <!-- Username input -->
                     <div class="form-outline mb-4">
                         <input type="text" id="usernameInput" th:field="*{usrUsername}"
