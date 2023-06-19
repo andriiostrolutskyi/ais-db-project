@@ -32,8 +32,14 @@ public class StoreProductController {
 
     @GetMapping("/{upc}")
     @ResponseBody
-    public StoreProductSearch getByID(@PathVariable("upc") String upc, Model model) {
+    public StoreProductSearch getByID(@PathVariable("upc") String upc) {
         return storeProductDAO.getProductByUPC(upc);
+    }
+
+    @GetMapping("/validate/{upc}")
+    @ResponseBody
+    public boolean getValidationByID(@PathVariable("upc") String upc) {
+        return (storeProductDAO.getByID(upc)) != null;
     }
 
     @GetMapping("/getPromotional/sortByName")
@@ -83,7 +89,7 @@ public class StoreProductController {
     public String add(@ModelAttribute("storeProduct") @Valid StoreProduct storeProduct,
                       BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return "storeProduct/add";
+            return "redirect:/api/v1/store-product/add-store-product";
         storeProductDAO.add(storeProduct);
         return "redirect:/api/v1/store-product";
     }
