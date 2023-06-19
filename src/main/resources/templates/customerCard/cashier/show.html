@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Customer Cards list</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/index.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <style>
+    #exportButton{
+      width: 160px;
+      font-size: 18px;
+      font-weight: bold;
+
+    }
+    #exportButton:hover {
+      opacity: .7;
+    }
+    .table-wrapper {
+      max-height: 90%;
+      overflow: auto;
+
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg" id="navbar-custom">
+  <a class="navbar-brand" href="#">Zlagoda</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+          aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/api/v1/category">Categories</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/api/v1/check">Checks</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/api/v1/customer-card">Customer Cards</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/api/v1/product">Products</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/api/v1/store-product">Store Products</a>
+      </li>
+    </ul>
+    <a type="button" href="/api/v1/login" id="logout" class="btn btn-info btn-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+      </svg> Log out
+    </a>
+  </div>
+</nav>
+<div class="container" id="table-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <input type="text" class="form-control mt-4" id="cardNumberInput"
+               placeholder="Enter card number">
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control mt-4" id="customerSurnameInput"
+               placeholder="Enter customer surname">
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control mt-4" id="percentInput"
+               placeholder="Enter percent value">
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive table-wrapper" id="searchResults" th:fragment="searchResults">
+    <table class="table">
+      <thead class="thead-dark" data-id="name">
+      <tr>
+        <th scope="col">Card Number</th>
+        <th scope="col">Customer Surname</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Customer Patronymic</th>
+        <th scope="col">Phone Number</th>
+        <th scope="col">City</th>
+        <th scope="col">Street</th>
+        <th scope="col">Zip code</th>
+        <th scope="col">Percent</th>
+        <th scope="col">
+          <a th:href="@{/api/v1/customer-card/add-customer-card}" type="button" class="btn btn-outline-primary">
+            Add Customer Card
+          </a>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="customerCard : ${customerCards}">
+        <th scope="row" th:text="${customerCard.getCardNumber()}"/>
+        <td th:text="${customerCard.getCustSurname()}"/>
+        <td th:text="${customerCard.getCustName()}"/>
+        <td th:text="${customerCard.getCustPatronymic()}"/>
+        <td th:text="${customerCard.getPhoneNumber()}"/>
+        <td th:text="${customerCard.getCity()}"/>
+        <td th:text="${customerCard.getStreet()}"/>
+        <td th:text="${customerCard.getZipCode()}"/>
+        <td th:text="${customerCard.getPercent()}"/>
+        <td>
+          <div class="btn-group-sm d-flex align-items-center gap-2">
+            <a type="button" class="btn btn-outline-primary"
+               th:href="@{/api/v1/customer-card/{cardNumber}/edit(cardNumber=${customerCard.getCardNumber()})}">
+              Edit
+            </a>
+            <form th:method="DELETE"
+                  th:action="@{/api/v1/customer-card/{cardNumber}(cardNumber=${customerCard.getCardNumber()})}">
+              <button type="submit" class="btn btn-outline-danger btn-sm">
+                Delete
+              </button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to PDF</button>
+</div>
+<script th:inline="javascript">
+  $(document).ready(function () {
+    const initialTable = $('#searchResults').html();
+    $('#cardNumberInput').on('input', function () {
+      const cardNumber = $(this).val();
+      if (cardNumber.trim() === '')
+        $('#searchResults').html(initialTable);
+      else
+        performCardNumberSearch(cardNumber);
+    });
+  });
+
+  function performCardNumberSearch(cardNumber) {
+    const url = "/api/v1/customer-card/cardNumber/" + cardNumber;
+    $.get(url, response => {
+      $('#searchResults').html(response);
+    });
+  }
+</script>
+
+<script>
+  $(document).ready(function () {
+    const initialTable = $('#searchResults').html();
+    $('#customerSurnameInput').on('input', function () {
+      const customerSurname = $(this).val();
+      if (customerSurname.trim() === '')
+        $('#searchResults').html(initialTable);
+      else
+        performCustomerSurnameSearch(customerSurname);
+    });
+  });
+
+  function performCustomerSurnameSearch(customerSurname) {
+    const url = "/api/v1/customer-card/customerSurname/" + customerSurname;
+    $.get(url, response => {
+      $('#searchResults').html(response);
+    });
+  }
+</script>
+
+<script>
+  $(document).ready(function () {
+    const initialTable = $('#searchResults').html();
+    $('#percentInput').on('input', function () {
+      const percent = $(this).val();
+      if (percent.trim() === '')
+        $('#searchResults').html(initialTable);
+      else
+        performPercentSearch(percent);
+    });
+  });
+
+  function performPercentSearch(percent) {
+    const url = "/api/v1/customer-card/percent/" + percent;
+    $.get(url, response => {
+      $('#searchResults').html(response);
+    });
+  }
+</script>
+
+<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/jszip.min.js"></script>
+
+<script type="text/javascript">
+  jQuery(function ($) {
+    $(document).on('click', '#exportButton', function () {
+
+      var data = [];
+      var searchResults = $('#searchResults');
+      searchResults.find('tbody tr').each(function () {
+        var row = {};
+        row["Card Number"] = parseInt($(this).find('th').eq(0).text().trim());
+        row["Customer Surname"] = $(this).find('td').eq(0).text().trim();
+        row["Customer Name"] = $(this).find('td').eq(1).text().trim();
+        row["Customer Patronymic"] = $(this).find('td').eq(2).text().trim();
+        row["Phone Number"] = parseInt($(this).find('td').eq(3).text().trim());
+        row["City"] = $(this).find('td').eq(4).text().trim();
+        row["Street"] = $(this).find('td').eq(5).text().trim();
+        row["Zip code"] = parseInt($(this).find('td').eq(6).text().trim());
+        row["Percent"] = parseInt($(this).find('td').eq(7).text().trim());
+        data.push(row);
+      });
+
+      var dataSource = shield.DataSource.create({
+        data: data,
+        schema: {
+          fields: {
+            "Card Number": { type: Number },
+            "Customer Surname": { type: String },
+            "Customer Name": { type: String },
+            "Customer Patronymic": { type: String },
+            "Phone Number": { type: Number },
+            "City": { type: String },
+            "Street": { type: String },
+            "Zip code": { type: Number },
+            "Percent": { type: Number }
+          }
+        }
+      });
+
+      dataSource.read().then(function (data) {
+        var pdf = new shield.exp.PDFDocument({
+          author: "Zlagoda",
+          created: new Date(),
+        });
+
+        pdf.addPage("a4", "landscape");
+
+
+
+        pdf.table(
+                50,
+                50,
+                data,
+                [
+                  { field: "Card Number", title: "Card Number", width: 90 },
+                  { field: "Customer Surname", title: "Customer Surname", width: 100 },
+                  { field: "Customer Name", title: "Customer Name", width: 100 },
+                  { field: "Customer Patronymic", title: "Customer Patronymic", width: 90 },
+                  { field: "Phone Number", title: "Phone Number", width: 100 },
+                  { field: "City", title: "City", width:50 },
+                  { field: "Street", title: "Street", width: 100 },
+                  { field: "Zip code", title: "Zip code", width: 60 },
+                  { field: "Percent", title: "Percent", width: 60 }
+                ],
+                {
+                  margins: {
+                    top: 50,
+                    left: 50
+                  }
+                }
+
+        );
+
+        var timestamp = new Date().toLocaleString();
+
+        pdf.saveAs({
+          fileName: "CustomerCardsReport" + timestamp
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>

@@ -24,33 +24,31 @@ public class CategoryController {
 
     @GetMapping
     public String getAll(Model model, HttpSession session) {
-        model.addAttribute("categories", categoryDAO.getAll());
 
         User user = (User) session.getAttribute("employee");
         if (user == null) {
             return "redirect:/api/v1/login";
         }
+        model.addAttribute("categories", categoryDAO.getAll());
 
         if (user.getUsrRole().equals("Manager")) {
-            return "category/showManagerView";
+            return "category/manager/show";
         } else {
-            return "category/showCashierView";
+            return "category/cashier/show";
         }
     }
 
     @GetMapping("/{categoryNumber}")
     public String getByID(@PathVariable("categoryNumber") Integer categoryNumber, Model model, HttpSession session) {
-        model.addAttribute("category", categoryDAO.getByID(categoryNumber));
-
         User user = (User) session.getAttribute("employee");
         if (user == null) {
             return "redirect:/api/v1/login";
         }
-
+        model.addAttribute("category", categoryDAO.getByID(categoryNumber));
         if (user.getUsrRole().equals("Manager")) {
-            return "showManagerView";
+            return "category/manager/show";
         } else {
-            return "showCashierView";
+            return "category/cashier/show";
         }
     }
 
@@ -62,20 +60,21 @@ public class CategoryController {
 
     @GetMapping("/add-category")
     public String goToAdd(Model model, HttpSession session) {
+
         User user = (User) session.getAttribute("employee");
         if (user == null || (!user.getUsrRole().equals("Manager"))) {
             return "redirect:/api/v1/login";
         }
 
         model.addAttribute("category", new Category());
-        return "category/add";
+        return "category/manager/add";
     }
 
     @PostMapping
     public String add(@ModelAttribute("category") @Valid Category category,
                       BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return "category/add";
+            return "category/manager/add";
         categoryDAO.add(category);
         return "redirect:/api/v1/category";
     }
@@ -88,7 +87,7 @@ public class CategoryController {
             return "redirect:/api/v1/login";
         }
         model.addAttribute("category", categoryDAO.getByID(categoryNumber));
-        return "category/edit";
+        return "category/manager/edit";
     }
 
     @PatchMapping("/{categoryNumber}")
@@ -96,7 +95,7 @@ public class CategoryController {
                          BindingResult bindingResult,
                          @PathVariable("categoryNumber") Integer categoryNumber) {
         if (bindingResult.hasErrors())
-            return "category/edit";
+            return "category/manager/edit";
         categoryDAO.update(categoryNumber, category);
         return "redirect:/api/v1/category";
     }
@@ -114,29 +113,29 @@ public class CategoryController {
 
     @GetMapping("/categoryNumber/{categoryNumber}")
     public String getByNumber(@PathVariable("categoryNumber") Integer categoryNumber, Model model, HttpSession session) {
-        model.addAttribute("categories", categoryDAO.getByID(categoryNumber));
         User user = (User) session.getAttribute("employee");
         if (user == null) {
             return "redirect:/api/v1/login";
         }
+        model.addAttribute("categories", categoryDAO.getByID(categoryNumber));
         if (user.getUsrRole().equals("Manager")) {
-            return "category/showManagerView :: searchResults";
+            return "category/manager/show :: searchResults";
         } else {
-            return "category/showCashierView :: searchResults";
+            return "category/cashier/show :: searchResults";
         }
     }
 
     @GetMapping("/categoryName/{categoryName}")
     public String getByName(@PathVariable("categoryName") String categoryName, Model model, HttpSession session) {
-        model.addAttribute("categories", categoryDAO.getByName(categoryName));
         User user = (User) session.getAttribute("employee");
         if (user == null) {
             return "redirect:/api/v1/login";
         }
+        model.addAttribute("categories", categoryDAO.getByName(categoryName));
         if (user.getUsrRole().equals("Manager")) {
-            return "category/showManagerView :: searchResults";
+            return "category/manager/show :: searchResults";
         } else {
-            return "category/showCashierView :: searchResults";
+            return "category/cashier/show :: searchResults";
         }
     }
 }
