@@ -40,6 +40,12 @@ public class CheckController {
             return "check/show :: searchResults";
         }
 
+        @GetMapping("/showDetails/{checkNumber}")
+        public String getCheckDetails(@PathVariable("checkNumber") String checkNumber, Model model){
+            model.addAttribute("sales", checkDAO.getSalesByCheckNumber(checkNumber));
+            return "check/checkDetails";
+        }
+
         @GetMapping("/time")
         public String getByTime(@RequestParam("startDate") String startDate,
                                 @RequestParam("endDate") String endDate, Model model) {

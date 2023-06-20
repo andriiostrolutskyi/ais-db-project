@@ -11,11 +11,7 @@
             integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
             crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script th:inline="javascript">
-        var currentURL = window.location.href;
-        var parts = currentURL.split("/");
-        var checkNumber = parts[parts.length - 2];
-    </script>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg" id="navbar-custom">
@@ -46,35 +42,18 @@
             </li>
         </ul>
         <a type="button" href="/api/v1/login" id="logout" class="btn btn-info btn-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-            </svg> Log out
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                <path fill-rule="evenodd"
+                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+            </svg>
+            Log out
         </a>
     </div>
 </nav>
 <div class="container" id="table-container">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <input type="text" class="form-control mt-4" id="idEmployeeInput"
-                       placeholder="Enter employee ID">
-            </div>
-            <div class="col-md-4">
-                <input type="text" class="form-control mt-4" id="checkNumberInput"
-                       placeholder="Enter check number">
-            </div>
-            <div class="form-group col-sm">
-                <label for="from">From</label>
-                <input type="date" class="form-control" id="from" pattern="\d{4}-\d{2}-\d{2}">
-            </div>
-            <div class="form-group col-sm">
-                <label for="to">To</label>
-                <input type="date" class="form-control" id="to" pattern="\d{4}-\d{2}-\d{2}">
-            </div>
-        </div>
-    </div>
-
     <div class="table-responsive" id="searchResults" th:fragment="searchResults">
         <table class="table">
             <thead class="thead-dark">
@@ -83,229 +62,20 @@
                 <th scope="col">Product Name</th>
                 <th scope="col">Product Number</th>
                 <th scope="col">Selling Price</th>
+                <th scope="col">Employee ID</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="sale : ${sales}">
-                <th th:with="selectedUPC=null">
-<!--                    <span th:if="${sale.checkNumber == checkNumber}"-->
-<!--                          th:with="selectedUPC=${sale.upc}">-->
-<!--&lt;!&ndash;                        <script th:inline="javascript">&ndash;&gt;-->
-<!--&lt;!&ndash;                            document.write('<span th:text="${selectedUPC}"></span>');&ndash;&gt;-->
-<!--&lt;!&ndash;                        </script>&ndash;&gt;-->
-<!--                    </span>-->
-                </th>
-            </span>
-                </th>
-                <td th:text="${check.getPrintDate()}"/>
-                <td th:text="${check.getSumTotal()}"/>
-                <td th:text="${check.getVat()}"/>
-                <td>
-                    <div class="btn-group-sm d-flex align-items-center gap-2">
-                        <form th:method="DELETE"
-                              th:action="@{/api/v1/check/{checkNumber}(checkNumber=${check.getCheckNumber()})}">
-                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                Delete
-                            </button>
-                        </form>
-                    </div>
-                </td>
+                <th th:text="${sale.upc}"/>
+                <th th:text="${sale.productName}"/>
+                <td th:text="${sale.productNumber}"/>
+                <td th:text="${sale.sellingPrice}"/>
+                <td th:text="${sale.idEmployee}"/>
             </tr>
             </tbody>
         </table>
     </div>
-    <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to PDF</button>
 </div>
-
-<script th:inline="javascript">
-    $(document).ready(function () {
-        const initialTable = $('#searchResults').html();
-        $('#idEmployeeInput').on('input', function () {
-            const idEmployee = $(this).val();
-            if (idEmployee.trim() === '')
-                $('#searchResults').html(initialTable);
-            else
-                performIDSearch(idEmployee);
-        });
-    });
-
-    function performIDSearch(idEmployee) {
-        const url = "/api/v1/check/idEmployee/" + idEmployee;
-        $.get(url, response => {
-            $('#searchResults').html(response);
-        });
-    }
-
-</script>
-
-<script>
-    $(document).ready(function () {
-        const initialTable = $('#searchResults').html();
-        $('#checkNumberInput').on('input', function () {
-            const checkNumber = $(this).val();
-            if (checkNumber.trim() === '')
-                $('#searchResults').html(initialTable);
-            else
-                performCheckNumberSearch(checkNumber);
-        });
-    });
-
-    function performCheckNumberSearch(checkNumber) {
-        const url = "/api/v1/check/" + checkNumber;
-        $.get(url, response => {
-            $('#searchResults').html(response);
-        });
-    }
-
-</script>
-<script>
-    $(document).ready(function () {
-        const initialTable = $('#searchResults').html();
-        $('#from').on('input', function () {
-            const from = $(this).val();
-            if (from.trim() === '')
-                $('#searchResults').html(initialTable);
-            else
-                performFromSearch(from);
-        });
-    });
-
-    function performFromSearch(from) {
-        const url = "/api/v1/check/from/" + from;
-        $.get(url, response => {
-            $('#searchResults').html(response);
-        });
-    }
-
-</script>
-<script>
-    $(document).ready(function () {
-        const initialTable = $('#searchResults').html();
-        $('#to').on('input', function () {
-            const to = $(this).val();
-            if (to.trim() === '')
-                $('#searchResults').html(initialTable);
-            else
-                performToSearch(to);
-        });
-    });
-
-    function performToSearch(to) {
-        const url = "/api/v1/check/to/" + to;
-        $.get(url, response => {
-            $('#searchResults').html(response);
-        });
-    }
-
-</script>
-<script>
-    function handleClick(element) {
-        var checkNumber = element.innerText;
-        performCheckSearch(checkNumber);
-    }
-
-    function performCheckSearch(checkNumber) {
-        const url = "/api/v1/check/" + checkNumber + "/checkDetails";
-        window.location.href = url;
-    }
-
-</script>
-
-<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
-<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
-<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/jszip.min.js"></script>
-
-<script type="text/javascript">
-    jQuery(function ($) {
-        $(document).on('click', '#exportButton', function () {
-
-            var data = [];
-            var searchResults = $('#searchResults');
-
-            searchResults.find('tbody tr').each(function () {
-                var row = {};
-                row["ID"] = $(this).find('th').eq(0).text().trim();
-                row["Surname"] = $(this).find('td').eq(0).text().trim();
-                row["Name"] = $(this).find('td').eq(1).text().trim();
-                row["Patronymic"] = $(this).find('td').eq(2).text().trim();
-                row["Role"] = $(this).find('td').eq(3).text().trim();
-                row["Salary"] = $(this).find('td').eq(4).text().trim();
-                row["Birth date"] = $(this).find('td').eq(5).text().trim();
-                row["Start date"] = $(this).find('td').eq(6).text().trim();
-                row["Phone"] = $(this).find('td').eq(7).text().trim();
-                row["City"] = $(this).find('td').eq(8).text().trim();
-                row["Street"] = $(this).find('td').eq(9).text().trim();
-                row["ZIP code"] = $(this).find('td').eq(10).text().trim();
-                data.push(row);
-            });
-
-            var dataSource = shield.DataSource.create({
-                data: data,
-                schema: {
-                    fields: {
-                        "ID": { type: String },
-                        "Surname": { type: String },
-                        "Name": { type: String},
-                        "Patronymic": { type: String},
-                        "Role": { type: String},
-                        "Salary": { type: Number},
-                        "Birth date": { type: Date},
-                        "Start date": { type: Date},
-                        "Phone": { type: String},
-                        "City": { type: String},
-                        "Street": { type: String},
-                        "ZIP code": { type: String}
-                    }
-                }
-            });
-
-            dataSource.read().then(function (data) {
-                var pdf = new shield.exp.PDFDocument({
-                    author: "Zlagoda",
-                    created: new Date(),
-                });
-
-                pdf.addPage("a4", "landscape");
-
-
-
-                pdf.table(
-                    50,
-                    50,
-                    data,
-                    [
-                        { field: "ID", title: "ID", width: 50 },
-                        { field: "Surname", title: "Surname", width: 75 },
-                        { field: "Name", title: "Name", width: 65 },
-                        { field: "Patronymic", title: "Patronymic", width: 70 },
-                        { field: "Role", title: "Role", width: 60 },
-                        { field: "Salary", title: "Salary", width: 50 },
-                        { field: "Birth date", title: "Birth date", width: 70 },
-                        { field: "Start date", title: "Start date", width: 70 },
-                        { field: "Phone", title: "Phone", width: 80 },
-                        { field: "City", title: "City", width: 50 },
-                        { field: "Street", title: "Street", width: 60 },
-                        { field: "ZIP code", title: "ZIP code", width: 60 }
-                    ],
-                    {
-                        margins: {
-                            top: 50,
-                            left: 50
-                        }
-                    }
-
-                );
-
-                var timestamp = new Date().toLocaleString();
-
-                pdf.saveAs({
-                    fileName: "EmployeesReport" + timestamp
-                });
-
-
-            });
-        });
-    });
-</script>
 </body>
 </html>
