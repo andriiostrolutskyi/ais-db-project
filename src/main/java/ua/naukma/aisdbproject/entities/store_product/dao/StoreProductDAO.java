@@ -44,6 +44,12 @@ public class StoreProductDAO {
         return jdbcTemplate.query("SELECT * FROM `store_product` WHERE UPC=?", new Object[]{upc},
                 new BeanPropertyRowMapper<>(StoreProduct.class)).stream().findAny().orElse(null);
     }
+    public Integer getNumberByID(String upc) {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) " +
+                        "FROM store_product " +
+                        "WHERE UPC = ? OR UPC_prom = ? ", new Object[]{upc, upc},
+                Integer.class);
+    }
 
     public List<StoreProduct> getPromotionalByName() {
         return jdbcTemplate.query("SELECT DISTINCT  UPC, UPC_prom, store_product.id_product, product_name, selling_price, products_number, promotional_product " +

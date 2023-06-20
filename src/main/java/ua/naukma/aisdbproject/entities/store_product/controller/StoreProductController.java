@@ -46,10 +46,13 @@ public class StoreProductController {
         return storeProductDAO.getProductByUPC(upc);
     }
 
-    @GetMapping("/validate/{upc}")
+    @GetMapping("/validate")
     @ResponseBody
-    public boolean getValidationByID(@PathVariable("upc") String upc) {
-        return (storeProductDAO.getByID(upc)) != null;
+    public boolean getValidationByID(@RequestParam("upc") String upc,
+                                     @RequestParam("upcProm") String upcProm) {
+        StoreProduct storeProduct = storeProductDAO.getByID(upc);
+        int count = storeProductDAO.getNumberByID(upcProm);
+        return (storeProduct != null) || (count > 2);
     }
 
     @GetMapping("/getPromotional/sortByName")
