@@ -88,6 +88,10 @@ public class Check {
         return vat;
     }
 
+    public void setVat(float vat) {
+        this.vat = vat;
+    }
+
     @Override
     public String toString() {
         return "Check{" +
