@@ -2,6 +2,7 @@ package ua.naukma.aisdbproject.entities.sale.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +32,11 @@ public class SaleController {
         model.addAttribute("sale", saleDAO.getByID(upc, checkNumber));
         return "sale/show";
     }
+    @GetMapping("/{checkNumber}")
+    public String getByID(@PathVariable("checkNumber") String checkNumber, Model model) {
+        model.addAttribute("sales", saleDAO.getByCheck(checkNumber));
+        return "check/add";
+    }
 
     @GetMapping("/{upc}/{checkNumber}/edit")
     public String edit(Model model,
@@ -38,6 +44,13 @@ public class SaleController {
                        @PathVariable("checkNumber") String checkNumber) {
         model.addAttribute("sale", saleDAO.getByID(upc, checkNumber));
         return "sale/edit";
+    }
+
+    @PostMapping("/add-sale")
+    @ResponseBody
+    public ResponseEntity<String> add(@ModelAttribute("sale") Sale sale) {
+        saleDAO.add(sale);
+        return ResponseEntity.ok("Sale added successfully");
     }
 
     @PatchMapping("/{upc}/{checkNumber}")
@@ -48,6 +61,13 @@ public class SaleController {
         if (bindingResult.hasErrors())
             return "sale/edit";
         saleDAO.update(upc, checkNumber, sale);
+        return "redirect:/api/v1/sale";
+    }
+
+    @DeleteMapping("/{upc}/{checkNumber}")
+    public String delete(@PathVariable("upc") String upc,
+                         @PathVariable("checkNumber") String checkNumber) {
+        saleDAO.delete(upc, checkNumber);
         return "redirect:/api/v1/sale";
     }
 }

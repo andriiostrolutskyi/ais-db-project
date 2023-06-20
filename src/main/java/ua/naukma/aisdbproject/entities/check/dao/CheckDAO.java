@@ -76,8 +76,26 @@ public class CheckDAO {
                 check.getVat());
     }
 
+    public void update(String checkNumber, Check updatedCheck) {
+        jdbcTemplate.update("UPDATE `check` SET id_employee=?, card_number=?, print_date=?, sum_total=?, vat=? WHERE check_number=?",
+                updatedCheck.getIdEmployee(),
+                updatedCheck.getCardNumber(),
+                updatedCheck.getPrintDate(),
+                updatedCheck.getSumTotal(),
+                updatedCheck.getVat(),
+                checkNumber
+        );
+    }
+
     public void delete(String checkNumber) {
         jdbcTemplate.update("DELETE FROM `check` WHERE check_number=?", checkNumber);
+    }
+
+    public String getLastCheckName() {
+        return jdbcTemplate.queryForObject("SELECT check_number " +
+                "FROM zlagoda.check " +
+                "ORDER BY CAST(SUBSTRING(check_number, 3) AS UNSIGNED) DESC, check_number DESC " +
+                "LIMIT 1;", String.class).substring(2);
     }
 }
 
