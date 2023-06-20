@@ -171,30 +171,31 @@
             event.preventDefault();
             if (form.checkValidity()) {
                 const $upc = $('#upc');
-                checkUPCDuplicate($upc.val(), form);
+                const $upcProm = $('#upcProm');
+                checkUPCDuplicate($upc.val(), $upcProm.val(), form);
             } else
                 event.stopPropagation(); // Stop event propagation
             form.classList.add('was-validated');
         }, false);
 
 
-        function checkUPCDuplicate(upc, form) {
-            var endpoint = '/api/v1/store-product/validate/' + upc;
+        function checkUPCDuplicate(upc, upcProm, form) {
+            var endpoint = '/api/v1/store-product/validate';
+            const $productName = $('#productId');
             // Send request to the endpoint
-            $.get(endpoint)
+            $.get(endpoint, {upc: upc, upcProm: upcProm})
                 .done(function (response) {
                     if (response === true) {
-                        alert('This UPC already exists');
+                        alert('This UPC already exists or too many products bounded to it');
                         form.classList.remove('was-validated');
                     } else {
                         form.classList.add('was-validated');
+                        $productName.prop('disabled', false);
                         form.submit();
                     }
                 })
                 .fail(function () {
                     form.classList.add('was-validated');
-                    const $productName = $('#productId');
-                    $productName.prop('disabled', false);
                     form.submit();
                 });
         }

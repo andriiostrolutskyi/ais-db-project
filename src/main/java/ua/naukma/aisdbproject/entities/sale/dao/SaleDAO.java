@@ -27,11 +27,25 @@ public class SaleDAO {
                 new BeanPropertyRowMapper<>(Sale.class)).stream().findAny().orElse(null);
     }
 
+    public Sale getByCheck(String checkNumber) {
+        return jdbcTemplate.query("SELECT * FROM `sale` WHERE check_number=?", new Object[]{checkNumber},
+                new BeanPropertyRowMapper<>(Sale.class)).stream().findAny().orElse(null);
+    }
+
+    public void add(Sale sale) {
+        jdbcTemplate.update("INSERT INTO `sale` VALUES (?,?,?,?)", sale.getUpc(), sale.getCheckNumber(),
+                sale.getProductNumber(), sale.getSellingPrice());
+    }
+
     public void update(String upc, String checkNumber, Sale updatedSale) {
         jdbcTemplate.update("UPDATE `sale` SET  product_number=?, selling_price=? WHERE UPC=? AND check_number=?",
                 updatedSale.getProductNumber(),
                 updatedSale.getSellingPrice(),
                 upc, checkNumber
         );
+    }
+
+    public void delete(String upc, String checkNumber) {
+        jdbcTemplate.update("DELETE FROM `sale` WHERE UPC=? AND check_number=?", upc, checkNumber);
     }
 }

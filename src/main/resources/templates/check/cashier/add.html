@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Checks list</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/index.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg" id="navbar-custom">
+    <a class="navbar-brand" href="#">Zlagoda</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/category">Categories</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/check">Checks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/customer-card">Customer Cards</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link">Employees</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/product">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/v1/store-product">Store Products</a>
+            </li>
+        </ul>
+        <a type="button" href="/api/v1/login" id="logout" class="btn btn-info btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                <path fill-rule="evenodd"
+                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+            </svg>
+            Log out
+        </a>
+        <a type="button" href="/api/v1/account" id="account" class="btn btn-info btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person"
+                 viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+            </svg>
+            My account
+        </a>
+    </div>
+</nav>
+<div class="container-sm" id="storeProducts" th:fragment="storeProducts">
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Product name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Available quantity</th>
+            <th scope="col">Promotional product</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="storeProduct : ${storeProducts}">
+            <th>
+                  <span th:each="product : ${products}"
+                        th:if="${product.idProduct == storeProduct.idProduct}"
+                        th:with="matchedProduct=${product}">
+                    <span th:text="${matchedProduct.productName}" id="productName"></span>
+                  </span>
+            </th>
+            <td th:text="${storeProduct.sellingPrice}" th:value="${storeProduct.sellingPrice}"
+                class="sellingPrice"></td>
+            <td th:text="${storeProduct.productsNumber}" id="availableQuantity"></td>
+            <td>
+                  <span th:if="${storeProduct.getPromotionalProduct()}" class="text-success">
+                        <svg style="fill:#1E3050" xmlns="http://www.w3.org/2000/svg" height="1.25em"
+                             viewBox="0 0 448 512">
+                            <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>
+                  </span>
+                <span th:unless="${storeProduct.getPromotionalProduct()}" class="text-danger">
+                        <svg style="fill:#dc3545" xmlns="http://www.w3.org/2000/svg" height="1.25em"
+                             viewBox="0 0 384 512">
+                            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+                  </span>
+            </td>
+            <td>
+                <input type="hidden" class="upc" th:value="${storeProduct.upc}">
+                <input type="hidden" class="checkNumber" th:value="${check.checkNumber}">
+                <form th:object="${sale}"
+                      class="needs-validation addToSale">
+                    <input type="hidden" class="upcSale" th:field="*{upc}">
+                    <input type="hidden" class="checkNumberSale" th:field="*{checkNumber}">
+                    <input type="hidden" class="sumForProducts" th:field="*{sellingPrice}">
+                    <div class="mb-3">
+                        <input class="form-control input-sm numOfProductsInCheck" type="number" min="1"
+                               th:field="*{productNumber}" required>
+                        <div class="invalid-feedback">
+                            Please enter a quantity of products >=1
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary btn-sm add-to-sale">Add to sale</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!--    <input type="hidden" id="checkNumber" th:field="*{checkNumber}">-->
+<!--    <input type="hidden" id="idEmployee" th:field="*{idEmployee}">-->
+
+<div class="container-sm" id="cart" th:fragment="cart">
+    <table class="table" th:each="sale : ${sales}">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Product name</th>
+            <th scope="col">Sum Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <!--                <th th:each="storeProduct : ${storeProducts}">-->
+            <!--                  <span th:each="product : ${products}"-->
+            <!--                        th:if="${product.idProduct == storeProduct.idProduct}"-->
+            <!--                        th:with="matchedProduct=${product}">-->
+            <!--                    <span th:text="${matchedProduct.productName}" id="productNameCart"></span>-->
+            <!--                  </span>-->
+            <!--                </th>-->
+            <td th:text="${sale.sellingPrice}" id="sumPrice"></td>
+            <td th:text="${sale.productNumber}" id="quantityInCart"></td>
+            <td>
+                <form th:method="DELETE"
+                      th:action="@{/api/v1/sale/{upc}(upc=${sale.upc})/{checkNumber}(checkNumber=${sale.checkNumber})}">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<form th:method="PATCH" th:object="${check}"
+      class="needs-validation" id="update-check">
+    <div class="mt-5 mb-3 col-3 mx-auto">
+        <label for="cardNumber" class="form-label">Card Number</label>
+        <select id="cardNumber" name="cardNumber" th:field="*{cardNumber}" class="form-select">
+            <option th:selected="true" th:value="null">Select a card number</option>
+            <option th:each="customerCard : ${customerCards}" th:text="${customerCard.getCardNumber()}"
+                    th:value="${customerCard.getCardNumber()}"></option>
+        </select>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Add check</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        const addToSaleForms = document.querySelectorAll(".addToSale");
+        addToSaleForms.forEach((form) => {
+            // Handle form submission
+            $(form).submit(function (event) {
+                event.preventDefault();
+
+                const currentRow = $(this).closest('tr');
+                const upc = currentRow.find('.upc').val();
+                const checkNumber = currentRow.find('.checkNumber').val();
+                const price = currentRow.find('.sellingPrice').text();
+                let numOfProductsInput = $(this).find('.numOfProductsInCheck').val();
+
+
+                $(this).find('.upcSale').val(upc);
+                $(this).find('.checkNumberSale').val(checkNumber);
+                $(this).find('.sumForProducts').val(parseFloat(price) * numOfProductsInput);
+                // Get the form data
+                const formData = $(this).serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/v1/sale/add-sale',
+                    data: formData,
+                    success: function (response) {
+                        console.log('Request successful:', response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Request failed:', error);
+                    }
+                });
+                $(this).find('.numOfProductsInCheck').val(0);
+                $.get("/api/v1/sale/" + checkNumber, function (response) {
+                    $('#cart').html(response);
+                }).fail(function (xhr, status, error) {
+                    // Handle the error response
+                    console.log("Request failed:", error);
+                });
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Handle form submission
+        $('#update-check').submit(function (event) {
+            event.preventDefault();
+
+            const currentRow = $(this).closest('tr');
+            const upc = currentRow.find('.upc').val();
+            const checkNumber = currentRow.find('.checkNumber').val();
+            const price = currentRow.find('.sellingPrice').text();
+            let numOfProductsInput = $(this).find('.numOfProductsInCheck').val();
+
+
+            $(this).find('.upcSale').val(upc);
+            $(this).find('.checkNumberSale').val(checkNumber);
+            $(this).find('.sumForProducts').val(parseFloat(price) * numOfProductsInput);
+            // Get the form data
+            const formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/sale/add-sale',
+                data: formData,
+                success: function (response) {
+                    console.log('Request successful:', response);
+                },
+                error: function (xhr, status, error) {
+                    console.log('Request failed:', error);
+                }
+            });
+            $(this).find('.numOfProductsInCheck').val(0);
+            $.get("/api/v1/sale/" + checkNumber, function (response) {
+                $('#cart').html(response);
+            }).fail(function (xhr, status, error) {
+                // Handle the error response
+                console.log("Request failed:", error);
+            });
+        });
+    });
+</script>
+</body>
+</html>

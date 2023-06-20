@@ -11,11 +11,6 @@
             integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
             crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script th:inline="javascript">
-        var currentURL = window.location.href;
-        var parts = currentURL.split("/");
-        var checkNumber = parts[parts.length - 2];
-    </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg" id="navbar-custom">
@@ -46,10 +41,21 @@
             </li>
         </ul>
         <a type="button" href="/api/v1/login" id="logout" class="btn btn-info btn-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-            </svg> Log out
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                <path fill-rule="evenodd"
+                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+            </svg>
+            Log out
+        </a>
+        <a type="button" href="/api/v1/account" id="account" class="btn btn-info btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person"
+                 viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+            </svg>
+            My account
         </a>
     </div>
 </nav>
@@ -79,24 +85,26 @@
         <table class="table">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">UPC</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Product Number</th>
-                <th scope="col">Selling Price</th>
+                <th scope="col">Check Number</th>
+                <th scope="col">ID Employee</th>
+                <th scope="col">Card Number</th>
+                <th scope="col">Print Date</th>
+                <th scope="col">Sum total</th>
+                <th scope="col">VAT</th>
+                <th scope="col">
+                    <a th:href="@{/api/v1/check/add-check}" type="button" class="btn btn-outline-primary">
+                        Add Check
+                    </a>
+                </th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="sale : ${sales}">
-                <th th:with="selectedUPC=null">
-<!--                    <span th:if="${sale.checkNumber == checkNumber}"-->
-<!--                          th:with="selectedUPC=${sale.upc}">-->
-<!--&lt;!&ndash;                        <script th:inline="javascript">&ndash;&gt;-->
-<!--&lt;!&ndash;                            document.write('<span th:text="${selectedUPC}"></span>');&ndash;&gt;-->
-<!--&lt;!&ndash;                        </script>&ndash;&gt;-->
-<!--                    </span>-->
+            <tr th:each="check : ${checks}">
+                <th style="cursor: pointer;">
+                    <span onclick="handleClick(this)" th:text="${check.checkNumber}"></span>
                 </th>
-            </span>
-                </th>
+                <td th:text="${check.getIdEmployee()}"/>
+                <td th:text="${check.getCardNumber()}"/>
                 <td th:text="${check.getPrintDate()}"/>
                 <td th:text="${check.getSumTotal()}"/>
                 <td th:text="${check.getVat()}"/>
@@ -114,7 +122,9 @@
             </tbody>
         </table>
     </div>
-    <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to PDF</button>
+    <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to
+        PDF
+    </button>
 </div>
 
 <script th:inline="javascript">
@@ -158,46 +168,63 @@
     }
 
 </script>
+
 <script>
     $(document).ready(function () {
         const initialTable = $('#searchResults').html();
         $('#from').on('input', function () {
-            const from = $(this).val();
-            if (from.trim() === '')
-                $('#searchResults').html(initialTable);
-            else
-                performFromSearch(from);
+            performCheckDateSearch();
         });
-    });
 
-    function performFromSearch(from) {
-        const url = "/api/v1/check/from/" + from;
-        $.get(url, response => {
-            $('#searchResults').html(response);
-        });
-    }
-
-</script>
-<script>
-    $(document).ready(function () {
-        const initialTable = $('#searchResults').html();
         $('#to').on('input', function () {
-            const to = $(this).val();
-            if (to.trim() === '')
+            performCheckDateSearch();
+        });
+
+        function performFromSearch(from) {
+            const url = "/api/v1/check/time/from";
+            $.get(url, {startDate: from})
+                .done(function (response) {
+                    $('#searchResults').html(response);
+                })
+                .fail(function (error) {
+                    alert("Error occurred" + error)
+                });
+        }
+
+        function performToSearch(to) {
+            const url = "/api/v1/check/time/to";
+            $.get(url, {endDate: to})
+                .done(function (response) {
+                    $('#searchResults').html(response);
+                })
+                .fail(function (error) {
+                    alert("Error occurred" + error)
+                });
+        }
+
+        function performCheckDateSearch() {
+            const fromDate = $('#from').val();
+            const toDate = $('#to').val();
+            if (fromDate === '' && toDate === '')
                 $('#searchResults').html(initialTable);
-            else
-                performToSearch(to);
-        });
+            else if (toDate === '')
+                performFromSearch(fromDate);
+            else if (fromDate === '')
+                performToSearch(toDate);
+            else {
+                $.get('/api/v1/check/time', {startDate: fromDate, endDate: toDate})
+                    .done(function (response) {
+                        $('#searchResults').html(response);
+                    })
+                    .fail(function (error) {
+                        alert("Error occurred" + error)
+                    });
+            }
+        }
     });
-
-    function performToSearch(to) {
-        const url = "/api/v1/check/to/" + to;
-        $.get(url, response => {
-            $('#searchResults').html(response);
-        });
-    }
-
 </script>
+
+
 <script>
     function handleClick(element) {
         var checkNumber = element.innerText;
@@ -205,13 +232,13 @@
     }
 
     function performCheckSearch(checkNumber) {
-        const url = "/api/v1/check/" + checkNumber + "/checkDetails";
+        const url = "/api/v1/check/showDetails/" + checkNumber;
         window.location.href = url;
     }
 
 </script>
 
-<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css"/>
 <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
 <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/jszip.min.js"></script>
 
@@ -243,18 +270,18 @@
                 data: data,
                 schema: {
                     fields: {
-                        "ID": { type: String },
-                        "Surname": { type: String },
-                        "Name": { type: String},
-                        "Patronymic": { type: String},
-                        "Role": { type: String},
-                        "Salary": { type: Number},
-                        "Birth date": { type: Date},
-                        "Start date": { type: Date},
-                        "Phone": { type: String},
-                        "City": { type: String},
-                        "Street": { type: String},
-                        "ZIP code": { type: String}
+                        "ID": {type: String},
+                        "Surname": {type: String},
+                        "Name": {type: String},
+                        "Patronymic": {type: String},
+                        "Role": {type: String},
+                        "Salary": {type: Number},
+                        "Birth date": {type: Date},
+                        "Start date": {type: Date},
+                        "Phone": {type: String},
+                        "City": {type: String},
+                        "Street": {type: String},
+                        "ZIP code": {type: String}
                     }
                 }
             });
@@ -268,24 +295,23 @@
                 pdf.addPage("a4", "landscape");
 
 
-
                 pdf.table(
                     50,
                     50,
                     data,
                     [
-                        { field: "ID", title: "ID", width: 50 },
-                        { field: "Surname", title: "Surname", width: 75 },
-                        { field: "Name", title: "Name", width: 65 },
-                        { field: "Patronymic", title: "Patronymic", width: 70 },
-                        { field: "Role", title: "Role", width: 60 },
-                        { field: "Salary", title: "Salary", width: 50 },
-                        { field: "Birth date", title: "Birth date", width: 70 },
-                        { field: "Start date", title: "Start date", width: 70 },
-                        { field: "Phone", title: "Phone", width: 80 },
-                        { field: "City", title: "City", width: 50 },
-                        { field: "Street", title: "Street", width: 60 },
-                        { field: "ZIP code", title: "ZIP code", width: 60 }
+                        {field: "ID", title: "ID", width: 50},
+                        {field: "Surname", title: "Surname", width: 75},
+                        {field: "Name", title: "Name", width: 65},
+                        {field: "Patronymic", title: "Patronymic", width: 70},
+                        {field: "Role", title: "Role", width: 60},
+                        {field: "Salary", title: "Salary", width: 50},
+                        {field: "Birth date", title: "Birth date", width: 70},
+                        {field: "Start date", title: "Start date", width: 70},
+                        {field: "Phone", title: "Phone", width: 80},
+                        {field: "City", title: "City", width: 50},
+                        {field: "Street", title: "Street", width: 60},
+                        {field: "ZIP code", title: "ZIP code", width: 60}
                     ],
                     {
                         margins: {
@@ -293,7 +319,6 @@
                             left: 50
                         }
                     }
-
                 );
 
                 var timestamp = new Date().toLocaleString();
@@ -307,5 +332,6 @@
         });
     });
 </script>
+
 </body>
 </html>
