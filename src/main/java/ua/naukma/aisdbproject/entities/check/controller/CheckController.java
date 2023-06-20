@@ -50,47 +50,94 @@ public class CheckController {
     }
 
     @GetMapping("/{checkNumber}")
-    public String getById(@PathVariable("checkNumber") String checkNumber, Model model) {
+    public String getById(@PathVariable("checkNumber") String checkNumber, Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("checks", checkDAO.getById(checkNumber));
-        return "check/show :: searchResults";
+        if (user.getUsrRole().equals("Manager"))
+            return "check/manager/show :: searchResults";
+        else
+            return "check/cashier/show :: searchResults";
+
     }
 
     @GetMapping("/idEmployee/{idEmployee}")
-    public String getByIdEmployee(@PathVariable("idEmployee") String idEmployee, Model model) {
+    public String getByIdEmployee(@PathVariable("idEmployee") String idEmployee, Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("checks", checkDAO.getByIdEmployee(idEmployee));
-        return "check/show :: searchResults";
+        if (user.getUsrRole().equals("Manager"))
+            return "check/manager/show :: searchResults";
+        else
+            return "check/cashier/show :: searchResults";
     }
 
     @GetMapping("/showDetails/{checkNumber}")
-    public String getCheckDetails(@PathVariable("checkNumber") String checkNumber, Model model) {
+    public String getCheckDetails(@PathVariable("checkNumber") String checkNumber, Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("sales", checkDAO.getSalesByCheckNumber(checkNumber));
-        return "check/checkDetails";
+        if (user.getUsrRole().equals("Manager"))
+            return "check/manager/checkDetails";
+        else
+            return "check/cashier/checkDetails";
     }
 
     @GetMapping("/time")
     public String getByTime(@RequestParam("startDate") String startDate,
-                            @RequestParam("endDate") String endDate, Model model) {
+                            @RequestParam("endDate") String endDate, Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         List<Check> checks = checkDAO.getByTime(startDate, endDate);
         model.addAttribute("checks", checks);
-        return "check/show :: searchResults";
+        if (user.getUsrRole().equals("Manager"))
+            return "check/manager/show :: searchResults";
+        else
+            return "check/cashier/show :: searchResults";
     }
 
     @GetMapping("/time/from")
-    public String getByTimeFrom(@RequestParam("startDate") String startDate, Model model) {
+    public String getByTimeFrom(@RequestParam("startDate") String startDate, Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         List<Check> checks = checkDAO.getByTimeFrom(startDate);
         model.addAttribute("checks", checks);
-        return "check/show :: searchResults";
+        if (user.getUsrRole().equals("Manager"))
+            return "check/manager/show :: searchResults";
+        else
+            return "check/cashier/show :: searchResults";
     }
 
     @GetMapping("/time/to")
-    public String getByTimeTo(@RequestParam("endDate") String endDate, Model model) {
+    public String getByTimeTo(@RequestParam("endDate") String endDate, Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         List<Check> checks = checkDAO.getByTimeTo(endDate);
         model.addAttribute("checks", checks);
-        return "check/show :: searchResults";
+        if (user.getUsrRole().equals("Manager"))
+            return "check/manager/show :: searchResults";
+        else
+            return "check/cashier/show :: searchResults";
     }
 
     @GetMapping("/add-check")
     public String goToAdd(Model model, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("employee");
+        if (user == null || user.getUsrRole().equals("Manager")) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("storeProducts", storeProductDAO.getAll());
         model.addAttribute("products", productDAO.getAll());
         model.addAttribute("customerCards", customerCardDAO.getAll());
@@ -101,7 +148,7 @@ public class CheckController {
         Check checkForForm = new Check("CH" + (++lastCheckNum), employeeID);
         checkDAO.add(checkForForm);
         model.addAttribute("check", checkForForm);
-        return "check/add";
+        return "check/cashier/add";
     }
 
     @PostMapping
@@ -128,8 +175,15 @@ public class CheckController {
 
     @GetMapping("/{checkNumber}/checkDetails")
     public String goToShow(Model model,
-                           @PathVariable("checkNumber") String checkNumber) {
+                           @PathVariable("checkNumber") String checkNumber, HttpSession httpSession) {
+        User user = (User) httpSession.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("checkNumber", checkDAO.getById(checkNumber));
-        return "check/checkDetails";
+        if (user.getUsrRole().equals("Manager"))
+            return "check/manager/checkDetails";
+        else
+            return "check/cashier/checkDetails";
     }
 }

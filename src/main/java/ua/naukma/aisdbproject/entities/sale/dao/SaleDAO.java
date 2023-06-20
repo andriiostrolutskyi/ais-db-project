@@ -28,7 +28,7 @@ public class SaleDAO {
     }
 
     public Sale getByCheck(String checkNumber) {
-        return jdbcTemplate.query("SELECT * FROM `sale` WHERE UPC=?", new Object[]{checkNumber},
+        return jdbcTemplate.query("SELECT * FROM `sale` WHERE check_number=?", new Object[]{checkNumber},
                 new BeanPropertyRowMapper<>(Sale.class)).stream().findAny().orElse(null);
     }
 
