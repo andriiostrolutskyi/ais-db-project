@@ -1,6 +1,6 @@
 package ua.naukma.aisdbproject.entities.category.controller;
 
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.naukma.aisdbproject.entities.category.dao.CategoryDAO;
 import ua.naukma.aisdbproject.entities.category.model.Category;
-
-import java.io.IOException;
+import ua.naukma.aisdbproject.login.model.User;
 
 @Controller
 @RequestMapping("/api/v1/category")
@@ -24,37 +23,71 @@ public class CategoryController {
     }
 
     @GetMapping
-    public String getAll(Model model) {
+    public String getAll(Model model, HttpSession session) {
+
+        User user = (User) session.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("categories", categoryDAO.getAll());
-        return "category/show";
+
+        if (user.getUsrRole().equals("Manager")) {
+            return "category/manager/show";
+        } else {
+            return "category/cashier/show";
+        }
     }
 
     @GetMapping("/{categoryNumber}")
-    public String getByID(@PathVariable("categoryNumber") Integer categoryNumber, Model model) {
+    public String getByID(@PathVariable("categoryNumber") Integer categoryNumber, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("category", categoryDAO.getByID(categoryNumber));
-        return "category/show";
+        if (user.getUsrRole().equals("Manager")) {
+            return "category/manager/show";
+        } else {
+            return "category/cashier/show";
+        }
+    }
+
+    @GetMapping("/validate/{categoryNumber}")
+    @ResponseBody
+    public boolean getByIDValidation(@PathVariable("categoryNumber") Integer categoryNumber) {
+        return (categoryDAO.getByID(categoryNumber)) != null;
     }
 
     @GetMapping("/add-category")
-    public String goToAdd(Model model) {
+    public String goToAdd(Model model, HttpSession session) {
+
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
+
         model.addAttribute("category", new Category());
-        return "category/add";
+        return "category/manager/add";
     }
 
     @PostMapping
     public String add(@ModelAttribute("category") @Valid Category category,
                       BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return "category/add";
+            return "category/manager/add";
         categoryDAO.add(category);
         return "redirect:/api/v1/category";
     }
 
     @GetMapping("/{categoryNumber}/edit")
     public String edit(Model model,
-                       @PathVariable("categoryNumber") Integer categoryNumber) {
+                       @PathVariable("categoryNumber") Integer categoryNumber, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("category", categoryDAO.getByID(categoryNumber));
-        return "category/edit";
+        return "category/manager/edit";
     }
 
     @PatchMapping("/{categoryNumber}")
@@ -62,7 +95,7 @@ public class CategoryController {
                          BindingResult bindingResult,
                          @PathVariable("categoryNumber") Integer categoryNumber) {
         if (bindingResult.hasErrors())
-            return "category/edit";
+            return "category/manager/edit";
         categoryDAO.update(categoryNumber, category);
         return "redirect:/api/v1/category";
     }
@@ -79,15 +112,30 @@ public class CategoryController {
     }
 
     @GetMapping("/categoryNumber/{categoryNumber}")
-    public String getByNumber(@PathVariable("categoryNumber") Integer categoryNumber, Model model) {
+    public String getByNumber(@PathVariable("categoryNumber") Integer categoryNumber, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("categories", categoryDAO.getByID(categoryNumber));
-        return "category/show :: searchResults";
+        if (user.getUsrRole().equals("Manager")) {
+            return "category/manager/show :: searchResults";
+        } else {
+            return "category/cashier/show :: searchResults";
+        }
     }
 
     @GetMapping("/categoryName/{categoryName}")
-    public String getByName(@PathVariable("categoryName") String categoryName, Model model) {
+    public String getByName(@PathVariable("categoryName") String categoryName, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("categories", categoryDAO.getByName(categoryName));
-        return "category/show :: searchResults";
+        if (user.getUsrRole().equals("Manager")) {
+            return "category/manager/show :: searchResults";
+        } else {
+            return "category/cashier/show :: searchResults";
+        }
     }
-
 }

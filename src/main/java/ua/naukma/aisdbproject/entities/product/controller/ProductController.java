@@ -1,5 +1,6 @@
 package ua.naukma.aisdbproject.entities.product.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.naukma.aisdbproject.entities.category.dao.CategoryDAO;
 import ua.naukma.aisdbproject.entities.product.dao.ProductDAO;
 import ua.naukma.aisdbproject.entities.product.model.Product;
+import ua.naukma.aisdbproject.login.model.User;
 
 @Controller
 @RequestMapping("/api/v1/product")
@@ -24,23 +26,55 @@ public class ProductController {
     }
 
     @GetMapping
-    public String getAll(Model model) {
+    public String getAll(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("products", productDAO.getAll());
         model.addAttribute("categories", productDAO.getCategoryNames());
-        return "product/show";
+        if (user.getUsrRole().equals("Manager")) {
+            return "product/manager/show";
+        } else {
+            return "product/cashier/show";
+        }
+    }
+
+    @GetMapping("/{productID}")
+    @ResponseBody
+    public boolean getByID(@PathVariable("productID") Integer productID) {
+        return (productDAO.getByID(productID)) != null;
     }
 
     @GetMapping("/categoryNumber/{categoryNumber}")
-    public String getByCategory(@PathVariable("categoryNumber") Integer categoryNumber, Model model) {
+    public String getByCategory(@PathVariable("categoryNumber") Integer categoryNumber, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("products", productDAO.getByCategory(categoryNumber));
         model.addAttribute("categories", categoryDAO.getAll());
-        return "product/show :: searchResults";
+
+        if (user.getUsrRole().equals("Manager")) {
+            return "product/manager/show :: searchResults";
+        } else {
+            return "product/cashier/show :: searchResults";
+        }
     }
+
     @GetMapping("/productName/{productName}")
-    public String getByName(@PathVariable("productName") String productName, Model model) {
+    public String getByName(@PathVariable("productName") String productName, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("products", productDAO.getByName(productName));
         model.addAttribute("categories", categoryDAO.getAll());
-        return "product/show :: searchResults";
+        if (user.getUsrRole().equals("Manager")) {
+            return "product/manager/show :: searchResults";
+        } else {
+            return "product/cashier/show :: searchResults";
+        }
     }
 
     @GetMapping("/canBeDeleted/{idProduct}")
@@ -49,27 +83,36 @@ public class ProductController {
     }
 
     @GetMapping("/add-product")
-    public String goToAdd(Model model) {
+    public String goToAdd(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
+
         model.addAttribute("product", new Product());
         model.addAttribute("categories", categoryDAO.getAll());
-        return "product/add";
+        return "product/manager/add";
     }
 
     @PostMapping
     public String add(@ModelAttribute("product") @Valid Product product,
                       BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return "product/add";
+            return "redirect:/api/v1/product/add-product";
         productDAO.add(product);
         return "redirect:/api/v1/product";
     }
 
     @GetMapping("/{idProduct}/edit")
     public String edit(Model model,
-                       @PathVariable("idProduct") Integer idProduct) {
+                       @PathVariable("idProduct") Integer idProduct, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("product", productDAO.getByID(idProduct));
         model.addAttribute("categories", categoryDAO.getAll());
-        return "product/edit";
+        return "product/manager/edit";
     }
 
     @PatchMapping("/{idProduct}")
@@ -77,7 +120,7 @@ public class ProductController {
                          BindingResult bindingResult,
                          @PathVariable("idProduct") Integer idProduct) {
         if (bindingResult.hasErrors())
-            return "product/edit";
+            return "product/manager/edit";
         productDAO.update(idProduct, product);
         return "redirect:/api/v1/product";
     }

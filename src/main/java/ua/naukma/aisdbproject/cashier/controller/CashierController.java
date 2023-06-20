@@ -13,6 +13,9 @@ public class CashierController {
     @GetMapping("/home")
     public String getCashierHome(HttpSession session, Model model){
         User user = (User) session.getAttribute("employee");
+        if (user == null || (user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
         model.addAttribute("employee", user);
         return "login/cashierHome";
     }

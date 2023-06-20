@@ -14,7 +14,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg" id="navbar-custom">
-    <a class="navbar-brand" href="#">Zlagoda</a>
+    <a class="navbar-brand" href="/api/v1/manager/home"><span style="font-family: 'Rockwell',serif;">Zlagoda</span></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -41,10 +41,21 @@
             </li>
         </ul>
         <a type="button" href="/api/v1/login" id="logout" class="btn btn-info btn-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-            </svg> Log out
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                <path fill-rule="evenodd"
+                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+            </svg>
+            Log out
+        </a>
+        <a type="button" href="/api/v1/account" id="account" class="btn btn-info btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person"
+                 viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+            </svg>
+            My account
         </a>
     </div>
 </nav>
@@ -80,7 +91,7 @@
             </div>
             <div class="col">
                 <label for="sortBy" class="form-label">Sort By</label>
-                <select id="sortBy" class="form-select">
+                <select id="sortBy" class="form-select" disabled>
                     <option th:selected="true" th:value="sortByName">Name</option>
                     <option th:value="sortByQuantity">Quantity</option>
                 </select>
@@ -120,11 +131,13 @@
                 <td th:text="${storeProduct.getProductsNumber()}"></td>
                 <td>
                   <span th:if="${storeProduct.getPromotionalProduct()}" class="text-success">
-                        <svg style="fill:#1E3050" xmlns="http://www.w3.org/2000/svg" height="1.25em" viewBox="0 0 448 512">
+                        <svg style="fill:#1E3050" xmlns="http://www.w3.org/2000/svg" height="1.25em"
+                             viewBox="0 0 448 512">
                             <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>
                   </span>
                     <span th:unless="${storeProduct.getPromotionalProduct()}" class="text-danger">
-                        <svg style="fill:#dc3545" xmlns="http://www.w3.org/2000/svg" height="1.25em" viewBox="0 0 384 512">
+                        <svg style="fill:#dc3545" xmlns="http://www.w3.org/2000/svg" height="1.25em"
+                             viewBox="0 0 384 512">
                             <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
                   </span>
                 </td>
@@ -146,7 +159,9 @@
             </tbody>
         </table>
     </div>
-    <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to PDF</button>
+    <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to
+        PDF
+    </button>
 </div>
 <script th:inline="javascript">
     $(document).ready(function () {
@@ -204,30 +219,46 @@
     $(document).ready(function () {
         $('input[name="productType"]').on('change', function () {
             let selectedRadio = $(this).val();
+            let selectedSortBy = $('#sortBy').val();
 
             if (selectedRadio === 'promProduct') {
-                performSearchOfPromoted();
+                performSearchOfPromoted(selectedSortBy);
+                $('#sortBy').prop('disabled', false);
             } else if (selectedRadio === 'notPromProduct') {
-                performSearchOfNotPromoted();
+                performSearchOfNotPromoted(selectedSortBy);
+                $('#sortBy').prop('disabled', false);
             } else if (selectedRadio === 'allProducts') {
-                getAllProducts();
+                getAllProducts(selectedSortBy);
+                $('#sortBy').prop('disabled', true);
             }
         });
 
-        function performSearchOfPromoted() {
-            const url = "/api/v1/store-product/getPromotional/" + $('#sortBy').val();
+        $('#sortBy').on('change', function () {
+            let selectedSortBy = $(this).val();
+            let selectedRadio = $('input[name="productType"]:checked').val();
+
+            if (selectedRadio === 'promProduct') {
+                performSearchOfPromoted(selectedSortBy);
+            } else if (selectedRadio === 'notPromProduct') {
+                performSearchOfNotPromoted(selectedSortBy);
+            } else if (selectedRadio === 'allProducts') {
+                getAllProducts(selectedSortBy);
+            }
+        });
+
+        function performSearchOfPromoted(sortBy) {
+            const url = "/api/v1/store-product/getPromotional/" + sortBy;
             $.get(url, function (response) {
                 $('#searchResults').html(response);
             });
         }
 
-        function performSearchOfNotPromoted() {
-            const url = "/api/v1/store-product/getNotPromotional/" + $('#sortBy').val();
+        function performSearchOfNotPromoted(sortBy) {
+            const url = "/api/v1/store-product/getNotPromotional/" + sortBy;
             $.get(url, function (response) {
                 $('#searchResults').html(response);
             });
         }
-
         function getAllProducts() {
             const url = "/api/v1/store-product/noFilters";
             $.get(url, function (response) {
@@ -236,7 +267,7 @@
         }
     });
 </script>
-<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css"/>
 <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
 <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/jszip.min.js"></script>
 
@@ -261,12 +292,12 @@
                 data: data,
                 schema: {
                     fields: {
-                        "UPC": { type: Number },
-                        "Promotional UPC": { type: Number },
-                        "Product name": { type: String },
-                        "Price": { type: Number},
-                        "Quantity": { type: Number},
-                        "Promotional product": { type: String}
+                        "UPC": {type: Number},
+                        "Promotional UPC": {type: Number},
+                        "Product name": {type: String},
+                        "Price": {type: Number},
+                        "Quantity": {type: Number},
+                        "Promotional product": {type: String}
                     }
                 }
             });
@@ -280,18 +311,17 @@
                 pdf.addPage("a4", "portrait");
 
 
-
                 pdf.table(
                     50,
                     50,
                     data,
                     [
-                        { field: "UPC", title: "UPC", width: 100 },
-                        { field: "Promotional UPC", title: "Promotional UPC", width: 100 },
-                        { field: "Product name", title: "Product Name", width: 100 },
-                        { field: "Price", title: "Price", width: 50 },
-                        { field: "Quantity", title: "Quantity", width: 60 },
-                        { field: "Promotional product", title: "Promotional product", width: 80 },
+                        {field: "UPC", title: "UPC", width: 100},
+                        {field: "Promotional UPC", title: "Promotional UPC", width: 100},
+                        {field: "Product name", title: "Product Name", width: 100},
+                        {field: "Price", title: "Price", width: 50},
+                        {field: "Quantity", title: "Quantity", width: 60},
+                        {field: "Promotional product", title: "Promotional product", width: 80},
                     ],
                     {
                         margins: {
@@ -299,7 +329,6 @@
                             left: 50
                         }
                     }
-
                 );
 
                 var timestamp = new Date().toLocaleString();
