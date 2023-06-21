@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class Employee {
     @NotEmpty(message = "Employee ID cant be empty")
@@ -37,6 +38,7 @@ public class Employee {
     @NotEmpty(message = "Zip code can't be empty")
     @Size(max = 9, message = "Zip code should be less than 9 characters")
     private String zipCode;
+    private Integer soldNumber;
 
     public Employee() {
         salary = 0f;
@@ -44,7 +46,7 @@ public class Employee {
 
     public Employee(String idEmployee, String employeeSurname, String employeeName, String employeeRole,
                     Float salary, Date dateOfBirth, Date dateOfStart, String phoneNumber, String city,
-                    String street, String zipCode) {
+                    String street, String zipCode, Integer soldNumber) {
         this.idEmployee = idEmployee;
         this.emplSurname = employeeSurname;
         this.emplName = employeeName;
@@ -56,6 +58,7 @@ public class Employee {
         this.city = city;
         this.street = street;
         this.zipCode = zipCode;
+        this.soldNumber = soldNumber;
     }
 
     public Employee(String idEmployee, String employeeSurname, String employeeName, String employeePatronymic,
@@ -170,6 +173,16 @@ public class Employee {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
+
+
+    public Integer getSoldNumber() {
+        return Objects.requireNonNullElse(soldNumber, 0);
+    }
+
+    public void setSoldNumber(Integer soldNumber) {
+        this.soldNumber = soldNumber;
+    }
+
 
     @Override
     public String toString() {
