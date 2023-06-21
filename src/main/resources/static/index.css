@@ -67,9 +67,32 @@
     overflow-y: auto;
     margin-top: 10px;
 }
+
 #searchResults thead th {
     position: sticky;
     top: 0;
+}
+
+#storeProducts thead th {
+    position: sticky;
+    top: 0;
+}
+
+#cart thead th {
+    position: sticky;
+    top: 0;
+}
+
+#storeProducts {
+    height: 200px;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+#cart {
+    height: 300px;
+    overflow-y: auto;
+    margin-top: 10px;
 }
 
 #exportButton {
@@ -83,12 +106,14 @@
     border-color: #EAE2B7;
     color: #EAE2B7;
 }
+
 #account {
     position: absolute;
     right: 120px;
     background-color: #EAE2B7;
     border-color: #1E3050;
 }
+
 #logout2 {
     background-color: #EAE2B7;
     border-color: #1E3050;

@@ -27,14 +27,17 @@ public class SaleDAO {
                 new BeanPropertyRowMapper<>(Sale.class)).stream().findAny().orElse(null);
     }
 
-    public Sale getByCheck(String checkNumber) {
+    public List<Sale> getByCheck(String checkNumber) {
         return jdbcTemplate.query("SELECT * FROM `sale` WHERE check_number=?", new Object[]{checkNumber},
-                new BeanPropertyRowMapper<>(Sale.class)).stream().findAny().orElse(null);
+                new BeanPropertyRowMapper<>(Sale.class));
     }
 
     public void add(Sale sale) {
         jdbcTemplate.update("INSERT INTO `sale` VALUES (?,?,?,?)", sale.getUpc(), sale.getCheckNumber(),
                 sale.getProductNumber(), sale.getSellingPrice());
+        jdbcTemplate.update("UPDATE `store_product` SET products_number= products_number - ? WHERE UPC=?",
+                sale.getProductNumber(),
+                sale.getUpc());
     }
 
     public void update(String upc, String checkNumber, Sale updatedSale) {
@@ -45,7 +48,16 @@ public class SaleDAO {
         );
     }
 
+    public Float getTotalSum(String checkNumber) {
+        return jdbcTemplate.queryForObject("SELECT SUM(selling_price) AS totalSum " +
+                "FROM `sale` " +
+                "WHERE check_number = ?;", new Object[]{checkNumber}, Float.class);
+    }
+
     public void delete(String upc, String checkNumber) {
+        jdbcTemplate.update("UPDATE `store_product` SET products_number= products_number + ? WHERE UPC=?",
+                (getByID(upc, checkNumber)).getProductNumber(),
+                upc);
         jdbcTemplate.update("DELETE FROM `sale` WHERE UPC=? AND check_number=?", upc, checkNumber);
     }
 }

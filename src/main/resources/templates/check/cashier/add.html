@@ -59,7 +59,7 @@
         </a>
     </div>
 </nav>
-<div class="container-sm" id="storeProducts" th:fragment="storeProducts">
+<div id="storeProducts" class="container-sm" th:fragment="storeProducts">
     <table class="table">
         <thead class="thead-dark">
         <tr>
@@ -117,33 +117,26 @@
     </table>
 </div>
 
-<!--    <input type="hidden" id="checkNumber" th:field="*{checkNumber}">-->
-<!--    <input type="hidden" id="idEmployee" th:field="*{idEmployee}">-->
 
-<div class="container-sm" id="cart" th:fragment="cart">
-    <table class="table" th:each="sale : ${sales}">
+<div class="container-sm">
+    <table class="table" id="cart" th:fragment="cart">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">Product name</th>
+            <th scope="col">Product UPC</th>
             <th scope="col">Sum Price</th>
             <th scope="col">Quantity</th>
             <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <!--                <th th:each="storeProduct : ${storeProducts}">-->
-            <!--                  <span th:each="product : ${products}"-->
-            <!--                        th:if="${product.idProduct == storeProduct.idProduct}"-->
-            <!--                        th:with="matchedProduct=${product}">-->
-            <!--                    <span th:text="${matchedProduct.productName}" id="productNameCart"></span>-->
-            <!--                  </span>-->
-            <!--                </th>-->
+        <tr th:each="sale : ${sales}">
+            <th th:text="${sale.upc}" id="upc"></th>
             <td th:text="${sale.sellingPrice}" id="sumPrice"></td>
             <td th:text="${sale.productNumber}" id="quantityInCart"></td>
             <td>
-                <form th:method="DELETE"
-                      th:action="@{/api/v1/sale/{upc}(upc=${sale.upc})/{checkNumber}(checkNumber=${sale.checkNumber})}">
+                <form id="deleteSale" onsubmit="handleDeleteSale(this)">
+                    <input type="hidden" name="upcForm" th:value="${sale.upc}"/>
+                    <input type="hidden" name="checkNumberForm" th:value="${sale.checkNumber}"/>
                     <button type="submit" class="btn btn-outline-danger btn-sm">
                         Delete
                     </button>
@@ -153,10 +146,15 @@
         </tbody>
     </table>
 </div>
-<form th:method="PATCH" th:object="${check}"
+<form th:method="PATCH" th:object="${check}" onsubmit="handleUpdateCheck(event, this)"
       class="needs-validation" id="update-check">
     <div class="mt-5 mb-3 col-3 mx-auto">
         <label for="cardNumber" class="form-label">Card Number</label>
+        <!--        <label for="totalSum" class="form-label">Total sum</label>-->
+        <input name="checkNumberInput" type="hidden" th:value="${check.checkNumber}" readonly>
+        <input name="idEmployee" type="hidden" th:value="${check.idEmployee}" readonly>
+        <input name="printDate" type="hidden" th:value="${#dates.format(check.printDate, 'yyyy-MM-dd HH:mm:ss')}"
+               readonly>
         <select id="cardNumber" name="cardNumber" th:field="*{cardNumber}" class="form-select">
             <option th:selected="true" th:value="null">Select a card number</option>
             <option th:each="customerCard : ${customerCards}" th:text="${customerCard.getCardNumber()}"
@@ -210,45 +208,102 @@
         });
     });
 </script>
+<script>
+    function handleDeleteSale(form) {
+        event.preventDefault();
+
+        // Get the form data
+        const upc = $(form).find('input[name="upcForm"]').val();
+        const checkNumber = $(form).find('input[name="checkNumberForm"]').val();
+
+        // Prepare the DELETE request
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/v1/sale/' + upc + '/' + checkNumber,
+            success: function () {
+                // Handle the success response
+                console.log('Sale deleted successfully');
+                // Perform any additional actions or updates after successful deletion
+
+                // Perform the GET request to update the cart fragment
+
+            },
+            error: function (xhr, status, error) {
+                // Handle the error response
+                console.log('Request failed:', error);
+                // Perform any error handling or display error messages
+            }
+        });
+        $.get('/api/v1/sale/' + checkNumber, function (response) {
+            $('#cart').html(response);
+        }).fail(function (xhr, status, error) {
+            // Handle the error response
+            console.log('Request failed:', error);
+            // Perform any error handling or display error messages
+        });
+    }
+</script>
 
 <script>
-    $(document).ready(function () {
-        // Handle form submission
-        $('#update-check').submit(function (event) {
-            event.preventDefault();
+    function handleUpdateCheck(event, form) {
+        event.preventDefault();
 
-            const currentRow = $(this).closest('tr');
-            const upc = currentRow.find('.upc').val();
-            const checkNumber = currentRow.find('.checkNumber').val();
-            const price = currentRow.find('.sellingPrice').text();
-            let numOfProductsInput = $(this).find('.numOfProductsInCheck').val();
+        // Get the form data
+        const cardNumber = $(form).find('#cardNumber').val();
+        const checkNumber = $(form).find('input[name="checkNumberInput"]').val();
+        const idEmployee = $(form).find('input[name="idEmployee"]').val();
+        const printDate = $(form).find('input[name="printDate"]').val();
+        const totalSumInput = $(form).find('#totalSum')
 
 
-            $(this).find('.upcSale').val(upc);
-            $(this).find('.checkNumberSale').val(checkNumber);
-            $(this).find('.sumForProducts').val(parseFloat(price) * numOfProductsInput);
-            // Get the form data
-            const formData = $(this).serialize();
-            $.ajax({
-                type: 'POST',
-                url: '/api/v1/sale/add-sale',
-                data: formData,
-                success: function (response) {
-                    console.log('Request successful:', response);
-                },
-                error: function (xhr, status, error) {
-                    console.log('Request failed:', error);
-                }
-            });
-            $(this).find('.numOfProductsInCheck').val(0);
-            $.get("/api/v1/sale/" + checkNumber, function (response) {
-                $('#cart').html(response);
-            }).fail(function (xhr, status, error) {
+        // Get the total sum for the check number
+        $.ajax({
+            type: 'GET',
+            url: '/api/v1/sale/getSum/' + checkNumber,
+            success: function (sumResponse) {
+                const totalSum = parseFloat(sumResponse);
+                totalSumInput.val(totalSum);
+                const vat = totalSum * 0.2;
+
+                // Proceed with the second AJAX request
+                updateCheckWithTotalSum(cardNumber, checkNumber, idEmployee, printDate, totalSum, vat);
+            },
+            error: function (xhr, status, error) {
                 // Handle the error response
-                console.log("Request failed:", error);
-            });
+                console.log('Failed to get total sum:', error);
+                // Perform any error handling or display error messages
+            }
         });
-    });
+    }
+
+    function updateCheckWithTotalSum(cardNumber, checkNumber, idEmployee, printDate, totalSum, vat) {
+        var currentDate = new Date();
+        const check = {
+            checkNumber: checkNumber,
+            idEmployee: idEmployee,
+            cardNumber: cardNumber,
+            printDate: printDate,
+            totalSum: totalSum,
+            vat: vat
+        };
+        // Prepare the PATCH request with the total sum information
+        $.ajax({
+            type: 'PATCH',
+            url: '/api/v1/check/' + checkNumber,
+            data: JSON.stringify(check),
+            contentType: 'application/json',
+            success: function (response) {
+                // Handle the success response
+                console.log('Check updated successfully');
+
+            },
+            error: function (xhr, status, error) {
+                // Handle the error response
+                console.log('Request failed:', error);
+                // Perform any error handling or display error messages
+            }
+        });
+    }
 </script>
 </body>
 </html>

@@ -2,6 +2,7 @@ package ua.naukma.aisdbproject.entities.sale.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.naukma.aisdbproject.entities.sale.dao.SaleDAO;
 import ua.naukma.aisdbproject.entities.sale.model.Sale;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/v1/sale")
@@ -32,10 +35,11 @@ public class SaleController {
         model.addAttribute("sale", saleDAO.getByID(upc, checkNumber));
         return "sale/show";
     }
+
     @GetMapping("/{checkNumber}")
     public String getByID(@PathVariable("checkNumber") String checkNumber, Model model) {
         model.addAttribute("sales", saleDAO.getByCheck(checkNumber));
-        return "check/add";
+        return "check/cashier/add :: cart";
     }
 
     @GetMapping("/{upc}/{checkNumber}/edit")
@@ -44,6 +48,18 @@ public class SaleController {
                        @PathVariable("checkNumber") String checkNumber) {
         model.addAttribute("sale", saleDAO.getByID(upc, checkNumber));
         return "sale/edit";
+    }
+
+    @GetMapping("/getSum/{checkNumber}")
+    @ResponseBody
+    public ResponseEntity<Float> getSum(@PathVariable("checkNumber") String checkNumber){
+        try {
+            Float totalSum = saleDAO.getTotalSum(checkNumber);
+            return ResponseEntity.ok(totalSum);
+        } catch (Exception e) {
+            // Handle the exception appropriately (e.g., return an error response)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping("/add-sale")
@@ -65,10 +81,11 @@ public class SaleController {
     }
 
     @DeleteMapping("/{upc}/{checkNumber}")
-    public String delete(@PathVariable("upc") String upc,
-                         @PathVariable("checkNumber") String checkNumber) {
+    @ResponseBody
+    public ResponseEntity<String>  delete(@PathVariable("upc") String upc,
+                         @PathVariable("checkNumber") String checkNumber, Model model) {
         saleDAO.delete(upc, checkNumber);
-        return "redirect:/api/v1/sale";
+        return ResponseEntity.ok("Sale added successfully");
     }
 }
 
