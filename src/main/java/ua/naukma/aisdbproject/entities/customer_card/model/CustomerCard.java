@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.Objects;
+
 public class CustomerCard {
     @NotEmpty(message = "Card number can't be empty")
     @Size(max = 13, message = "Card number should be less than 13 characters")
@@ -27,6 +29,7 @@ public class CustomerCard {
     private String zipCode;
     @NotNull(message = "Customer discount percent can't be empty")
     private Integer percent;
+    private Integer boughtNumber;
 
     public CustomerCard() {
         percent = 0;
@@ -34,7 +37,7 @@ public class CustomerCard {
 
     public CustomerCard(String cardNumber, String customerSurname, String customerName,
                         String customerPatronymic, String phoneNumber, String city, String street,
-                        String zipCode, Integer percent) {
+                        String zipCode, Integer percent, Integer boughtNumber) {
         this.cardNumber = cardNumber;
         this.custSurname = customerSurname;
         this.custName = customerName;
@@ -44,6 +47,7 @@ public class CustomerCard {
         this.street = street;
         this.zipCode = zipCode;
         this.percent = percent;
+        this.boughtNumber = boughtNumber;
     }
 
     public String getCardNumber() {
@@ -117,6 +121,14 @@ public class CustomerCard {
 
     public void setPercent(int percent) {
         this.percent = percent;
+    }
+
+    public Integer getBoughtNumber() {
+        return Objects.requireNonNullElse(boughtNumber, 0);
+    }
+
+    public void setBoughtNumber(Integer boughtNumber) {
+        this.boughtNumber = boughtNumber;
     }
 
     @Override

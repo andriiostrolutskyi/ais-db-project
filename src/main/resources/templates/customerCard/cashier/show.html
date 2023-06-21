@@ -98,6 +98,7 @@
         <th scope="col">Street</th>
         <th scope="col">Zip code</th>
         <th scope="col">Percent</th>
+        <th scope="col">Number of product bought in the store</th>
         <th scope="col">
           <a th:href="@{/api/v1/customer-card/add-customer-card}" type="button" class="btn btn-outline-primary">
             Add Customer Card
@@ -116,6 +117,7 @@
         <td th:text="${customerCard.getStreet()}"/>
         <td th:text="${customerCard.getZipCode()}"/>
         <td th:text="${customerCard.getPercent()}"/>
+        <td th:text="${customerCard.getBoughtNumber()}"/>
         <td>
           <div class="btn-group-sm d-flex align-items-center gap-2">
             <a type="button" class="btn btn-outline-primary"
