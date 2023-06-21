@@ -31,23 +31,35 @@ public class CustomerCardDAO {
         return jdbcTemplate.query("SELECT c.card_number, c.cust_surname, c.cust_name, c.cust_patronymic, c.phone_number, c.city, c.street, c.zip_code, c.percent, SUM(s.product_number) AS bought_number" +
                         " FROM `customer_card` c" +
                         " LEFT JOIN `check` ch ON c.card_number = ch.card_number" +
-                        " LEFT JOIN `sale` s ON ch.check_number = s.check_number" + " WHERE card_number=?" +
+                        " LEFT JOIN `sale` s ON ch.check_number = s.check_number" + " WHERE c.card_number=?" +
                         " GROUP BY c.card_number", new Object[]{cardNumber},
                 new BeanPropertyRowMapper<>(CustomerCard.class)).stream().findAny().orElse(null);
     }
 
     public CustomerCard getBySurname(String customerSurname) {
-        return jdbcTemplate.query("SELECT * FROM `customer_card` WHERE cust_surname=?", new Object[]{customerSurname},
+        return jdbcTemplate.query("SELECT c.card_number, c.cust_surname, c.cust_name, c.cust_patronymic, c.phone_number, c.city, c.street, c.zip_code, c.percent, SUM(s.product_number) AS bought_number" +
+                        " FROM `customer_card` c" +
+                        " LEFT JOIN `check` ch ON c.card_number = ch.card_number" +
+                        " LEFT JOIN `sale` s ON ch.check_number = s.check_number" + " WHERE c.card_surname=?" +
+                        " GROUP BY c.card_number", new Object[]{customerSurname},
                 new BeanPropertyRowMapper<>(CustomerCard.class)).stream().findAny().orElse(null);
     }
 
     public CustomerCard getByNumber(String cardNumber) {
-        return jdbcTemplate.query("SELECT * FROM `customer_card` WHERE card_number=?", new Object[]{cardNumber},
+        return jdbcTemplate.query("SELECT c.card_number, c.cust_surname, c.cust_name, c.cust_patronymic, c.phone_number, c.city, c.street, c.zip_code, c.percent, SUM(s.product_number) AS bought_number" +
+                        " FROM `customer_card` c" +
+                        " LEFT JOIN `check` ch ON c.card_number = ch.card_number" +
+                        " LEFT JOIN `sale` s ON ch.check_number = s.check_number" + " WHERE c.card_number=?" +
+                        " GROUP BY c.card_number", new Object[]{cardNumber},
                 new BeanPropertyRowMapper<>(CustomerCard.class)).stream().findAny().orElse(null);
     }
 
     public List<CustomerCard> getByPercent(Integer percent) {
-        return jdbcTemplate.query("SELECT * FROM `customer_card` WHERE percent=? ORDER BY cust_surname", new Object[]{percent},
+        return jdbcTemplate.query("SELECT c.card_number, c.cust_surname, c.cust_name, c.cust_patronymic, c.phone_number, c.city, c.street, c.zip_code, c.percent, SUM(s.product_number) AS bought_number" +
+                        " FROM `customer_card` c" +
+                        " LEFT JOIN `check` ch ON c.card_number = ch.card_number" +
+                        " LEFT JOIN `sale` s ON ch.check_number = s.check_number" + " WHERE c.percent=?" +
+                        " GROUP BY c.card_number", new Object[]{percent},
                 new BeanPropertyRowMapper<>(CustomerCard.class));
     }
 
