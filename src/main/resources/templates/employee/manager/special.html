@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee list</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/index.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg" id="navbar-custom">
+  <a class="navbar-brand" href="/api/v1/manager/home"><span style="font-family: 'Rockwell',serif;">Zlagoda</span></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+          aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/api/v1/category">Categories</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/api/v1/check">Checks</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/api/v1/customer-card">Customer Cards</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/api/v1/employee">Employees</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/api/v1/product">Products</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/api/v1/store-product">Store Products</a>
+      </li>
+    </ul>
+    <a type="button" href="/api/v1/login" id="logout" class="btn btn-info btn-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+      </svg> Log out
+    </a>
+    <a type="button" href="/api/v1/account" id="account" class="btn btn-info btn-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person"
+           viewBox="0 0 16 16">
+        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+      </svg>
+      My account
+    </a>
+  </div>
+</nav>
+<div class="container" id="table-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <input type="text" class="form-control mt-4" id="idEmployeeInput"
+               placeholder="Enter employee ID">
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control mt-4" id="surnameEmployeeInput"
+               placeholder="Enter surname">
+      </div>
+      <div class="col-md-4 form-check" style="margin-top: auto">
+        <input class="form-check-input" type="checkbox" value="" id="isCashier">
+        <label class="form-check-label" for="isCashier">
+          Cashier
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="table-responsive" id="searchResults" th:fragment="searchResults">
+    <table class="table">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Surname</th>
+        <th scope="col">Name</th>
+        <th scope="col">Patronymic</th>
+        <th scope="col">Role</th>
+        <th scope="col">Salary</th>
+        <th scope="col">Birth date</th>
+        <th scope="col">Start date</th>
+        <th scope="col">Phone</th>
+        <th scope="col">City</th>
+        <th scope="col">Street</th>
+        <th scope="col">ZIP code</th>
+        <th scope="col">Number of sold products in the store</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="employee : ${employees}">
+        <th scope="row" th:text="${employee.getIdEmployee()}"/>
+        <td th:text="${employee.getEmplSurname()}"/>
+        <td th:text="${employee.getEmplName()}"/>
+        <td th:text="${employee.getEmplPatronymic()}"/>
+        <td th:text="${employee.getEmplRole()}"/>
+        <td th:text="${employee.getSalary()}"/>
+        <td th:text="${employee.getDateOfBirth()}"/>
+        <td th:text="${employee.getDateOfStart()}"/>
+        <td th:text="${employee.getPhoneNumber()}"/>
+        <td th:text="${employee.getCity()}"/>
+        <td th:text="${employee.getStreet()}"/>
+        <td th:text="${employee.getZipCode()}"/>
+        <td th:text="${employee.getSoldNumber()}"/>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to PDF</button>
+</div>
+
+<script th:inline="javascript">
+  $(document).ready(function () {
+    const initialTable = $('#searchResults').html();
+    $('#idEmployeeInput').on('input', function () {
+      const employeeID = $(this).val();
+      if (employeeID.trim() === '')
+        $('#searchResults').html(initialTable);
+      else
+        performIDSearch(employeeID);
+    });
+  });
+
+  function performIDSearch(employeeID) {
+    const url = "/api/v1/employee/" + employeeID;
+    $.get(url, response => {
+      $('#searchResults').html(response);
+    });
+  }
+
+</script>
+
+<script>
+  $(document).ready(function () {
+    const initialTable = $('#searchResults').html();
+    $('#surnameEmployeeInput').on('input', function () {
+      const employeeSurname = $(this).val();
+      if (employeeSurname.trim() === '')
+        $('#searchResults').html(initialTable);
+      else
+        performSurnameSearch(employeeSurname);
+    });
+  });
+
+  function performSurnameSearch(employeeSurname) {
+    const url = "/api/v1/employee/surname/" + employeeSurname;
+    $.get(url, response => {
+      $('#searchResults').html(response);
+    });
+  }
+
+</script>
+
+<script>
+  $(document).ready(function () {
+    const initialTable = $('#searchResults').html();
+    $('#isCashier').on('change', function () {
+      if ($(this).is(':checked')) {
+        performRequest()
+      } else {
+        $('#searchResults').html(initialTable);
+      }
+    });
+  });
+
+  function performRequest() {
+    const url = "/api/v1/employee/cashier";
+    $.get(url, response => {
+      $('#searchResults').html(response);
+    });
+  }
+</script>
+<link rel="stylesheet" type="text/css" href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+<script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/jszip.min.js"></script>
+
+<script type="text/javascript">
+  jQuery(function ($) {
+    $(document).on('click', '#exportButton', function () {
+
+      var data = [];
+      var searchResults = $('#searchResults');
+
+      searchResults.find('tbody tr').each(function () {
+        var row = {};
+        row["ID"] = $(this).find('th').eq(0).text().trim();
+        row["Surname"] = $(this).find('td').eq(0).text().trim();
+        row["Name"] = $(this).find('td').eq(1).text().trim();
+        row["Patronymic"] = $(this).find('td').eq(2).text().trim();
+        row["Role"] = $(this).find('td').eq(3).text().trim();
+        row["Salary"] = $(this).find('td').eq(4).text().trim();
+        row["Birth date"] = $(this).find('td').eq(5).text().trim();
+        row["Start date"] = $(this).find('td').eq(6).text().trim();
+        row["Phone"] = $(this).find('td').eq(7).text().trim();
+        row["City"] = $(this).find('td').eq(8).text().trim();
+        row["Street"] = $(this).find('td').eq(9).text().trim();
+        row["ZIP code"] = $(this).find('td').eq(10).text().trim();
+        data.push(row);
+      });
+
+      var dataSource = shield.DataSource.create({
+        data: data,
+        schema: {
+          fields: {
+            "ID": { type: String },
+            "Surname": { type: String },
+            "Name": { type: String},
+            "Patronymic": { type: String},
+            "Role": { type: String},
+            "Salary": { type: Number},
+            "Birth date": { type: Date},
+            "Start date": { type: Date},
+            "Phone": { type: String},
+            "City": { type: String},
+            "Street": { type: String},
+            "ZIP code": { type: String}
+          }
+        }
+      });
+
+      dataSource.read().then(function (data) {
+        var pdf = new shield.exp.PDFDocument({
+          author: "Zlagoda",
+          created: new Date(),
+        });
+
+        pdf.addPage("a4", "landscape");
+
+
+
+        pdf.table(
+                50,
+                50,
+                data,
+                [
+                  { field: "ID", title: "ID", width: 50 },
+                  { field: "Surname", title: "Surname", width: 75 },
+                  { field: "Name", title: "Name", width: 65 },
+                  { field: "Patronymic", title: "Patronymic", width: 70 },
+                  { field: "Role", title: "Role", width: 60 },
+                  { field: "Salary", title: "Salary", width: 50 },
+                  { field: "Birth date", title: "Birth date", width: 70 },
+                  { field: "Start date", title: "Start date", width: 70 },
+                  { field: "Phone", title: "Phone", width: 80 },
+                  { field: "City", title: "City", width: 50 },
+                  { field: "Street", title: "Street", width: 60 },
+                  { field: "ZIP code", title: "ZIP code", width: 60 }
+                ],
+                {
+                  margins: {
+                    top: 50,
+                    left: 50
+                  }
+                }
+
+        );
+
+        var timestamp = new Date().toLocaleString();
+
+        pdf.saveAs({
+          fileName: "EmployeesReport" + timestamp
+        });
+
+
+      });
+    });
+  });
+</script>
+</body>
+</html>

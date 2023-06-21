@@ -63,7 +63,7 @@ public class Employee {
 
     public Employee(String idEmployee, String employeeSurname, String employeeName, String employeePatronymic,
                     String employeeRole, Float salary, Date dateOfBirth, Date dateOfStart, String phoneNumber,
-                    String city, String street, String zipCode) {
+                    String city, String street, String zipCode, Integer soldNumber) {
         this.idEmployee = idEmployee;
         this.emplSurname = employeeSurname;
         this.emplName = employeeName;
@@ -76,6 +76,7 @@ public class Employee {
         this.city = city;
         this.street = street;
         this.zipCode = zipCode;
+        this.soldNumber = soldNumber;
     }
 
     public String getIdEmployee() {

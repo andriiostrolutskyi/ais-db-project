@@ -31,6 +31,16 @@ public class EmployeeController {
         return "employee/manager/show";
     }
 
+    @GetMapping("/special")
+    public String getSpecial(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
+        model.addAttribute("employees", employeeDAO.getSpecial());
+        return "employee/manager/special";
+    }
+
     @GetMapping("/{idEmployee}")
     public String getByID(@PathVariable("idEmployee") String idEmployee, Model model, HttpSession session) {
         User user = (User) session.getAttribute("employee");
