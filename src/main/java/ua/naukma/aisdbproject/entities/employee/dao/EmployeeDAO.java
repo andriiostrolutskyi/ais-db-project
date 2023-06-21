@@ -29,7 +29,7 @@ public class EmployeeDAO {
     }
 
     public List<Employee> getSpecial() {
-        return jdbcTemplate.query("SELECT e.id_employee, e.empl_surname, e.empl_name, e.empl_patronymic, e.empl_role, e.salary, e.date_of_birth, e.date_of_start, e.phone_number, e.city, e.street" +
+        return jdbcTemplate.query("SELECT e.id_employee, e.empl_surname, e.empl_name, e.empl_patronymic, e.empl_role, e.salary, e.date_of_birth, e.date_of_start, e.phone_number, e.city, e.street, e.zip_code" +
                         " FROM employee AS e" +
                         " WHERE NOT EXISTS (SELECT c.category_number" +
                         "                   FROM `category` AS c" +
