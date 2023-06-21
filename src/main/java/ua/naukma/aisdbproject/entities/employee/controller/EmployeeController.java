@@ -31,7 +31,7 @@ public class EmployeeController {
         return "employee/manager/show";
     }
 
-    @GetMapping("/special")
+    @GetMapping("/manager/special")
     public String getSpecial(Model model, HttpSession session) {
         User user = (User) session.getAttribute("employee");
         if (user == null || (!user.getUsrRole().equals("Manager"))) {

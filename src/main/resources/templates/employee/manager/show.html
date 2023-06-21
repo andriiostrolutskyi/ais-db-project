@@ -92,6 +92,7 @@
                 <th scope="col">City</th>
                 <th scope="col">Street</th>
                 <th scope="col">ZIP code</th>
+                <th scope="col">Number of sold products in the store</th>
                 <th scope="col">
                     <a th:href="@{/api/v1/employee/add-employee}" type="button" class="btn btn-outline-primary">
                         Add Employee
@@ -113,6 +114,7 @@
                 <td th:text="${employee.getCity()}"/>
                 <td th:text="${employee.getStreet()}"/>
                 <td th:text="${employee.getZipCode()}"/>
+                <td th:text="${employee.getSoldNumber()}"/>
                 <td>
                     <div class="btn-group-sm d-flex align-items-center gap-2">
                         <a type="button" class="btn btn-outline-primary"
@@ -131,7 +133,7 @@
             </tbody>
         </table>
     </div>
-    <a href="/api/v1/employee/special" class="btn btn-lg btn-primary" style="margin-top: 25px;">Productive employees</a>
+    <a href="/api/v1/employee/manager/special" class="btn btn-lg btn-primary" style="margin-top: 25px;">Productive employees</a>
     <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to PDF</button>
 </div>
 

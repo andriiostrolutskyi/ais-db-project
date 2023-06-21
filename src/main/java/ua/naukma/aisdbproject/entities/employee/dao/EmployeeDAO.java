@@ -32,16 +32,16 @@ public class EmployeeDAO {
         return jdbcTemplate.query("SELECT e.id_employee, e.empl_surname, e.empl_name, e.empl_patronymic, e.empl_role, e.salary, e.date_of_birth, e.date_of_start, e.phone_number, e.city, e.street" +
                         " FROM employee AS e" +
                         " WHERE NOT EXISTS (SELECT c.category_number" +
-                        "                   FROM category AS c" +
+                        "                   FROM `category` AS c" +
                         "                   WHERE NOT EXISTS (SELECT e.id_employee, sp.UPC, c.category_number" +
-                        "                                    FROM ((((store_product AS sp" +
-                        "                                            INNER JOIN product ON sp.id_product = product.id_product)" +
-                        "                                            INNER JOIN sale ON sp.UPC = sale.UPC)" +
+                        "                                    FROM ((((`store_product` AS sp" +
+                        "                                            INNER JOIN `product` ON sp.id_product = `product`.id_product)" +
+                        "                                            INNER JOIN `sale` ON sp.UPC = `sale`.UPC)" +
                         "                                            INNER JOIN `check` ON sale.check_number = `check`.check_number)" +
-                        "                                            INNER JOIN employee ON check.id_employee = employee.id_employee)" +
-                        "                                        INNER JOIN category ON product.category_number = category.category_number" +
-                        "                                        WHERE employee.id_employee = e.id_employee AND" +
-                        "                                        categorycategory_number = c.category_number" +
+                        "                                            INNER JOIN `employee` ON check.id_employee = `employee`.id_employee)" +
+                        "                                        INNER JOIN `category` ON `product`.category_number = `category`.category_number" +
+                        "                                        WHERE `employee`.id_employee = e.id_employee AND" +
+                        "                                        `category`.category_number = c.category_number" +
                         "                                    )" +
                         "                );",
                 new BeanPropertyRowMapper<>(Employee.class));
