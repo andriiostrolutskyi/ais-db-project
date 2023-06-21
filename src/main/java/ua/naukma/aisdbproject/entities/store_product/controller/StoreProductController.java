@@ -41,6 +41,18 @@ public class StoreProductController {
         }
     }
 
+    @GetMapping("/popular")
+    public String getPopular(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
+        model.addAttribute("storeProducts", storeProductDAO.getPopular());
+        model.addAttribute("products", storeProductDAO.getProductNames());
+        return "storeProduct/manager/popular";
+
+    }
+
     @GetMapping("/{upc}")
     @ResponseBody
     public StoreProductSearch getByID(@PathVariable("upc") String upc) {

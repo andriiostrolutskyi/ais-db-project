@@ -24,6 +24,23 @@ public class StoreProductDAO {
                 new BeanPropertyRowMapper<>(StoreProduct.class));
     }
 
+    public List<StoreProduct> getPopular() {
+        return jdbcTemplate.query("SELECT sp.UPC, sp.UPC_prom, sp.id_product, sp.selling_price, sp.products_number, sp.promotional_product" +
+                        " FROM store_product AS sp" +
+                        " WHERE NOT EXISTS (" +
+                        "  SELECT *" +
+                        "  FROM customer_card AS cc" +
+                        "  WHERE NOT EXISTS (" +
+                        "    SELECT *" +
+                        "    FROM `check` AS chk" +
+                        "    INNER JOIN sale AS s ON chk.check_number = s.check_number" +
+                        "    WHERE cc.card_number = chk.card_number" +
+                        "      AND s.UPC = sp.UPC" +
+                        "  )" +
+                        ")",
+                new BeanPropertyRowMapper<>(StoreProduct.class));
+    }
+
     public List<Product> getProductNames() {
         return jdbcTemplate.query("SELECT DISTINCT product.id_product, category_number, product_name, characteristics " +
                 "FROM `store_product` " +
