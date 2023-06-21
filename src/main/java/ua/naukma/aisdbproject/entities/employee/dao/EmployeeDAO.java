@@ -20,11 +20,13 @@ public class EmployeeDAO {
     }
 
     public List<Employee> getAll() {
-        return jdbcTemplate.query("SELECT e.id_employee, e.empl_surname, e.empl_name, e.empl_patronymic, e.empl_role, e.salary, e.date_of_birth, e.date_of_start, e.phone_number, e.city, e.street, e.zip_code, SUM(s.product_number) AS sold_number" +
-                        " FROM `employee` e" +
-                        " LEFT JOIN `check` ch ON e.id_employee = ch.id_employee" +
-                        " LEFT JOIN `sale` s ON ch.check_number = s.check_number" +
-                        " GROUP BY e.id_employee",
+        return jdbcTemplate.query("SELECT e.id_employee, e.empl_surname, e.empl_name, e.empl_patronymic," +
+                        " e.empl_role, e.salary, e.date_of_birth, e.date_of_start, e.phone_number, e.city," +
+                        " e.street, e.zip_code, SUM(s.product_number) AS sold_number " +
+                        "FROM `employee` e " +
+                        "   LEFT JOIN `check` ch ON e.id_employee = ch.id_employee " +
+                        "       LEFT JOIN `sale` s ON ch.check_number = s.check_number " +
+                        "GROUP BY e.id_employee",
                 new BeanPropertyRowMapper<>(Employee.class));
     }
 
