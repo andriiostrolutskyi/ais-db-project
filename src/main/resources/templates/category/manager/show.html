@@ -93,6 +93,7 @@
             <tr>
                 <th scope="col">Category Number</th>
                 <th scope="col">Name</th>
+                <th scope="col">Number of products in the store</th>
                 <th scope="col">
                     <a th:href="@{/api/v1/category/add-category}" type="button" class="btn btn-outline-primary">
                         Add Category
@@ -104,6 +105,7 @@
             <tr th:each="category : ${categories}">
                 <th scope="row" th:text="${category.getCategoryNumber()}"/>
                 <td th:text="${category.getCategoryName()}"/>
+                <td th:text="${category.getProductsNumber()}"/>
                 <td>
                     <div class="btn-group-sm d-flex align-items-center gap-2">
                         <a type="button" class="btn btn-outline-primary"

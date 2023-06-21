@@ -89,12 +89,14 @@
             <tr>
                 <th scope="col">Category Number</th>
                 <th scope="col">Name</th>
+                <th scope="col">Number of products in the store</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="category : ${categories}">
                 <th scope="row" th:text="${category.getCategoryNumber()}"/>
                 <td th:text="${category.getCategoryName()}"/>
+                <td th:text="${category.getProductsNumber()}"/>
             </tr>
             </tbody>
         </table>
@@ -102,8 +104,8 @@
     <button id="exportButton" class="btn btn-lg btn-danger clearfix"><span class="fa fa-file-pdf-o"></span> Export to
         PDF
     </button>
-
 </div>
+
 <script th:inline="javascript">
     $(document).ready(function () {
         const initialTable = $('#searchResults').html();

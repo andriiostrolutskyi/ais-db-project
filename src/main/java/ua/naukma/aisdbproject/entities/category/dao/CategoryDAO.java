@@ -18,17 +18,26 @@ public class CategoryDAO {
     }
 
     public List<Category> getAll() {
-        return jdbcTemplate.query("SELECT * FROM `category` ORDER BY category_name",
+        return jdbcTemplate.query("SELECT c.category_number, c.category_name, SUM(sp.products_number) AS products_number" +
+                        " FROM `category` c" + " INNER JOIN `product` p ON c.category_number = p.category_number" +
+                        " INNER JOIN `store_product` sp ON p.id_product = sp.id_product" +
+                        " GROUP BY c.category_number",
                 new BeanPropertyRowMapper<>(Category.class));
     }
 
     public Category getByID(Integer categoryNumber) {
-        return jdbcTemplate.query("SELECT * FROM `category` WHERE category_number=?", new Object[]{categoryNumber},
+        return jdbcTemplate.query("SELECT c.category_number, c.category_name, SUM(sp.products_number) AS products_number" +
+                        " FROM `category` c" + " INNER JOIN `product` p ON c.category_number = p.category_number" +
+                        " INNER JOIN `store_product` sp ON p.id_product = sp.id_product" + " WHERE c.category_number=?" +
+                        " GROUP BY c.category_number", new Object[]{categoryNumber},
                 new BeanPropertyRowMapper<>(Category.class)).stream().findAny().orElse(null);
     }
 
     public Category getByName(String categoryName) {
-        return jdbcTemplate.query("SELECT * FROM `category` WHERE category_name=?", new Object[]{categoryName},
+        return jdbcTemplate.query("SELECT c.category_number, c.category_name, SUM(sp.products_number) AS products_number" +
+                        " FROM `category` c" + " INNER JOIN `product` p ON c.category_number = p.category_number" +
+                        " INNER JOIN `store_product` sp ON p.id_product = sp.id_product" + " WHERE c.category_name=?" +
+                        " GROUP BY c.category_number", new Object[]{categoryName},
                 new BeanPropertyRowMapper<>(Category.class)).stream().findAny().orElse(null);
     }
 
