@@ -18,11 +18,13 @@ public class CustomerCardDAO {
     }
 
     public List<CustomerCard> getAll() {
-        return jdbcTemplate.query("SELECT c.card_number, c.cust_surname, c.cust_name, c.cust_patronymic, c.phone_number, c.city, c.street, c.zip_code, c.percent, SUM(s.product_number) AS bought_number" +
+        return jdbcTemplate.query("SELECT c.card_number, c.cust_surname, c.cust_name, c.cust_patronymic, c.phone_number, " +
+                        "c.city, c.street, c.zip_code, c.percent, SUM(s.product_number) AS bought_number" +
                         " FROM `customer_card` c" +
                         " LEFT JOIN `check` ch ON c.card_number = ch.card_number" +
                         " LEFT JOIN `sale` s ON ch.check_number = s.check_number" +
-                        " GROUP BY c.card_number",
+                        " GROUP BY c.card_number" +
+                        " ORDER BY c.cust_surname",
                 new BeanPropertyRowMapper<>(CustomerCard.class));
     }
 
@@ -59,7 +61,8 @@ public class CustomerCardDAO {
                         " FROM `customer_card` c" +
                         " LEFT JOIN `check` ch ON c.card_number = ch.card_number" +
                         " LEFT JOIN `sale` s ON ch.check_number = s.check_number" + " WHERE c.percent=?" +
-                        " GROUP BY c.card_number", new Object[]{percent},
+                        " GROUP BY c.card_number" +
+                        " ORDER BY c.percent", new Object[]{percent},
                 new BeanPropertyRowMapper<>(CustomerCard.class));
     }
 
