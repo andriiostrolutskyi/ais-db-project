@@ -35,6 +35,17 @@ public class CustomerCardController {
         }
     }
 
+    @GetMapping("/special")
+    public String getSpecial(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("employee");
+        if (user == null || (!user.getUsrRole().equals("Manager"))) {
+            return "redirect:/api/v1/login";
+        }
+        model.addAttribute("customerCards", customerCardDAO.getSpecial());
+        return "customerCard/manager/show-special";
+
+    }
+
     @GetMapping("/{cardNumber}")
     public String getByID(@PathVariable("cardNumber") String cardNumber, Model model, HttpSession session) {
         User user = (User) session.getAttribute("employee");
