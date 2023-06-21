@@ -39,6 +39,8 @@ public class Check {
     public Check(String checkNumber, String idEmployee, String cardNumber, @NotNull(message = "Total sum can't be empty") Float sumTotal) {
         this.checkNumber = checkNumber;
         this.idEmployee = idEmployee;
+        if(cardNumber.equals(""))
+            cardNumber = null;
         this.cardNumber = cardNumber;
         this.sumTotal = sumTotal;
         this.printDate = Timestamp.valueOf(LocalDateTime.now());

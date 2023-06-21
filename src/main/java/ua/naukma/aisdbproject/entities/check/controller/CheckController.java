@@ -173,9 +173,9 @@ public class CheckController {
         String idEmployee = (String) requestBody.get("idEmployee");
         String checkNumberBody = (String) requestBody.get("checkNumber");
         String cardNumber = (String) requestBody.get("cardNumber");
-        Double totalSum =  (Double) requestBody.get("totalSum");
+        Float totalSum =  ((Double) requestBody.get("totalSum")).floatValue();
 
-        Check check = new Check(checkNumberBody, idEmployee/*, cardNumber, totalSum*/);
+        Check check = new Check(checkNumberBody, idEmployee, cardNumber, totalSum);
         checkDAO.update(checkNumber, check);
         return "redirect:/api/v1/check";
     }

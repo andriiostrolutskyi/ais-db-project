@@ -290,6 +290,9 @@
             url: '/api/v1/check/' + checkNumber,
             data: JSON.stringify(check),
             contentType: 'application/json',
+            headers: {
+                'X-HTTP-Method-Override': 'PATCH'
+            },
             success: function (response) {
                 // Handle the success response
                 console.log('Check updated successfully');
