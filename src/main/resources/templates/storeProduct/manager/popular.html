@@ -61,44 +61,6 @@
 </nav>
 <div class="container" id="table-container">
     <h2 class="text-center">Popular products who were bought by all customers from customer cards</h2>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <input type="text" class="form-control mt-4" id="upcSearch"
-                       placeholder="Enter product UPC">
-            </div>
-            <div class="col-6 align-items-center">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="productType" id="allProducts" value="allProducts"
-                           checked>
-                    <label class="form-check-label" for="allProducts">
-                        All products
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="productType" id="promProduct"
-                           value="promProduct">
-                    <label class="form-check-label" for="promProduct">
-                        Promotional product
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="productType" id="notPromProduct"
-                           value="notPromProduct">
-                    <label class="form-check-label" for="notPromProduct">
-                        Not promotional product
-                    </label>
-                </div>
-            </div>
-            <div class="col">
-                <label for="sortBy" class="form-label">Sort By</label>
-                <select id="sortBy" class="form-select" disabled>
-                    <option th:selected="true" th:value="sortByName">Name</option>
-                    <option th:value="sortByQuantity">Quantity</option>
-                </select>
-            </div>
-        </div>
-    </div>
     <div id="searchResults" th:fragment="searchResults">
         <table class="table">
             <thead class="thead-dark">
